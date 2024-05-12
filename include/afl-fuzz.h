@@ -859,6 +859,8 @@ typedef struct afl_interface{
 	char func_covFile[256];
 }afl_interface_t;
 
+afl_interface_t afl_interface;
+
 struct custom_mutator {
 
   const char *name;
