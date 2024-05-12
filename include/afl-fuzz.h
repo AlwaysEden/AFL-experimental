@@ -592,7 +592,8 @@ typedef struct afl_state {
       cycle_schedules,                  /* cycle power schedules?           */
       old_seed_selection,               /* use vanilla afl seed selection   */
       reinit_table;                     /* reinit the queue weight table    */
-
+      interface_mode;       /**/
+      
   u8 *virgin_bits,                      /* Regions yet untouched by fuzzing */
       *virgin_tmout,                    /* Bits we haven't seen in tmouts   */
       *virgin_crash;                    /* Bits we haven't seen in crashes  */
