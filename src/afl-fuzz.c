@@ -1454,6 +1454,7 @@ int main(int argc, char **argv_orig, char **envp) {
         break;  // not needed
 
       case 'R':
+	afl->interface_mode = 1;
 	parseJson(optarg);
         /*FATAL(
             "Radamsa is now a custom mutator, please use that "
