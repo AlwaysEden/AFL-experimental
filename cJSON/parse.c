@@ -91,4 +91,5 @@ int main(){
 
 	free(total_func);
 	free(target_path);
+	fclose(fp);
 }

@@ -502,7 +502,7 @@ void parseJson(char *json){
                         total_func = malloc(sizeof(char));
                         memcpy(total_func, tmp, sizeof(char));
                         func = malloc(sizeof(char) * atoi(total_func));
-                        printf("total_func: %s\n", total_func);
+                        //printf("total_func: %s\n", total_func);
                 }else if(strcmp(tmp, "\t\"func\":") == 0){
                         if(total_func == NULL){
                                 fprintf(stderr, "ERROR: NO total_func\n");
@@ -511,7 +511,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         func[func_cnt] = malloc(sizeof(char)*LENGTH);
                         memcpy(func[func_cnt], tmp, strlen(tmp));
-			printf("func: %s\n",func[func_cnt]);
+			//printf("func: %s\n",func[func_cnt]);
                         func_cnt++;
                         if(func_cnt >= 5){
                                 fprintf(stderr, "ERROR: Don't over 5 target function\n");
@@ -560,12 +560,12 @@ void parseJson(char *json){
         for(int i = 0; i < func_cnt; i++){
                 strcat(func[i], "\n");
                 fwrite(func[i],1, strlen(func[i]),fp);
+		free(func[i]);
         }
         fwrite(target_path, 1, strlen(target_path),fp);
 
         free(total_func);
         free(target_path);
-        free(func);
         fclose(fp);
 }
 

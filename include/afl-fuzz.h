@@ -850,6 +850,13 @@ typedef struct afl_state {
 
 } afl_state_t;
 
+typedef struct afl_interface{
+	int total_func;
+	char binary path[256];
+	char parsed_Json[256];
+	char func_covFile[256];
+}afl_interface_t;
+
 struct custom_mutator {
 
   const char *name;
