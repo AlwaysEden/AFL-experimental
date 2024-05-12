@@ -592,7 +592,7 @@ typedef struct afl_state {
       expand_havoc,                /* perform expensive havoc after no find */
       cycle_schedules,                  /* cycle power schedules?           */
       old_seed_selection,               /* use vanilla afl seed selection   */
-      reinit_table;                     /* reinit the queue weight table    */
+      reinit_table,                     /* reinit the queue weight table    */
       interface_mode;       /**/
       
   u8 *virgin_bits,                      /* Regions yet untouched by fuzzing */
@@ -854,7 +854,7 @@ typedef struct afl_state {
 
 typedef struct afl_interface{
 	int total_func;
-	char binary path[256];
+	char binary_path[256];
 	char parsed_Json[256];
 	char func_covFile[256];
 }afl_interface_t;

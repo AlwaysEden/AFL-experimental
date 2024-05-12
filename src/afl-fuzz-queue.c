@@ -1188,7 +1188,10 @@ u32 calculate_score(afl_state_t *afl, struct queue_entry *q) {
     perf_score = afl->havoc_max_mult * 100;
 
   }
-
+	FILE *fp = fopen("perf_score","a+");
+	char output[50];
+	fprintf(fp,"%d\n",perf_score);
+	fclose(fp);
   return perf_score;
 
 }
