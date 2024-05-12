@@ -224,8 +224,9 @@ struct queue_entry {
       stats_tmouts,                     /* stats: # of saved timeouts       */
 #endif
       fuzz_level,                       /* Number of fuzzing iterations     */
-      n_fuzz_entry;                     /* offset in n_fuzz                 */
-
+      n_fuzz_entry,                    /* offset in n_fuzz                 */
+      covered_func_count;                  /*in interface mode, count of covered target function*/
+  
   u64 exec_us,                          /* Execution time (us)              */
       handicap,                         /* Number of queue cycles behind    */
       depth,                            /* Path depth                       */
