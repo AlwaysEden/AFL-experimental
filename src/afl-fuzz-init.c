@@ -937,6 +937,37 @@ void perform_dry_run(afl_state_t *afl) {
 
     close(fd);
 
+    if(afl->interface_mode > 0){ // suppress mode or enhance mode
+	    int pid;
+	    char exe_line[512];
+	    snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
+	    char * exe_args[] = {exe_line, NULL};
+
+	    pid = fork();
+	    if(pid == 0){
+		    execv(exe_line, exe_args);
+	    }
+	    else{
+		    wait(NULL);
+	    }
+
+	    FILE *fp;
+	    int cover_count = 0;
+	    fp = fopen("function_coverage", "r");
+	    if (fp == NULL) {
+		    fprintf(stderr, "can not open func_covFile in interface mode.\n");
+		    cover_count = 1;		    
+	    }
+	    else{
+		    while(fgetc(fp) != EOF){
+			    cover_count ++ ;
+		    }
+		    fclose(fp);
+	    
+	    }
+	    q->covered_func_count = cover_count;
+    }
+
     res = calibrate_case(afl, q, use_mem, 0, 1);
 
     /* For AFLFast schedules we update the queue entry */
