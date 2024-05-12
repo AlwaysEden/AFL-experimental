@@ -546,7 +546,11 @@ save_if_interesting(afl_state_t *afl, void *mem, u32 len, u8 fault) {
     if (unlikely(fd < 0)) { PFATAL("Unable to create '%s'", queue_fn); }
     ck_write(fd, mem, len, queue_fn);
     close(fd);
+    
     add_to_queue(afl, queue_fn, len, 0);
+	if(afl->interface_mode > 0){
+		//TODO
+	}
 
     if (unlikely(afl->fuzz_mode) &&
         likely(afl->switch_fuzz_mode && !afl->non_instrumented_mode)) {
