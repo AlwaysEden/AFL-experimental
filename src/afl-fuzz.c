@@ -571,8 +571,8 @@ void parseJson(char *json){
         }
         fwrite(target_path, 1, strlen(target_path),fp);
 	
-	//afl_interface.total_func = atoi(total_func);
-	//memcpy(&afl_interface.binary_path, target_path, strlen(target_path));
+	afl_interface.total_func = atoi(total_func);
+	memcpy(&afl_interface.binary_path, target_path, strlen(target_path));
 
 	free(func);
         free(total_func);
@@ -1465,25 +1465,25 @@ int main(int argc, char **argv_orig, char **envp) {
         break;  // not needed
 
       case 'R'://supress mode(== function supress mode)
-	/*if(afl->interface_mode != 0){
+	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);
-	}*/
+	}
 
 	parseJson(optarg);
-	//afl->interface_mode = 1;
+	afl->interface_mode = 1;
         /*FATAL(
             "Radamsa is now a custom mutator, please use that "
             "(custom_mutators/radamsa/).");
 	*/
         break;
       case 'r': //enhance mode(== function enhance mode)
-	/*if(afl->interface_mode != 0){
+	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);
-	}*/
+	}
 	parseJson(optarg);
-	//afl->interface_mode = 2;
+	afl->interface_mode = 2;
 	break;
 	
       default:

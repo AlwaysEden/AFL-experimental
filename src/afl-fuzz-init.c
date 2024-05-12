@@ -906,6 +906,8 @@ void perform_dry_run(afl_state_t *afl) {
   struct queue_entry *q;
   u32                 cal_failures = 0, idx;
   u8                 *use_mem;
+  
+  FILE *fpp = fopen("checking_func_count", "a+");
 
   for (idx = 0; idx < afl->queued_items; idx++) {
 
@@ -942,10 +944,19 @@ void perform_dry_run(afl_state_t *afl) {
 	    char exe_line[512];
 	    snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
 	    char * exe_args[] = {exe_line, NULL};
+	    
+	    if(afl->fsrv.use_stdin == false){ //stdin X, argv O
+
+	    }else{ // stdin O, argv X
+
+	    }
+	    //Stdin일 때는 pipe 써서 넘겨주면 되고, argv일 때는 argument로 넘겨주면 될듯
 
 	    pid = fork();
 	    if(pid == 0){
 		    execv(exe_line, exe_args);
+		    fprintf(stderr, "Can't execute the binary\n");
+		    exit(1);
 	    }
 	    else{
 		    wait(NULL);
@@ -966,7 +977,10 @@ void perform_dry_run(afl_state_t *afl) {
 	    
 	    }
 	    q->covered_func_count = cover_count;
+	    fprintf(fpp, "%d\n",q->covered_func_count);//for checking -JW-
+	    
     }
+	   fclose(fpp);
 
     res = calibrate_case(afl, q, use_mem, 0, 1);
 
