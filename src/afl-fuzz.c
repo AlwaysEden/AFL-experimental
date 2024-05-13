@@ -502,7 +502,7 @@ void parseJson(char *json){
                         total_func = malloc(sizeof(char));
                         memcpy(total_func, tmp, sizeof(char));
                         func = malloc(sizeof(char) * atoi(total_func));
-                        //printf("total_func: %s\n", total_func);
+                        printf("total_func: %s\n", total_func);
                 }else if(strcmp(tmp, "\t\"func\":") == 0){
                         if(total_func == NULL){
                                 fprintf(stderr, "ERROR: NO total_func\n");
@@ -511,7 +511,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         func[func_cnt] = malloc(sizeof(char)*LENGTH);
                         memcpy(func[func_cnt], tmp, strlen(tmp));
-			//printf("func: %s\n",func[func_cnt]);
+			printf("func: %s\n",func[func_cnt]);
                         func_cnt++;
                         if(func_cnt >= 5){
                                 fprintf(stderr, "ERROR: Don't over 5 target function\n");
@@ -538,18 +538,26 @@ void parseJson(char *json){
         }
 	if(atoi(total_func) != func_cnt){
                 fprintf(stderr, "ERROR: Not Match \"total_func\" and the number of \"func\"\n");
+        	free(total_func);
+        	free(target_path);
                 exit(1);
         }
         if(total_func == NULL){
                 fprintf(stderr, "ERROR: NO total_func\n");
+        	free(total_func);
+        	free(target_path);
                 exit(1);
         }
         if(func == NULL){
                 fprintf(stderr, "ERROR: No Func\n");
+        	free(total_func);
+        	free(target_path);
                 exit(1);
         }
         if(target_path == NULL){
                 fprintf(stderr, "ERROR: No target_path\n");
+        	free(total_func);
+        	free(target_path);
                 exit(1);
         }
         fclose(fp);
@@ -560,10 +568,13 @@ void parseJson(char *json){
         for(int i = 0; i < func_cnt; i++){
                 strcat(func[i], "\n");
                 fwrite(func[i],1, strlen(func[i]),fp);
-		free(func[i]);
         }
         fwrite(target_path, 1, strlen(target_path),fp);
+	
+	afl_interface.total_func = atoi(total_func);
+	memcpy(&afl_interface.binary_path, target_path, strlen(target_path));
 
+	free(func);
         free(total_func);
         free(target_path);
         fclose(fp);
@@ -638,7 +649,7 @@ int main(int argc, char **argv_orig, char **envp) {
 
   // still available: HjJkKqruvwz
   while ((opt = getopt(argc, argv,
-                       "+a:Ab:B:c:CdDe:E:f:F:g:G:hi:I:l:L:m:M:nNo:Op:P:QR:s:S:t:"
+                       "+a:Ab:B:c:CdDe:E:f:F:g:G:hi:I:l:L:m:M:nNo:Op:P:QR:r:s:S:t:"
                        "T:UV:WXx:YzZ")) > 0) {
 
     switch (opt) {
@@ -1453,15 +1464,28 @@ int main(int argc, char **argv_orig, char **envp) {
         show_help++;
         break;  // not needed
 
-      case 'R':
-	afl->interface_mode = 1;
+      case 'R'://supress mode(== function supress mode)
+	if(afl->interface_mode != 0){
+		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
+		exit(1);
+	}
+
 	parseJson(optarg);
+	afl->interface_mode = 1;
         /*FATAL(
             "Radamsa is now a custom mutator, please use that "
             "(custom_mutators/radamsa/).");
 	*/
         break;
-
+      case 'r': //enhance mode(== function enhance mode)
+	if(afl->interface_mode != 0){
+		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
+		exit(1);
+	}
+	parseJson(optarg);
+	afl->interface_mode = 2;
+	break;
+	
       default:
         if (!show_help) { show_help = 1; }
 

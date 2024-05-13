@@ -855,8 +855,6 @@ typedef struct afl_state {
 typedef struct afl_interface{
 	int total_func;
 	char binary_path[256];
-	char parsed_Json[256];
-	char func_covFile[256];
 }afl_interface_t;
 
 afl_interface_t afl_interface;
