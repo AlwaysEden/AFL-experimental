@@ -1251,12 +1251,65 @@ u32 calculate_score(afl_state_t *afl, struct queue_entry *q) {
     perf_score = afl->havoc_max_mult * 100;
 
   }
-  /*
-	FILE *fp = fopen("perf_score","a+");
-	char output[50];
+  FILE *fp = fopen("perf_score","a+");
+  char output[50];
+  if(afl->interface_mode > 0){
+    if(afl->interface_mode == 1){//supress mode
+  	  switch(q->covered_func_count){
+		case 1:
+			perf_score /= 2;
+			fprintf(fp,"sup case1\n");
+			break;
+		case 2:
+			perf_score /= 2.5;
+			fprintf(fp,"sup case2\n");
+			break;
+		case 3: 
+			perf_score /= 3;
+			fprintf(fp,"sup case3\n");
+			break;
+		case 4:
+			perf_score /= 3.5;
+			fprintf(fp,"sup case4\n");
+			break;
+		case 5:
+			perf_score /= 4;
+			fprintf(fp,"sup case5\n");
+			break;
+		default:
+			break;
+	  }
+  }else if(afl->interface_mode == 2){//enhance mode
+		
+	  switch(q->covered_func_count){
+		case 1:
+			perf_score *= 2;
+			fprintf(fp,"enhance case1\n");
+			break;
+		case 2:
+			perf_score *= 2.5;
+			fprintf(fp,"enhance case2\n");
+			break;
+		case 3: 
+			perf_score *= 3;
+			fprintf(fp,"enhance case3\n");
+			break;
+		case 4:
+			perf_score *= 3.5;
+			fprintf(fp,"enhance case4\n");
+			break;
+		case 5:
+			perf_score *= 4;
+			fprintf(fp,"enhance case5\n");
+			break;
+		default:
+			break;
+	  }
+  }
+}
 	fprintf(fp,"%d\n",perf_score);
 	fclose(fp);
-  */
+  
 	return perf_score;
 
 }

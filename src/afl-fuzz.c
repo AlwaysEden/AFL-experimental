@@ -502,7 +502,7 @@ void parseJson(char *json){
                         total_func = malloc(sizeof(char));
                         memcpy(total_func, tmp, sizeof(char));
                         func = malloc(sizeof(char) * atoi(total_func));
-                        printf("total_func: %s\n", total_func);
+                        //printf("total_func: %s\n", total_func);
                 }else if(strcmp(tmp, "\t\"func\":") == 0){
                         if(total_func == NULL){
                                 fprintf(stderr, "ERROR: NO total_func\n");
@@ -511,7 +511,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         func[func_cnt] = malloc(sizeof(char)*LENGTH);
                         memcpy(func[func_cnt], tmp, strlen(tmp));
-			printf("func: %s\n",func[func_cnt]);
+			//printf("func: %s\n",func[func_cnt]);
                         func_cnt++;
                         if(func_cnt >= 5){
                                 fprintf(stderr, "ERROR: Don't over 5 target function\n");
@@ -521,7 +521,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         target_path = malloc(sizeof(char)*LENGTH);
                         memcpy(target_path, tmp, strlen(tmp));
-                        printf("target_path: %s\n", target_path);
+                        //printf("target_path: %s\n", target_path);
                 }else{
                         fprintf(stderr,"ERROR: Check your JSON Format.\n");
                         fprintf(stderr,"Example: \n");
@@ -1464,7 +1464,7 @@ int main(int argc, char **argv_orig, char **envp) {
         show_help++;
         break;  // not needed
 
-      case 'R'://supress mode(== function supress mode)
+      case 'r'://supress mode(== function supress mode)
 	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);
@@ -1477,7 +1477,7 @@ int main(int argc, char **argv_orig, char **envp) {
             "(custom_mutators/radamsa/).");
 	*/
         break;
-      case 'r': //enhance mode(== function enhance mode)
+      case 'R': //enhance mode(== function enhance mode)
 	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);
