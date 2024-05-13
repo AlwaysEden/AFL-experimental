@@ -817,7 +817,7 @@ void read_testcases(afl_state_t *afl, u8 *directory) {
          and probably very time-consuming. */
 
       if (!access(dfn, F_OK)) { passed_det = 1; }
-
+      
       add_to_queue(afl, fn2, st.st_size >= MAX_FILE ? MAX_FILE : st.st_size,
                    passed_det);
 
@@ -943,17 +943,35 @@ void perform_dry_run(afl_state_t *afl) {
 	    int pid;
 	    char exe_line[512];
 	    snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
-	    char * exe_args[] = {exe_line, NULL};
 	    
+	    char ** exe_args;
 	    if(afl->fsrv.use_stdin == false){ //stdin X, argv O
-
+		    exe_args = (char**)malloc(3 * sizeof(char*));
+		    exe_args[0] = exe_line;
+		    exe_args[1] = q->fname;
+		    exe_args[2] = NULL;
 	    }else{ // stdin O, argv X
-
+		    exe_args = (char**)malloc(2*sizeof(char*));
+		    exe_args[0] = exe_line;
+		    exe_args[1] = NULL;
 	    }
 	    //Stdin일 때는 pipe 써서 넘겨주면 되고, argv일 때는 argument로 넘겨주면 될듯
 
 	    pid = fork();
 	    if(pid == 0){
+		    if(afl->fsrv.use_stdin == true){
+			    int tmp_fd = open(q->fname, O_RDONLY); //fd variable already exist
+			    if(tmp_fd < 0)	{
+				    fprintf(stderr, "open %s file\n", q->fname) ;
+				    exit(1);
+			    }	
+			    if(dup2(tmp_fd, STDIN_FILENO) < 0){
+				    fprintf(stderr, "Failed to redirect stdin");
+				    exit(1);
+			    }
+
+			    close(tmp_fd);
+		    }
 		    execv(exe_line, exe_args);
 		    fprintf(stderr, "Can't execute the binary\n");
 		    exit(1);
@@ -962,6 +980,7 @@ void perform_dry_run(afl_state_t *afl) {
 		    wait(NULL);
 	    }
 
+	   free(exe_args); 
 	    FILE *fp;
 	    int cover_count = 0;
 	    fp = fopen("function_coverage", "r");
@@ -978,7 +997,8 @@ void perform_dry_run(afl_state_t *afl) {
 	    }
 	    q->covered_func_count = cover_count;
 	    fprintf(fpp, "%d\n",q->covered_func_count);//for checking -JW-
-	    
+
+	   //free(exe_args); 
     }
 	   fclose(fpp);
 
