@@ -817,7 +817,7 @@ void read_testcases(afl_state_t *afl, u8 *directory) {
          and probably very time-consuming. */
 
       if (!access(dfn, F_OK)) { passed_det = 1; }
-
+      
       add_to_queue(afl, fn2, st.st_size >= MAX_FILE ? MAX_FILE : st.st_size,
                    passed_det);
 
@@ -946,6 +946,8 @@ void perform_dry_run(afl_state_t *afl) {
 	    pid = fork();
 	    if(pid == 0){
 		    execv(exe_line, exe_args);
+		    perror("execv failed");
+		    exit(1);
 	    }
 	    else{
 		    wait(NULL);
