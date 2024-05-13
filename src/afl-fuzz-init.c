@@ -970,7 +970,7 @@ void perform_dry_run(afl_state_t *afl) {
 				    exit(1);
 			    }
 
-			    close(fd);
+			    close(tmp_fd);
 		    }
 		    execv(exe_line, exe_args);
 		    fprintf(stderr, "Can't execute the binary\n");
@@ -980,6 +980,7 @@ void perform_dry_run(afl_state_t *afl) {
 		    wait(NULL);
 	    }
 
+	   free(exe_args); 
 	    FILE *fp;
 	    int cover_count = 0;
 	    fp = fopen("function_coverage", "r");
@@ -997,7 +998,7 @@ void perform_dry_run(afl_state_t *afl) {
 	    q->covered_func_count = cover_count;
 	    fprintf(fpp, "%d\n",q->covered_func_count);//for checking -JW-
 
-	   free(exe_args); 
+	   //free(exe_args); 
     }
 	   fclose(fpp);
 
