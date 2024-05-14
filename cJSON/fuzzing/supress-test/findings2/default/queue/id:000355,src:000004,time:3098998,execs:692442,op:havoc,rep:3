@@ -1,0 +1,17 @@
+bf{"et": {
+    "debug": "on",
+    "window": {
+    "": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "Ce",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "a": "er", "oneRp": "sity = (sity / 100) * 90;"
+    }
+}}

@@ -1,0 +1,19 @@
+uf{"et": {			},
+			"IDs": [1@6, 943, 234w": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+  "name": "sunffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "a": "er", "nneUp": "sity = (sity / 100) * 90;"
+    }
+}\

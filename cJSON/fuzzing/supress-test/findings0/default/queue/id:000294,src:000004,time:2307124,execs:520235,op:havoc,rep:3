@@ -1,0 +1,24 @@
+bf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sample Konfabulator Widget", "name": "main_window",
+"widvOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "Ce",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "a": "er", "oneUp":6,
+"style": "bold", "name": "text1",
+        "hO
+[0, -1, 0],
+    [1, 0, 0],
+    [0, 0, 1]
+	]
+ffset": 250,
+        "vOffset": 100,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

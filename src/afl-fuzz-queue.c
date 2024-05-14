@@ -604,8 +604,10 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
             int pid;
             char exe_line[512];
             snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
-
-            char ** exe_args;
+	    char disable_output[256] = "";
+	    sprintf(disable_output, "> /dev/null 2>&1");
+            
+	    char ** exe_args;
             if(afl->fsrv.use_stdin == false){ //stdin X, argv O
                     exe_args = (char**)malloc(3 * sizeof(char*));
                     exe_args[0] = exe_line;
@@ -638,7 +640,23 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
 
                             close(tmp_fd);
                     }
-                    execv(exe_line, exe_args);
+
+		    int dev_null = open("/dev/null", O_WRONLY);
+		    if (dev_null == -1) {
+			    perror("open");
+			    exit(1);
+		    }
+
+		    if (dup2(dev_null, STDOUT_FILENO) == -1) {
+			    perror("dup2");
+			    exit(1);
+		    }
+		    if (dup2(dev_null, STDERR_FILENO) == -1) {
+			    perror("dup2");
+			    exit (1);
+		    }
+  
+  		    execv(exe_line, exe_args);
                     fprintf(stderr, "Can't execute the binary\n");
                     exit(1);
             }

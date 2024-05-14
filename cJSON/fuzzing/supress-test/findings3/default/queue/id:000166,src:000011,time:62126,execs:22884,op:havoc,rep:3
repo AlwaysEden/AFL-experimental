@@ -1,0 +1,23 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.7668,
+	 "Longitude": -1920,
+"ht": 1080,
+"i":   "",
+	 "City":  "SAN FRAAAAAAAAAAANCISCO",
+	 "State": "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.371991,
+	 "e": -122.026020,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State": "CA",
+ "Zip":   "94085",
+	 "Coy":   "US"
+	 }
+	 ]

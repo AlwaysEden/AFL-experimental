@@ -1,0 +1,21 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_windbw",
+"width": 500,
+      "vet": 100,
+       "image": {
+    "src": "Images",
+   "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"text": {
+}}}}}}}}}}}}}}: "C Here",
+       0"size": 36-
+"style": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+           "het": 25   "a": "er", "oneUp": "sity =€(sity / 10?) * 90;"
+    }
+}}

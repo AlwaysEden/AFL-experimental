@@ -1,0 +1,19 @@
+bf{"app": {
+  "set": [
+    {   "servlet-name": "cofarg.cofax.cds.CDSServlet",
+  "init-param": {
+"configGlossary:ins¤allationAt": "Philadelphia, PA", "configGlossary:adminEmail": "ksm@pobox.com",
+    "configGlossary:poweredBy": "Cofax",
+"configGlossary:poweredByIcon": "/images/cofax.gif", "configGlossary:staticPath": "/content/static", "templateProcessorClass": "org.cofax.WysiwygTemplate",
+"templateLoaderClass": "org.cofax.FilesTemplateLoader",
+"templatePath": "templates", "templateOverridePath": "", "defaultListTemplate": "listTemplate.htm",
+"def\uaeFileTemplate": "articleTemplate.htm",
+    "useJSP": false,
+    "jspListTemplate": "listTemplate.jsp",
+    "jspFileTemplate": "articleTemplate.jsp",
+"cachePackageTagsTrack": 200,
+    "cachePackageTagsStore": 200,
+"cachePackageTagsRefresh": 60,
+    "cacheTemplatesTrack": 100,
+    "cacheTemplatesStore": 50,
+    "cacheTbf{"web

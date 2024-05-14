@@ -1,0 +1,23 @@
+bf[
+26020,
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State": "?A",
+	 "Zip":  "9",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude": -122.026020,
+	 "Ass":   "",
+	 "City":  "S",
+	 "State":     "CA",
+	 "Zip":   "5",
+	 "Coentry":   "US"
+	 }
+	 ]

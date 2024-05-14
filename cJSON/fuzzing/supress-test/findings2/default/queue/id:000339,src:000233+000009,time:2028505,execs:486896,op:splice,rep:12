@@ -1,0 +1,13 @@
+bf{"menu": {
+    "header": "SZG Viewer",
+    "items": [
+        {"id": "Open"},
+        {"id": "OpenNew", "label": "Open New"},
+     {"id": "ViewSVG", "label": "V)ew SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "About", "label": "Abe CVG V~ewer..."}
+    ]
+}}

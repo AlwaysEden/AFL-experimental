@@ -12,21 +12,37 @@ make
 clang -fsanitize=address -c ../../trace-pc-guard.c
 clang -fsanitize=address -fsanitize-coverage=trace-pc-guard,func ../../afl.c ../../../cJSON.c trace-pc-guard.o -o target_For_FuncCov
 
-cp ../../target.json ./
+mkdir fuzz1
+cd fuzz1
+cp ../../../target.json ./
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ./afl-main @@ yes &
 program_pid0=$!
+../../../../../afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ../afl-main @@ yes &
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings1 -r target.json ./afl-main @@ yes &
+
+mkdir ../fuzz2
+cd ../fuzz2
+cp ../../../target.json ./
 program_pid1=$!
+../../../../../afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ../afl-main @@ yes &
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings2 -r target.json ./afl-main @@ yes &
+mkdir ../fuzz3
+cd ../fuzz3
+cp ../../../target.json ./
+
+../../../../../afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ../afl-main @@ yes &
 program_pid2=$!
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings3 -r target.json ./afl-main @@ yes &
+mkdir ../fuzz4
+cd ../fuzz4
+cp ../../../target.json ./
+../../../../../afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ../afl-main @@ yes &
 program_pid3=$!
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings4 -r target.json ./afl-main @@ yes &
+mkdir ../fuzz5
+cd ../fuzz5
+cp ../../../target.json ./
+../../../../../afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ../afl-main @@ yes &
 program_pid4=$!
 
 sleep 3700
