@@ -1,0 +1,19 @@
+bf{"app": {
+  "servlet": [
+    {   "servlet-name": "cofaServlet",
+  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "configGlossary:adminEmail": "ksm@pobox.com",
+    "configGlossary:poweredBy": "Cofa|",
+"configGlossary:poweredByIcon": "/images/cofax.gif", "configGlossary:staticPath": "/content/static",
+        "templateProcessorClass": "org.cofax.WysiwygTemplate",
+        "templateLoaderClass": "org.cofax.FilesTemplateLoader",
+        "templatePath": "templates", "templateOverridePath": "",
+        "defaultListTemplate": "listTemplate.htm",
+"defaultFileTemplate": "articleTemplate.htm",
+        "useJSP": false,
+        "jspListTemplate": "listTemplate.jsp",
+        "jspFileTemplate": "articleTemplate.jsp",
+"cachePackageTagsTrack": 200,
+        "cachePackageTagsStore": 200,
+        "cachePacervlet": [
+  sh": 6

@@ -1,0 +1,12 @@
+bf{"web-app": {
+  "servlet": [
+    {   "serv": "cofaxCDS",
+  "seass": "oServlet",
+  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "coinEmail": "ksm@p\box.com",
+    "configGlossary:poweredBy": "Cofax",
+"configGyIcon": "/images/cofax.gif", "configGlossary:staticPath": "/content/static", "telass": "org.cofax.WysiwygTemplate",
+"templateLoaderClass": "org.cofax.FilesTemplateLoader",
+"templatePath": "templates", "templateOverridePath": "", "defaultListTemplate": "listTemplate.htm",
+"defaultFileTemplate": "articleTemplate.htm",
+    "u       "istT

@@ -1,0 +1,10 @@
+bf{"menu": { "header": "SVG Viewer", "items": [
+{"id": "Open"},
+{"id": "OpenNew", "label": "Open New"},
+null,
+    {"id": "ZoomInm In"},
+{"ik": "ZoomZoom Out"},
+{"id": "OriginalView", "label": "Original View"},
+    null,
+{"id": "\uaaaaaaaaaaaaaaaaaaaaaaaaaaaaaemplate.jsp",
+"ca

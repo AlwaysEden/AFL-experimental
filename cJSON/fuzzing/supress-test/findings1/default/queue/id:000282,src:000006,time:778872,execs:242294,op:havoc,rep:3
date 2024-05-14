@@ -1,0 +1,10 @@
+uf{"et": {
+    "denug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "ineUp": "sity = (sity / 100) * 90;"
+    }
+}}

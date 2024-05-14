@@ -1,0 +1,6 @@
+bf{"app": {
+  "servlet": [
+    {   "servlet-name": "cofaxCDS",
+      "servlet-class": "oServlet",
+      "init-param": {
+"configGlossary:installationAt": "Philadelphia, ‡Ñœ’İÓõßßßßßmplateProcessorClass": "

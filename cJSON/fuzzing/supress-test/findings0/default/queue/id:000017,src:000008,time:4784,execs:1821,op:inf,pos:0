@@ -1,0 +1,8 @@
+bf{"web-app": {
+  "servlet": [
+    {   "serv": "cofaxCDS",
+  "servlet-class": "oServlet",
+  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "configGlossary:adminEmail": "ksm@pobox.com",
+     ,
+  

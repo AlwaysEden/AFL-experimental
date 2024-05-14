@@ -1,0 +1,22 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "het": 250.
+/       "vet": 100,
+        "a": "er", "oneUp": "sityc= (sity / 100) * 90;"
+    }
+}}

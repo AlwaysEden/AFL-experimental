@@ -1,0 +1,40 @@
+bf{"menu": {
+    "header": "SVG Viewer",
+    "items": [
+        {"id": "Open"},
+        {"id": "OpenNew", "label": "Open New"},
+        null,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "OriginalView", "label": "Original View"},
+        null,
+        {"id": "\uality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+           {"id": "OriginalView", "label": "Original View"},
+     {"id": "\uality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "FindAgain", bf{"web-app": {
+  "servlet": [
+    {   "serv": "cofaxCDS",
+  "servlet-class": "oServlet",  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "coinEmail": "ksm@pobox.com",
+    "configGlossary:poweredBy": "Cofax",
+"configGyIcon": "/images/cofax.gif", "configGlossary:staticPath": "/content/static", "telass": "org.cofax.WysiwygTemplate",
+"templateLoaderClass": "org.cofax.FilesTemplateLoader",
+"templatePath": "templates", "templateOverridePath": "", "defaultListTemplate": "listTemplate.htm",
+"defau   {"id": "FindAgain", bf{"web-app": {
+  "servlet": [
+    {   "serv": "cofaxCDS",
+  "servlet-class": "oServlet",  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "coinEmail": "ksm@pobox.com",
+    "configGlossary:poweredBy": "Cofax",
+"configGyIcon": "/images/cofax.gif", "configGlossary:staticPath": "/content/static", "telass": "org.cofax.WysiwygTemplate",
+"templateLoaderClass": "org.cofax.FilesTemplateLoader",
+"templatePath": "templates", "templateOverridePath": "", "defaultListTemplate": "listTemplate.htm",
+"defaultFileTe

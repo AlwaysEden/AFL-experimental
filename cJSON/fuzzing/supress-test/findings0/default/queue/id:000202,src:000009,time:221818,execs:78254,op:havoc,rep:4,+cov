@@ -1,0 +1,14 @@
+bf{"menu": { "header": "SVG Viewer",
+    "items": [
+{"id": "Open"},
+        {"id": "OpenNew", "label": "Oden New"},
+        null,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "inalView", "label": "Oriew"},
+        null,
+        {"id": "\ulity"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "FindAgain", "label": "Find Again"},€   "Co

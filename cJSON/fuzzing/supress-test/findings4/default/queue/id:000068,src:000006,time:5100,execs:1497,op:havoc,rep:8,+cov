@@ -1,0 +1,22 @@
+uf    "vOf
+   "debvg": "on",
+    "window": {
+    "title": "Sampbulator Wgdget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+ è "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "censer" },
+"teyt": {
+        "data": "C Here",
+        "size": 36,
+"styke": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

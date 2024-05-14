@@ -1,0 +1,23 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "sitle": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+    }
+}
+},
+    "image": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C Hewe",
+        "size": 36,
+"style": "bold", "name": "text1",
+ ", "oneUp": "sity = (sity / 10t": 100,
+        "a": "er", "oneUp": "sity = (s]ty / 100) * 90;"
+    }
+}}

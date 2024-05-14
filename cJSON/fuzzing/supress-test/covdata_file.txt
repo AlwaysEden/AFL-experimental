@@ -1,0 +1,3616 @@
+/home/s22100141/Capston2/cJSON_ijon/cJSON.h:
+    1|       |/*
+    2|       |  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
+    3|       |
+    4|       |  Permission is hereby granted, free of charge, to any person obtaining a copy
+    5|       |  of this software and associated documentation files (the "Software"), to deal
+    6|       |  in the Software without restriction, including without limitation the rights
+    7|       |  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    8|       |  copies of the Software, and to permit persons to whom the Software is
+    9|       |  furnished to do so, subject to the following conditions:
+   10|       |
+   11|       |  The above copyright notice and this permission notice shall be included in
+   12|       |  all copies or substantial portions of the Software.
+   13|       |
+   14|       |  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   15|       |  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   16|       |  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   17|       |  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   18|       |  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   19|       |  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   20|       |  THE SOFTWARE.
+   21|       |*/
+   22|       |
+   23|       |#ifndef cJSON__h
+   24|       |#define cJSON__h
+   25|       |
+   26|       |#ifdef __cplusplus
+   27|       |extern "C"
+   28|       |{
+   29|       |#endif
+   30|       |
+   31|       |#if !defined(__WINDOWS__) && (defined(WIN32) || defined(WIN64) || defined(_MSC_VER) || defined(_WIN32))
+   32|       |#define __WINDOWS__
+   33|       |#endif
+   34|       |
+   35|       |#ifdef __WINDOWS__
+   36|       |
+   37|       |/* When compiling for windows, we specify a specific calling convention to avoid issues where we are being called from a project with a different default calling convention.  For windows you have 3 define options:
+   38|       |
+   39|       |CJSON_HIDE_SYMBOLS - Define this in the case where you don't want to ever dllexport symbols
+   40|       |CJSON_EXPORT_SYMBOLS - Define this on library build when you want to dllexport symbols (default)
+   41|       |CJSON_IMPORT_SYMBOLS - Define this if you want to dllimport symbol
+   42|       |
+   43|       |For *nix builds that support visibility attribute, you can define similar behavior by
+   44|       |
+   45|       |setting default visibility to hidden by adding
+   46|       |-fvisibility=hidden (for gcc)
+   47|       |or
+   48|       |-xldscope=hidden (for sun cc)
+   49|       |to CFLAGS
+   50|       |
+   51|       |then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJSON_EXPORT_SYMBOLS does
+   52|       |
+   53|       |*/
+   54|       |
+   55|       |#define CJSON_CDECL __cdecl
+   56|       |#define CJSON_STDCALL __stdcall
+   57|       |
+   58|       |/* export symbols by default, this is necessary for copy pasting the C and header file */
+   59|       |#if !defined(CJSON_HIDE_SYMBOLS) && !defined(CJSON_IMPORT_SYMBOLS) && !defined(CJSON_EXPORT_SYMBOLS)
+   60|       |#define CJSON_EXPORT_SYMBOLS
+   61|       |#endif
+   62|       |
+   63|       |#if defined(CJSON_HIDE_SYMBOLS)
+   64|       |#define CJSON_PUBLIC(type)   type CJSON_STDCALL
+   65|       |#elif defined(CJSON_EXPORT_SYMBOLS)
+   66|       |#define CJSON_PUBLIC(type)   __declspec(dllexport) type CJSON_STDCALL
+   67|       |#elif defined(CJSON_IMPORT_SYMBOLS)
+   68|       |#define CJSON_PUBLIC(type)   __declspec(dllimport) type CJSON_STDCALL
+   69|       |#endif
+   70|       |#else /* !__WINDOWS__ */
+   71|       |#define CJSON_CDECL
+   72|       |#define CJSON_STDCALL
+   73|       |
+   74|       |#if (defined(__GNUC__) || defined(__SUNPRO_CC) || defined (__SUNPRO_C)) && defined(CJSON_API_VISIBILITY)
+   75|       |#define CJSON_PUBLIC(type)   __attribute__((visibility("default"))) type
+   76|       |#else
+   77|       |#define CJSON_PUBLIC(type) type
+   78|       |#endif
+   79|       |#endif
+   80|       |
+   81|       |/* project version */
+   82|      0|#define CJSON_VERSION_MAJOR 1
+   83|      0|#define CJSON_VERSION_MINOR 7
+   84|      0|#define CJSON_VERSION_PATCH 17
+   85|       |
+   86|       |#include <stddef.h>
+   87|       |
+   88|       |/* cJSON Types: */
+   89|      0|#define cJSON_Invalid (0)
+   90|    608|#define cJSON_False  (1 << 0)
+   91|    400|#define cJSON_True   (1 << 1)
+   92|    367|#define cJSON_NULL   (1 << 2)
+   93|  11.9k|#define cJSON_Number (1 << 3)
+   94|  37.9k|#define cJSON_String (1 << 4)
+   95|  4.08k|#define cJSON_Array  (1 << 5)
+   96|  5.95k|#define cJSON_Object (1 << 6)
+   97|      0|#define cJSON_Raw    (1 << 7) /* raw json */
+   98|       |
+   99|  70.0k|#define cJSON_IsReference 256
+  100|  35.0k|#define cJSON_StringIsConst 512
+  101|       |
+  102|       |/* The cJSON structure: */
+  103|       |typedef struct cJSON
+  104|       |{
+  105|       |    /* next/prev allow you to walk array/object chains. Alternatively, use GetArraySize/GetArrayItem/GetObjectItem */
+  106|       |    struct cJSON *next;
+  107|       |    struct cJSON *prev;
+  108|       |    /* An array or object item will have a child pointer pointing to a chain of the items in the array/object. */
+  109|       |    struct cJSON *child;
+  110|       |
+  111|       |    /* The type of the item, as above. */
+  112|       |    int type;
+  113|       |
+  114|       |    /* The item's string, if type==cJSON_String  and type == cJSON_Raw */
+  115|       |    char *valuestring;
+  116|       |    /* writing to valueint is DEPRECATED, use cJSON_SetNumberValue instead */
+  117|       |    int valueint;
+  118|       |    /* The item's number, if type==cJSON_Number */
+  119|       |    double valuedouble;
+  120|       |
+  121|       |    /* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
+  122|       |    char *string;
+  123|       |} cJSON;
+  124|       |
+  125|       |typedef struct cJSON_Hooks
+  126|       |{
+  127|       |      /* malloc/free are CDECL on Windows regardless of the default calling convention of the compiler, so ensure the hooks allow passing those functions directly. */
+  128|       |      void *(CJSON_CDECL *malloc_fn)(size_t sz);
+  129|       |      void (CJSON_CDECL *free_fn)(void *ptr);
+  130|       |} cJSON_Hooks;
+  131|       |
+  132|       |typedef int cJSON_bool;
+  133|       |
+  134|       |/* Limits how deeply nested arrays/objects can be before cJSON rejects to parse them.
+  135|       | * This is to prevent stack overflows. */
+  136|       |#ifndef CJSON_NESTING_LIMIT
+  137|  13.7k|#define CJSON_NESTING_LIMIT 1000
+  138|       |#endif
+  139|       |
+  140|       |/* returns the version of cJSON as a string */
+  141|       |CJSON_PUBLIC(const char*) cJSON_Version(void);
+  142|       |
+  143|       |/* Supply malloc, realloc and free functions to cJSON */
+  144|       |CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks);
+  145|       |
+  146|       |/* Memory Management: the caller is always responsible to free the results from all variants of cJSON_Parse (with cJSON_Delete) and cJSON_Print (with stdlib free, cJSON_Hooks.free_fn, or cJSON_free as appropriate). The exception is cJSON_PrintPreallocated, where the caller has full responsibility of the buffer. */
+  147|       |/* Supply a block of JSON, and this returns a cJSON object you can interrogate. */
+  148|       |CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);
+  149|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length);
+  150|       |/* ParseWithOpts allows you to require (and check) that the JSON is null terminated, and to retrieve the pointer to the final byte parsed. */
+  151|       |/* If you supply a ptr in return_parse_end and parsing fails, then return_parse_end will contain a pointer to the error so will match cJSON_GetErrorPtr(). */
+  152|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated);
+  153|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated);
+  154|       |
+  155|       |/* Render a cJSON entity to text for transfer/storage. */
+  156|       |CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item);
+  157|       |/* Render a cJSON entity to text for transfer/storage without any formatting. */
+  158|       |CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item);
+  159|       |/* Render a cJSON entity to text using a buffered strategy. prebuffer is a guess at the final size. guessing well reduces reallocation. fmt=0 gives unformatted, =1 gives formatted */
+  160|       |CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt);
+  161|       |/* Render a cJSON entity to text using a buffer already allocated in memory with given length. Returns 1 on success and 0 on failure. */
+  162|       |/* NOTE: cJSON is not always 100% accurate in estimating how much memory it will use, so to be safe allocate 5 bytes more than you actually need */
+  163|       |CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format);
+  164|       |/* Delete a cJSON entity and all subentities. */
+  165|       |CJSON_PUBLIC(void) cJSON_Delete(cJSON *item);
+  166|       |
+  167|       |/* Returns the number of items in an array (or object). */
+  168|       |CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array);
+  169|       |/* Retrieve item number "index" from array "array". Returns NULL if unsuccessful. */
+  170|       |CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index);
+  171|       |/* Get item "string" from object. Case insensitive. */
+  172|       |CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string);
+  173|       |CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string);
+  174|       |CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string);
+  175|       |/* For analysing failed parses. This returns a pointer to the parse error. You'll probably need to look a few chars back to make sense of it. Defined when cJSON_Parse() returns 0. 0 when cJSON_Parse() succeeds. */
+  176|       |CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void);
+  177|       |
+  178|       |/* Check item type and return its value */
+  179|       |CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item);
+  180|       |CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item);
+  181|       |
+  182|       |/* These functions check the type of an item */
+  183|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item);
+  184|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item);
+  185|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item);
+  186|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item);
+  187|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item);
+  188|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item);
+  189|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item);
+  190|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item);
+  191|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item);
+  192|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item);
+  193|       |
+  194|       |/* These calls create a cJSON item of the appropriate type. */
+  195|       |CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void);
+  196|       |CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void);
+  197|       |CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void);
+  198|       |CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean);
+  199|       |CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num);
+  200|       |CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string);
+  201|       |/* raw json */
+  202|       |CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw);
+  203|       |CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void);
+  204|       |CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void);
+  205|       |
+  206|       |/* Create a string where valuestring references a string so
+  207|       | * it will not be freed by cJSON_Delete */
+  208|       |CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string);
+  209|       |/* Create an object/array that only references it's elements so
+  210|       | * they will not be freed by cJSON_Delete */
+  211|       |CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child);
+  212|       |CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child);
+  213|       |
+  214|       |/* These utilities create an Array of count items.
+  215|       | * The parameter count cannot be greater than the number of elements in the number array, otherwise array access will be out of bounds.*/
+  216|       |CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count);
+  217|       |CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count);
+  218|       |CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count);
+  219|       |CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count);
+  220|       |
+  221|       |/* Append item to the specified array/object. */
+  222|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item);
+  223|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item);
+  224|       |/* Use this when string is definitely const (i.e. a literal, or as good as), and will definitely survive the cJSON object.
+  225|       | * WARNING: When this function was used, make sure to always check that (item->type & cJSON_StringIsConst) is zero before
+  226|       | * writing to `item->string` */
+  227|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item);
+  228|       |/* Append reference to item to the specified array/object. Use this when you want to add an existing cJSON to a new cJSON, but don't want to corrupt your existing cJSON. */
+  229|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item);
+  230|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item);
+  231|       |
+  232|       |/* Remove/Detach items from Arrays/Objects. */
+  233|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item);
+  234|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which);
+  235|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which);
+  236|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string);
+  237|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string);
+  238|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string);
+  239|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string);
+  240|       |
+  241|       |/* Update array items. */
+  242|       |CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem); /* Shifts pre-existing items to the right. */
+  243|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement);
+  244|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem);
+  245|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object,const char *string,cJSON *newitem);
+  246|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object,const char *string,cJSON *newitem);
+  247|       |
+  248|       |/* Duplicate a cJSON item */
+  249|       |CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse);
+  250|       |/* Duplicate will create a new, identical cJSON item to the one you pass, in new memory that will
+  251|       | * need to be released. With recurse!=0, it will duplicate any children connected to the item.
+  252|       | * The item->next and ->prev pointers are always zero on return from Duplicate. */
+  253|       |/* Recursively compare two cJSON items for equality. If either a or b is NULL or invalid, they will be considered unequal.
+  254|       | * case_sensitive determines if object keys are treated case sensitive (1) or case insensitive (0) */
+  255|       |CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive);
+  256|       |
+  257|       |/* Minify a strings, remove blank characters(such as ' ', '\t', '\r', '\n') from strings.
+  258|       | * The input pointer json cannot point to a read-only address area, such as a string constant, 
+  259|       | * but should point to a readable and writable address area. */
+  260|       |CJSON_PUBLIC(void) cJSON_Minify(char *json);
+  261|       |
+  262|       |/* Helper functions for creating and adding items to an object at the same time.
+  263|       | * They return the added item or NULL on failure. */
+  264|       |CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name);
+  265|       |CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name);
+  266|       |CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name);
+  267|       |CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean);
+  268|       |CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number);
+  269|       |CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string);
+  270|       |CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw);
+  271|       |CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name);
+  272|       |CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name);
+  273|       |
+  274|       |/* When assigning an integer value, it needs to be propagated to valuedouble too. */
+  275|       |#define cJSON_SetIntValue(object, number) ((object) ? (object)->valueint = (object)->valuedouble = (number) : (number))
+  276|       |/* helper for the cJSON_SetNumberValue macro */
+  277|       |CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number);
+  278|       |#define cJSON_SetNumberValue(object, number) ((object != NULL) ? cJSON_SetNumberHelper(object, (double)number) : (number))
+  279|       |/* Change the valuestring of a cJSON_String object, only takes effect when type of object is cJSON_String */
+  280|       |CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring);
+  281|       |
+  282|       |/* If the object is not a boolean type this does nothing and returns cJSON_Invalid else it returns the new type*/
+  283|       |#define cJSON_SetBoolValue(object, boolValue) ( \
+  284|       |    (object != NULL && ((object)->type & (cJSON_False|cJSON_True))) ? \
+  285|       |    (object)->type=((object)->type &(~(cJSON_False|cJSON_True)))|((boolValue)?cJSON_True:cJSON_False) : \
+  286|       |    cJSON_Invalid\
+  287|       |)
+  288|       |
+  289|       |/* Macro for iterating over an array or object */
+  290|      0|#define cJSON_ArrayForEach(element, array) for(element = (array != NULL) ? (array)->child : NULL; element != NULL; element = element->next)
+  291|       |
+  292|       |/* malloc/free objects using the malloc/free functions that have been set with cJSON_InitHooks */
+  293|       |CJSON_PUBLIC(void *) cJSON_malloc(size_t size);
+  294|       |CJSON_PUBLIC(void) cJSON_free(void *object);
+  295|       |
+  296|       |#ifdef __cplusplus
+  297|       |}
+  298|       |#endif
+  299|       |
+  300|       |#endif
+
+/home/s22100141/Capston2/cJSON_ijon/cJSON_origin.c:
+    1|       |/*
+    2|       |  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
+    3|       |
+    4|       |  Permission is hereby granted, free of charge, to any person obtaining a copy
+    5|       |  of this software and associated documentation files (the "Software"), to deal
+    6|       |  in the Software without restriction, including without limitation the rights
+    7|       |  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    8|       |  copies of the Software, and to permit persons to whom the Software is
+    9|       |  furnished to do so, subject to the following conditions:
+   10|       |
+   11|       |  The above copyright notice and this permission notice shall be included in
+   12|       |  all copies or substantial portions of the Software.
+   13|       |
+   14|       |  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   15|       |  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   16|       |  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   17|       |  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   18|       |  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   19|       |  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   20|       |  THE SOFTWARE.
+   21|       |*/
+   22|       |
+   23|       |/* cJSON */
+   24|       |/* JSON parser in C. */
+   25|       |
+   26|       |/* disable warnings about old C89 functions in MSVC */
+   27|       |#if !defined(_CRT_SECURE_NO_DEPRECATE) && defined(_MSC_VER)
+   28|       |#define _CRT_SECURE_NO_DEPRECATE
+   29|       |#endif
+   30|       |
+   31|       |#ifdef __GNUC__
+   32|       |#pragma GCC visibility push(default)
+   33|       |#endif
+   34|       |#if defined(_MSC_VER)
+   35|       |#pragma warning (push)
+   36|       |/* disable warning about single line comments in system headers */
+   37|       |#pragma warning (disable : 4001)
+   38|       |#endif
+   39|       |
+   40|       |#include <string.h>
+   41|       |#include <stdio.h>
+   42|       |#include <math.h>
+   43|       |#include <stdlib.h>
+   44|       |#include <limits.h>
+   45|       |#include <ctype.h>
+   46|       |#include <float.h>
+   47|       |
+   48|       |#ifdef ENABLE_LOCALES
+   49|       |#include <locale.h>
+   50|       |#endif
+   51|       |
+   52|       |#if defined(_MSC_VER)
+   53|       |#pragma warning (pop)
+   54|       |#endif
+   55|       |#ifdef __GNUC__
+   56|       |#pragma GCC visibility pop
+   57|       |#endif
+   58|       |
+   59|       |#include "cJSON.h"
+   60|       |
+   61|       |/* define our own boolean type */
+   62|       |#ifdef true
+   63|       |#undef true
+   64|       |#endif
+   65|  73.3k|#define true ((cJSON_bool)1)
+   66|       |
+   67|       |#ifdef false
+   68|       |#undef false
+   69|       |#endif
+   70|  9.19k|#define false ((cJSON_bool)0)
+   71|       |
+   72|       |/* define isnan and isinf for ANSI C, if in C99 or above, isnan and isinf has been defined in math.h */
+   73|       |#ifndef isinf
+   74|       |#define isinf(d) (isnan((d - d)) && !isnan(d))
+   75|       |#endif
+   76|       |#ifndef isnan
+   77|       |#define isnan(d) (d != d)
+   78|       |#endif
+   79|       |
+   80|       |#ifndef NAN
+   81|       |#ifdef _WIN32
+   82|       |#define NAN sqrt(-1.0)
+   83|       |#else
+   84|       |#define NAN 0.0/0.0
+   85|       |#endif
+   86|       |#endif
+   87|       |
+   88|       |typedef struct {
+   89|       |    const unsigned char *json;
+   90|       |    size_t position;
+   91|       |} error;
+   92|       |static error global_error = { NULL, 0 };
+   93|       |
+   94|       |CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void)
+   95|      0|{
+   96|      0|    return (const char*) (global_error.json + global_error.position);
+   97|      0|}
+   98|       |
+   99|       |CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item)
+  100|      0|{
+  101|      0|    if (!cJSON_IsString(item))
+  102|      0|    {
+  103|      0|        return NULL;
+  104|      0|    }
+  105|       |
+  106|      0|    return item->valuestring;
+  107|      0|}
+  108|       |
+  109|       |CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item)
+  110|      0|{
+  111|      0|    if (!cJSON_IsNumber(item))
+  112|      0|    {
+  113|      0|        return (double) NAN;
+  114|      0|    }
+  115|       |
+  116|      0|    return item->valuedouble;
+  117|      0|}
+  118|       |
+  119|       |/* This is a safeguard to prevent copy-pasters from using incompatible C and header files */
+  120|       |#if (CJSON_VERSION_MAJOR != 1) || (CJSON_VERSION_MINOR != 7) || (CJSON_VERSION_PATCH != 17)
+  121|       |    #error cJSON.h and cJSON.c have different versions. Make sure that both have the same.
+  122|       |#endif
+  123|       |
+  124|       |CJSON_PUBLIC(const char*) cJSON_Version(void)
+  125|      0|{
+  126|      0|    static char version[15];
+  127|      0|    sprintf(version, "%i.%i.%i", CJSON_VERSION_MAJOR, CJSON_VERSION_MINOR, CJSON_VERSION_PATCH);
+  128|       |
+  129|      0|    return version;
+  130|      0|}
+  131|       |
+  132|       |/* Case insensitive string comparison, doesn't consider two NULL pointers equal though */
+  133|       |static int case_insensitive_strcmp(const unsigned char *string1, const unsigned char *string2)
+  134|      0|{
+  135|      0|    if ((string1 == NULL) || (string2 == NULL))
+  136|      0|    {
+  137|      0|        return 1;
+  138|      0|    }
+  139|       |
+  140|      0|    if (string1 == string2)
+  141|      0|    {
+  142|      0|        return 0;
+  143|      0|    }
+  144|       |
+  145|      0|    for(; tolower(*string1) == tolower(*string2); (void)string1++, string2++)
+  146|      0|    {
+  147|      0|        if (*string1 == '\0')
+  148|      0|        {
+  149|      0|            return 0;
+  150|      0|        }
+  151|      0|    }
+  152|       |
+  153|      0|    return tolower(*string1) - tolower(*string2);
+  154|      0|}
+  155|       |
+  156|       |typedef struct internal_hooks
+  157|       |{
+  158|       |    void *(CJSON_CDECL *allocate)(size_t size);
+  159|       |    void (CJSON_CDECL *deallocate)(void *pointer);
+  160|       |    void *(CJSON_CDECL *reallocate)(void *pointer, size_t size);
+  161|       |} internal_hooks;
+  162|       |
+  163|       |#if defined(_MSC_VER)
+  164|       |/* work around MSVC error C2322: '...' address of dllimport '...' is not static */
+  165|       |static void * CJSON_CDECL internal_malloc(size_t size)
+  166|       |{
+  167|       |    return malloc(size);
+  168|       |}
+  169|       |static void CJSON_CDECL internal_free(void *pointer)
+  170|       |{
+  171|       |    free(pointer);
+  172|       |}
+  173|       |static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
+  174|       |{
+  175|       |    return realloc(pointer, size);
+  176|       |}
+  177|       |#else
+  178|       |#define internal_malloc malloc
+  179|       |#define internal_free free
+  180|       |#define internal_realloc realloc
+  181|       |#endif
+  182|       |
+  183|       |/* strlen of character literals resolved at compile time */
+  184|      0|#define static_strlen(string_literal) (sizeof(string_literal) - sizeof(""))
+  185|       |
+  186|       |static internal_hooks global_hooks = { internal_malloc, internal_free, internal_realloc };
+  187|       |
+  188|       |static unsigned char* cJSON_strdup(const unsigned char* string, const internal_hooks * const hooks)
+  189|      0|{
+  190|      0|    size_t length = 0;
+  191|      0|    unsigned char *copy = NULL;
+  192|       |
+  193|      0|    if (string == NULL)
+  194|      0|    {
+  195|      0|        return NULL;
+  196|      0|    }
+  197|       |
+  198|      0|    length = strlen((const char*)string) + sizeof("");
+  199|      0|    copy = (unsigned char*)hooks->allocate(length);
+  200|      0|    if (copy == NULL)
+  201|      0|    {
+  202|      0|        return NULL;
+  203|      0|    }
+  204|      0|    memcpy(copy, string, length);
+  205|       |
+  206|      0|    return copy;
+  207|      0|}
+  208|       |
+  209|       |CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
+  210|      0|{
+  211|      0|    if (hooks == NULL)
+  212|      0|    {
+  213|       |        /* Reset hooks */
+  214|      0|        global_hooks.allocate = malloc;
+  215|      0|        global_hooks.deallocate = free;
+  216|      0|        global_hooks.reallocate = realloc;
+  217|      0|        return;
+  218|      0|    }
+  219|       |
+  220|      0|    global_hooks.allocate = malloc;
+  221|      0|    if (hooks->malloc_fn != NULL)
+  222|      0|    {
+  223|      0|        global_hooks.allocate = hooks->malloc_fn;
+  224|      0|    }
+  225|       |
+  226|      0|    global_hooks.deallocate = free;
+  227|      0|    if (hooks->free_fn != NULL)
+  228|      0|    {
+  229|      0|        global_hooks.deallocate = hooks->free_fn;
+  230|      0|    }
+  231|       |
+  232|       |    /* use realloc only if both free and malloc are used */
+  233|      0|    global_hooks.reallocate = NULL;
+  234|      0|    if ((global_hooks.allocate == malloc) && (global_hooks.deallocate == free))
+  235|      0|    {
+  236|      0|        global_hooks.reallocate = realloc;
+  237|      0|    }
+  238|      0|}
+  239|       |
+  240|       |/* Internal constructor. */
+  241|       |static cJSON *cJSON_New_Item(const internal_hooks * const hooks)
+  242|  35.0k|{
+  243|  35.0k|    cJSON* node = (cJSON*)hooks->allocate(sizeof(cJSON));
+  244|  35.0k|    if (node)
+  245|  35.0k|    {
+  246|  35.0k|        memset(node, '\0', sizeof(cJSON));
+  247|  35.0k|    }
+  248|       |
+  249|  35.0k|    return node;
+  250|  35.0k|}
+  251|       |
+  252|       |/* Delete a cJSON structure. */
+  253|       |CJSON_PUBLIC(void) cJSON_Delete(cJSON *item)
+  254|  15.4k|{
+  255|  15.4k|    cJSON *next = NULL;
+  256|  50.5k|    while (item != NULL)
+  257|  35.0k|    {
+  258|  35.0k|        next = item->next;
+  259|  35.0k|        if (!(item->type & cJSON_IsReference) && (item->child != NULL))
+  260|  5.71k|        {
+  261|  5.71k|            cJSON_Delete(item->child);
+  262|  5.71k|        }
+  263|  35.0k|        if (!(item->type & cJSON_IsReference) && (item->valuestring != NULL))
+  264|  12.2k|        {
+  265|  12.2k|            global_hooks.deallocate(item->valuestring);
+  266|  12.2k|        }
+  267|  35.0k|        if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
+  268|  17.3k|        {
+  269|  17.3k|            global_hooks.deallocate(item->string);
+  270|  17.3k|        }
+  271|  35.0k|        global_hooks.deallocate(item);
+  272|  35.0k|        item = next;
+  273|  35.0k|    }
+  274|  15.4k|}
+  275|       |
+  276|       |/* get the decimal point character of the current locale */
+  277|       |static unsigned char get_decimal_point(void)
+  278|  12.0k|{
+  279|       |#ifdef ENABLE_LOCALES
+  280|       |    struct lconv *lconv = localeconv();
+  281|       |    return (unsigned char) lconv->decimal_point[0];
+  282|       |#else
+  283|  12.0k|    return '.';
+  284|  12.0k|#endif
+  285|  12.0k|}
+  286|       |
+  287|       |typedef struct
+  288|       |{
+  289|       |    const unsigned char *content;
+  290|       |    size_t length;
+  291|       |    size_t offset;
+  292|       |    size_t depth; /* How deeply nested (in arrays/objects) is the input at the current offset. */
+  293|       |    internal_hooks hooks;
+  294|       |} parse_buffer;
+  295|       |
+  296|       |/* check if the given size is left to read in a given parse buffer (starting with 1) */
+  297|   206k|#define can_read(buffer, size) ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
+  298|       |/* check if the buffer can be accessed at the given index (starting with 0) */
+  299|   878k|#define can_access_at_index(buffer, index) ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
+  300|   178k|#define cannot_access_at_index(buffer, index) (!can_access_at_index(buffer, index))
+  301|       |/* get a pointer to the buffer at the position */
+  302|   704k|#define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
+  303|       |
+  304|       |/* Parse the input text to generate a number, and populate the result into item. */
+  305|       |static cJSON_bool parse_number(cJSON * const item, parse_buffer * const input_buffer)
+  306|  7.75k|{
+  307|  7.75k|    double number = 0;
+  308|  7.75k|    unsigned char *after_end = NULL;
+  309|  7.75k|    unsigned char number_c_string[64];
+  310|  7.75k|    unsigned char decimal_point = get_decimal_point();
+  311|  7.75k|    size_t i = 0;
+  312|       |
+  313|  7.75k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+  314|      0|    {
+  315|      0|        return false;
+  316|      0|    }
+  317|       |
+  318|       |    /* copy the number into a temporary buffer and replace '.' with the decimal point
+  319|       |     * of the current locale (for strtod)
+  320|       |     * This also takes care of '\0' not necessarily being available for marking the end of the input */
+  321|  32.0k|    for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
+  322|  32.0k|    {
+  323|  32.0k|        switch (buffer_at_offset(input_buffer)[i])
+  324|  32.0k|        {
+  325|  6.45k|            case '0':
+  326|  10.6k|            case '1':
+  327|  12.5k|            case '2':
+  328|  13.1k|            case '3':
+  329|  13.4k|            case '4':
+  330|  14.5k|            case '5':
+  331|  15.2k|            case '6':
+  332|  15.7k|            case '7':
+  333|  16.2k|            case '8':
+  334|  21.2k|            case '9':
+  335|  21.2k|            case '+':
+  336|  22.5k|            case '-':
+  337|  23.0k|            case 'e':
+  338|  23.1k|            case 'E':
+  339|  23.1k|                number_c_string[i] = buffer_at_offset(input_buffer)[i];
+  340|  23.1k|                break;
+  341|       |
+  342|  1.13k|            case '.':
+  343|  1.13k|                number_c_string[i] = decimal_point;
+  344|  1.13k|                break;
+  345|       |
+  346|  7.73k|            default:
+  347|  7.73k|                goto loop_end;
+  348|  32.0k|        }
+  349|  32.0k|    }
+  350|  7.75k|loop_end:
+  351|  7.75k|    number_c_string[i] = '\0';
+  352|       |
+  353|  7.75k|    number = strtod((const char*)number_c_string, (char**)&after_end);
+  354|  7.75k|    if (number_c_string == after_end)
+  355|     33|    {
+  356|     33|        return false; /* parse_error */
+  357|     33|    }
+  358|       |
+  359|  7.72k|    item->valuedouble = number;
+  360|       |
+  361|       |    /* use saturation in case of overflow */
+  362|  7.72k|    if (number >= INT_MAX)
+  363|    320|    {
+  364|    320|        item->valueint = INT_MAX;
+  365|    320|    }
+  366|  7.40k|    else if (number <= (double)INT_MIN)
+  367|     47|    {
+  368|     47|        item->valueint = INT_MIN;
+  369|     47|    }
+  370|  7.35k|    else
+  371|  7.35k|    {
+  372|  7.35k|        item->valueint = (int)number;
+  373|  7.35k|    }
+  374|       |
+  375|  7.72k|    item->type = cJSON_Number;
+  376|       |
+  377|  7.72k|    input_buffer->offset += (size_t)(after_end - number_c_string);
+  378|  7.72k|    return true;
+  379|  7.75k|}
+  380|       |
+  381|       |/* don't ask me, but the original cJSON_SetNumberValue returns an integer or double */
+  382|       |CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number)
+  383|      0|{
+  384|      0|    if (number >= INT_MAX)
+  385|      0|    {
+  386|      0|        object->valueint = INT_MAX;
+  387|      0|    }
+  388|      0|    else if (number <= (double)INT_MIN)
+  389|      0|    {
+  390|      0|        object->valueint = INT_MIN;
+  391|      0|    }
+  392|      0|    else
+  393|      0|    {
+  394|      0|        object->valueint = (int)number;
+  395|      0|    }
+  396|       |
+  397|      0|    return object->valuedouble = number;
+  398|      0|}
+  399|       |
+  400|       |CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring)
+  401|      0|{
+  402|      0|    char *copy = NULL;
+  403|       |    /* if object's type is not cJSON_String or is cJSON_IsReference, it should not set valuestring */
+  404|      0|    if ((object == NULL) || !(object->type & cJSON_String) || (object->type & cJSON_IsReference))
+  405|      0|    {
+  406|      0|        return NULL;
+  407|      0|    }
+  408|       |    /* return NULL if the object is corrupted */
+  409|      0|    if (object->valuestring == NULL)
+  410|      0|    {
+  411|      0|        return NULL;
+  412|      0|    }
+  413|      0|    if (strlen(valuestring) <= strlen(object->valuestring))
+  414|      0|    {
+  415|      0|        strcpy(object->valuestring, valuestring);
+  416|      0|        return object->valuestring;
+  417|      0|    }
+  418|      0|    copy = (char*) cJSON_strdup((const unsigned char*)valuestring, &global_hooks);
+  419|      0|    if (copy == NULL)
+  420|      0|    {
+  421|      0|        return NULL;
+  422|      0|    }
+  423|      0|    if (object->valuestring != NULL)
+  424|      0|    {
+  425|      0|        cJSON_free(object->valuestring);
+  426|      0|    }
+  427|      0|    object->valuestring = copy;
+  428|       |
+  429|      0|    return copy;
+  430|      0|}
+  431|       |
+  432|       |typedef struct
+  433|       |{
+  434|       |    unsigned char *buffer;
+  435|       |    size_t length;
+  436|       |    size_t offset;
+  437|       |    size_t depth; /* current nesting depth (for formatted printing) */
+  438|       |    cJSON_bool noalloc;
+  439|       |    cJSON_bool format; /* is this print a formatted print */
+  440|       |    internal_hooks hooks;
+  441|       |} printbuffer;
+  442|       |
+  443|       |/* realloc printbuffer if necessary to have at least "needed" bytes more */
+  444|       |static unsigned char* ensure(printbuffer * const p, size_t needed)
+  445|  71.4k|{
+  446|  71.4k|    unsigned char *newbuffer = NULL;
+  447|  71.4k|    size_t newsize = 0;
+  448|       |
+  449|  71.4k|    if ((p == NULL) || (p->buffer == NULL))
+  450|      0|    {
+  451|      0|        return NULL;
+  452|      0|    }
+  453|       |
+  454|  71.4k|    if ((p->length > 0) && (p->offset >= p->length))
+  455|      0|    {
+  456|       |        /* make sure that offset is valid */
+  457|      0|        return NULL;
+  458|      0|    }
+  459|       |
+  460|  71.4k|    if (needed > INT_MAX)
+  461|      0|    {
+  462|       |        /* sizes bigger than INT_MAX are currently not supported */
+  463|      0|        return NULL;
+  464|      0|    }
+  465|       |
+  466|  71.4k|    needed += p->offset + 1;
+  467|  71.4k|    if (needed <= p->length)
+  468|  68.3k|    {
+  469|  68.3k|        return p->buffer + p->offset;
+  470|  68.3k|    }
+  471|       |
+  472|  3.07k|    if (p->noalloc) {
+  473|      0|        return NULL;
+  474|      0|    }
+  475|       |
+  476|       |    /* calculate new buffer size */
+  477|  3.07k|    if (needed > (INT_MAX / 2))
+  478|      0|    {
+  479|       |        /* overflow of int, use INT_MAX if possible */
+  480|      0|        if (needed <= INT_MAX)
+  481|      0|        {
+  482|      0|            newsize = INT_MAX;
+  483|      0|        }
+  484|      0|        else
+  485|      0|        {
+  486|      0|            return NULL;
+  487|      0|        }
+  488|      0|    }
+  489|  3.07k|    else
+  490|  3.07k|    {
+  491|  3.07k|        newsize = needed * 2;
+  492|  3.07k|    }
+  493|       |
+  494|  3.07k|    if (p->hooks.reallocate != NULL)
+  495|  3.07k|    {
+  496|       |        /* reallocate with realloc if available */
+  497|  3.07k|        newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
+  498|  3.07k|        if (newbuffer == NULL)
+  499|      0|        {
+  500|      0|            p->hooks.deallocate(p->buffer);
+  501|      0|            p->length = 0;
+  502|      0|            p->buffer = NULL;
+  503|       |
+  504|      0|            return NULL;
+  505|      0|        }
+  506|  3.07k|    }
+  507|      0|    else
+  508|      0|    {
+  509|       |        /* otherwise reallocate manually */
+  510|      0|        newbuffer = (unsigned char*)p->hooks.allocate(newsize);
+  511|      0|        if (!newbuffer)
+  512|      0|        {
+  513|      0|            p->hooks.deallocate(p->buffer);
+  514|      0|            p->length = 0;
+  515|      0|            p->buffer = NULL;
+  516|       |
+  517|      0|            return NULL;
+  518|      0|        }
+  519|       |
+  520|      0|        memcpy(newbuffer, p->buffer, p->offset + 1);
+  521|      0|        p->hooks.deallocate(p->buffer);
+  522|      0|    }
+  523|  3.07k|    p->length = newsize;
+  524|  3.07k|    p->buffer = newbuffer;
+  525|       |
+  526|  3.07k|    return newbuffer + p->offset;
+  527|  3.07k|}
+  528|       |
+  529|       |/* calculate the new length of the string in a printbuffer and update the offset */
+  530|       |static void update_offset(printbuffer * const buffer)
+  531|  28.6k|{
+  532|  28.6k|    const unsigned char *buffer_pointer = NULL;
+  533|  28.6k|    if ((buffer == NULL) || (buffer->buffer == NULL))
+  534|      0|    {
+  535|      0|        return;
+  536|      0|    }
+  537|  28.6k|    buffer_pointer = buffer->buffer + buffer->offset;
+  538|       |
+  539|  28.6k|    buffer->offset += strlen((const char*)buffer_pointer);
+  540|  28.6k|}
+  541|       |
+  542|       |/* securely comparison of floating-point variables */
+  543|       |static cJSON_bool compare_double(double a, double b)
+  544|    426|{
+  545|    426|    double maxVal = fabs(a) > fabs(b) ? fabs(a) : fabs(b);
+  546|    426|    return (fabs(a - b) <= maxVal * DBL_EPSILON);
+  547|    426|}
+  548|       |
+  549|       |/* Render the number nicely from the given item into a string. */
+  550|       |static cJSON_bool print_number(const cJSON * const item, printbuffer * const output_buffer)
+  551|  4.25k|{
+  552|  4.25k|    unsigned char *output_pointer = NULL;
+  553|  4.25k|    double d = item->valuedouble;
+  554|  4.25k|    int length = 0;
+  555|  4.25k|    size_t i = 0;
+  556|  4.25k|    unsigned char number_buffer[26] = {0}; /* temporary buffer to print the number into */
+  557|  4.25k|    unsigned char decimal_point = get_decimal_point();
+  558|  4.25k|    double test = 0.0;
+  559|       |
+  560|  4.25k|    if (output_buffer == NULL)
+  561|      0|    {
+  562|      0|        return false;
+  563|      0|    }
+  564|       |
+  565|       |    /* This checks for NaN and Infinity */
+  566|  4.25k|    if (isnan(d) || isinf(d))
+  567|     20|    {
+  568|     20|        length = sprintf((char*)number_buffer, "null");
+  569|     20|    }
+  570|  4.23k|	else if(d == (double)item->valueint)
+  571|  3.80k|	{
+  572|  3.80k|		length = sprintf((char*)number_buffer, "%d", item->valueint);
+  573|  3.80k|	}
+  574|    426|    else
+  575|    426|    {
+  576|       |        /* Try 15 decimal places of precision to avoid nonsignificant nonzero digits */
+  577|    426|        length = sprintf((char*)number_buffer, "%1.15g", d);
+  578|       |
+  579|       |        /* Check whether the original double can be recovered */
+  580|    426|        if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
+  581|     18|        {
+  582|       |            /* If not, print with 17 decimal places of precision */
+  583|     18|            length = sprintf((char*)number_buffer, "%1.17g", d);
+  584|     18|        }
+  585|    426|    }
+  586|       |
+  587|       |    /* sprintf failed or buffer overrun occurred */
+  588|  4.25k|    if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
+  589|      0|    {
+  590|      0|        return false;
+  591|      0|    }
+  592|       |
+  593|       |    /* reserve appropriate space in the output */
+  594|  4.25k|    output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
+  595|  4.25k|    if (output_pointer == NULL)
+  596|      0|    {
+  597|      0|        return false;
+  598|      0|    }
+  599|       |
+  600|       |    /* copy the printed number to the output and replace locale
+  601|       |     * dependent decimal point with '.' */
+  602|  16.7k|    for (i = 0; i < ((size_t)length); i++)
+  603|  12.4k|    {
+  604|  12.4k|        if (number_buffer[i] == decimal_point)
+  605|    314|        {
+  606|    314|            output_pointer[i] = '.';
+  607|    314|            continue;
+  608|    314|        }
+  609|       |
+  610|  12.1k|        output_pointer[i] = number_buffer[i];
+  611|  12.1k|    }
+  612|  4.25k|    output_pointer[i] = '\0';
+  613|       |
+  614|  4.25k|    output_buffer->offset += (size_t)length;
+  615|       |
+  616|  4.25k|    return true;
+  617|  4.25k|}
+  618|       |
+  619|       |/* parse 4 digit hexadecimal number */
+  620|       |static unsigned parse_hex4(const unsigned char * const input)
+  621|  4.53k|{
+  622|  4.53k|    unsigned int h = 0;
+  623|  4.53k|    size_t i = 0;
+  624|       |
+  625|  16.2k|    for (i = 0; i < 4; i++)
+  626|  14.1k|    {
+  627|       |        /* parse digit */
+  628|  14.1k|        if ((input[i] >= '0') && (input[i] <= '9'))
+  629|  2.25k|        {
+  630|  2.25k|            h += (unsigned int) input[i] - '0';
+  631|  2.25k|        }
+  632|  11.8k|        else if ((input[i] >= 'A') && (input[i] <= 'F'))
+  633|  5.82k|        {
+  634|  5.82k|            h += (unsigned int) 10 + input[i] - 'A';
+  635|  5.82k|        }
+  636|  6.06k|        else if ((input[i] >= 'a') && (input[i] <= 'f'))
+  637|  3.60k|        {
+  638|  3.60k|            h += (unsigned int) 10 + input[i] - 'a';
+  639|  3.60k|        }
+  640|  2.45k|        else /* invalid */
+  641|  2.45k|        {
+  642|  2.45k|            return 0;
+  643|  2.45k|        }
+  644|       |
+  645|  11.6k|        if (i < 3)
+  646|  9.60k|        {
+  647|       |            /* shift left to make place for the next nibble */
+  648|  9.60k|            h = h << 4;
+  649|  9.60k|        }
+  650|  11.6k|    }
+  651|       |
+  652|  2.07k|    return h;
+  653|  4.53k|}
+  654|       |
+  655|       |/* converts a UTF-16 literal to UTF-8
+  656|       | * A literal can be one or two sequences of the form \uXXXX */
+  657|       |static unsigned char utf16_literal_to_utf8(const unsigned char * const input_pointer, const unsigned char * const input_end, unsigned char **output_pointer)
+  658|  4.36k|{
+  659|  4.36k|    long unsigned int codepoint = 0;
+  660|  4.36k|    unsigned int first_code = 0;
+  661|  4.36k|    const unsigned char *first_sequence = input_pointer;
+  662|  4.36k|    unsigned char utf8_length = 0;
+  663|  4.36k|    unsigned char utf8_position = 0;
+  664|  4.36k|    unsigned char sequence_length = 0;
+  665|  4.36k|    unsigned char first_byte_mark = 0;
+  666|       |
+  667|  4.36k|    if ((input_end - first_sequence) < 6)
+  668|      3|    {
+  669|       |        /* input ends unexpectedly */
+  670|      3|        goto fail;
+  671|      3|    }
+  672|       |
+  673|       |    /* get the first utf16 sequence */
+  674|  4.35k|    first_code = parse_hex4(first_sequence + 2);
+  675|       |
+  676|       |    /* check that the code is valid */
+  677|  4.35k|    if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
+  678|     15|    {
+  679|     15|        goto fail;
+  680|     15|    }
+  681|       |
+  682|       |    /* UTF16 surrogate pair */
+  683|  4.34k|    if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
+  684|    196|    {
+  685|    196|        const unsigned char *second_sequence = first_sequence + 6;
+  686|    196|        unsigned int second_code = 0;
+  687|    196|        sequence_length = 12; /* \uXXXX\uXXXX */
+  688|       |
+  689|    196|        if ((input_end - second_sequence) < 6)
+  690|      6|        {
+  691|       |            /* input ends unexpectedly */
+  692|      6|            goto fail;
+  693|      6|        }
+  694|       |
+  695|    190|        if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
+  696|     16|        {
+  697|       |            /* missing second half of the surrogate pair */
+  698|     16|            goto fail;
+  699|     16|        }
+  700|       |
+  701|       |        /* get the second utf16 sequence */
+  702|    174|        second_code = parse_hex4(second_sequence + 2);
+  703|       |        /* check that the code is valid */
+  704|    174|        if ((second_code < 0xDC00) || (second_code > 0xDFFF))
+  705|     22|        {
+  706|       |            /* invalid second half of the surrogate pair */
+  707|     22|            goto fail;
+  708|     22|        }
+  709|       |
+  710|       |
+  711|       |        /* calculate the unicode codepoint from the surrogate pair */
+  712|    152|        codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
+  713|    152|    }
+  714|  4.14k|    else
+  715|  4.14k|    {
+  716|  4.14k|        sequence_length = 6; /* \uXXXX */
+  717|  4.14k|        codepoint = first_code;
+  718|  4.14k|    }
+  719|       |
+  720|       |    /* encode as UTF-8
+  721|       |     * takes at maximum 4 bytes to encode:
+  722|       |     * 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx */
+  723|  4.29k|    if (codepoint < 0x80)
+  724|  2.44k|    {
+  725|       |        /* normal ascii, encoding 0xxxxxxx */
+  726|  2.44k|        utf8_length = 1;
+  727|  2.44k|    }
+  728|  1.85k|    else if (codepoint < 0x800)
+  729|     26|    {
+  730|       |        /* two bytes, encoding 110xxxxx 10xxxxxx */
+  731|     26|        utf8_length = 2;
+  732|     26|        first_byte_mark = 0xC0; /* 11000000 */
+  733|     26|    }
+  734|  1.82k|    else if (codepoint < 0x10000)
+  735|  1.67k|    {
+  736|       |        /* three bytes, encoding 1110xxxx 10xxxxxx 10xxxxxx */
+  737|  1.67k|        utf8_length = 3;
+  738|  1.67k|        first_byte_mark = 0xE0; /* 11100000 */
+  739|  1.67k|    }
+  740|    152|    else if (codepoint <= 0x10FFFF)
+  741|    152|    {
+  742|       |        /* four bytes, encoding 1110xxxx 10xxxxxx 10xxxxxx 10xxxxxx */
+  743|    152|        utf8_length = 4;
+  744|    152|        first_byte_mark = 0xF0; /* 11110000 */
+  745|    152|    }
+  746|      0|    else
+  747|      0|    {
+  748|       |        /* invalid unicode codepoint */
+  749|      0|        goto fail;
+  750|      0|    }
+  751|       |
+  752|       |    /* encode as utf8 */
+  753|  8.12k|    for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
+  754|  3.83k|    {
+  755|       |        /* 10xxxxxx */
+  756|  3.83k|        (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
+  757|  3.83k|        codepoint >>= 6;
+  758|  3.83k|    }
+  759|       |    /* encode first byte */
+  760|  4.29k|    if (utf8_length > 1)
+  761|  1.85k|    {
+  762|  1.85k|        (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
+  763|  1.85k|    }
+  764|  2.44k|    else
+  765|  2.44k|    {
+  766|  2.44k|        (*output_pointer)[0] = (unsigned char)(codepoint & 0x7F);
+  767|  2.44k|    }
+  768|       |
+  769|  4.29k|    *output_pointer += utf8_length;
+  770|       |
+  771|  4.29k|    return sequence_length;
+  772|       |
+  773|     62|fail:
+  774|     62|    return 0;
+  775|  4.29k|}
+  776|       |
+  777|       |/* Parse the input text into an unescaped cinput, and populate item. */
+  778|       |static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_buffer)
+  779|  29.8k|{
+  780|  29.8k|    const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
+  781|  29.8k|    const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
+  782|  29.8k|    unsigned char *output_pointer = NULL;
+  783|  29.8k|    unsigned char *output = NULL;
+  784|       |
+  785|       |    /* not a string */
+  786|  29.8k|    if (buffer_at_offset(input_buffer)[0] != '\"')
+  787|     82|    {
+  788|     82|        goto fail;
+  789|     82|    }
+  790|       |
+  791|  29.7k|    {
+  792|       |        /* calculate approximate size of the output (overestimate) */
+  793|  29.7k|        size_t allocation_length = 0;
+  794|  29.7k|        size_t skipped_bytes = 0;
+  795|   486k|        while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
+  796|   457k|        {
+  797|       |            /* is escape sequence */
+  798|   457k|            if (input_end[0] == '\\')
+  799|  15.7k|            {
+  800|  15.7k|                if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
+  801|      0|                {
+  802|       |                    /* prevent buffer overflow when last input character is a backslash */
+  803|      0|                    goto fail;
+  804|      0|                }
+  805|  15.7k|                skipped_bytes++;
+  806|  15.7k|                input_end++;
+  807|  15.7k|            }
+  808|   457k|            input_end++;
+  809|   457k|        }
+  810|  29.7k|        if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
+  811|     32|        {
+  812|     32|            goto fail; /* string ended unexpectedly */
+  813|     32|        }
+  814|       |
+  815|       |        /* This is at most how much we need for the output */
+  816|  29.7k|        allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
+  817|  29.7k|        output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
+  818|  29.7k|        if (output == NULL)
+  819|      0|        {
+  820|      0|            goto fail; /* allocation failure */
+  821|      0|        }
+  822|  29.7k|    }
+  823|       |
+  824|  29.7k|    output_pointer = output;
+  825|       |    /* loop through the string literal */
+  826|   464k|    while (input_pointer < input_end)
+  827|   435k|    {
+  828|   435k|        if (*input_pointer != '\\')
+  829|   421k|        {
+  830|   421k|            *output_pointer++ = *input_pointer++;
+  831|   421k|        }
+  832|       |        /* escape sequence */
+  833|  13.3k|        else
+  834|  13.3k|        {
+  835|  13.3k|            unsigned char sequence_length = 2;
+  836|  13.3k|            if ((input_end - input_pointer) < 1)
+  837|      0|            {
+  838|      0|                goto fail;
+  839|      0|            }
+  840|       |
+  841|  13.3k|            switch (input_pointer[1])
+  842|  13.3k|            {
+  843|    301|                case 'b':
+  844|    301|                    *output_pointer++ = '\b';
+  845|    301|                    break;
+  846|    163|                case 'f':
+  847|    163|                    *output_pointer++ = '\f';
+  848|    163|                    break;
+  849|     33|                case 'n':
+  850|     33|                    *output_pointer++ = '\n';
+  851|     33|                    break;
+  852|     59|                case 'r':
+  853|     59|                    *output_pointer++ = '\r';
+  854|     59|                    break;
+  855|    113|                case 't':
+  856|    113|                    *output_pointer++ = '\t';
+  857|    113|                    break;
+  858|  1.23k|                case '\"':
+  859|  8.22k|                case '\\':
+  860|  8.23k|                case '/':
+  861|  8.23k|                    *output_pointer++ = input_pointer[1];
+  862|  8.23k|                    break;
+  863|       |
+  864|       |                /* UTF-16 literal */
+  865|  4.36k|                case 'u':
+  866|  4.36k|                    sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
+  867|  4.36k|                    if (sequence_length == 0)
+  868|     62|                    {
+  869|       |                        /* failed to convert UTF16-literal to UTF-8 */
+  870|     62|                        goto fail;
+  871|     62|                    }
+  872|  4.29k|                    break;
+  873|       |
+  874|  4.29k|                default:
+  875|     58|                    goto fail;
+  876|  13.3k|            }
+  877|  13.2k|            input_pointer += sequence_length;
+  878|  13.2k|        }
+  879|   435k|    }
+  880|       |
+  881|       |    /* zero terminate the output */
+  882|  29.6k|    *output_pointer = '\0';
+  883|       |
+  884|  29.6k|    item->type = cJSON_String;
+  885|  29.6k|    item->valuestring = (char*)output;
+  886|       |
+  887|  29.6k|    input_buffer->offset = (size_t) (input_end - input_buffer->content);
+  888|  29.6k|    input_buffer->offset++;
+  889|       |
+  890|  29.6k|    return true;
+  891|       |
+  892|    234|fail:
+  893|    234|    if (output != NULL)
+  894|    120|    {
+  895|    120|        input_buffer->hooks.deallocate(output);
+  896|    120|    }
+  897|       |
+  898|    234|    if (input_pointer != NULL)
+  899|    234|    {
+  900|    234|        input_buffer->offset = (size_t)(input_pointer - input_buffer->content);
+  901|    234|    }
+  902|       |
+  903|    234|    return false;
+  904|  29.7k|}
+  905|       |
+  906|       |/* Render the cstring provided to an escaped version that can be printed. */
+  907|       |static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffer * const output_buffer)
+  908|  20.2k|{
+  909|  20.2k|    const unsigned char *input_pointer = NULL;
+  910|  20.2k|    unsigned char *output = NULL;
+  911|  20.2k|    unsigned char *output_pointer = NULL;
+  912|  20.2k|    size_t output_length = 0;
+  913|       |    /* numbers of additional characters needed for escaping */
+  914|  20.2k|    size_t escape_characters = 0;
+  915|       |
+  916|  20.2k|    if (output_buffer == NULL)
+  917|      0|    {
+  918|      0|        return false;
+  919|      0|    }
+  920|       |
+  921|       |    /* empty string */
+  922|  20.2k|    if (input == NULL)
+  923|      0|    {
+  924|      0|        output = ensure(output_buffer, sizeof("\"\""));
+  925|      0|        if (output == NULL)
+  926|      0|        {
+  927|      0|            return false;
+  928|      0|        }
+  929|      0|        strcpy((char*)output, "\"\"");
+  930|       |
+  931|      0|        return true;
+  932|      0|    }
+  933|       |
+  934|       |    /* set "flag" to 1 if something needs to be escaped */
+  935|   284k|    for (input_pointer = input; *input_pointer; input_pointer++)
+  936|   264k|    {
+  937|   264k|        switch (*input_pointer)
+  938|   264k|        {
+  939|    545|            case '\"':
+  940|  4.55k|            case '\\':
+  941|  4.63k|            case '\b':
+  942|  4.86k|            case '\f':
+  943|  10.3k|            case '\n':
+  944|  10.3k|            case '\r':
+  945|  13.4k|            case '\t':
+  946|       |                /* one character escape sequence */
+  947|  13.4k|                escape_characters++;
+  948|  13.4k|                break;
+  949|   250k|            default:
+  950|   250k|                if (*input_pointer < 32)
+  951|  6.49k|                {
+  952|       |                    /* UTF-16 escape sequence uXXXX */
+  953|  6.49k|                    escape_characters += 5;
+  954|  6.49k|                }
+  955|   250k|                break;
+  956|   264k|        }
+  957|   264k|    }
+  958|  20.2k|    output_length = (size_t)(input_pointer - input) + escape_characters;
+  959|       |
+  960|  20.2k|    output = ensure(output_buffer, output_length + sizeof("\"\""));
+  961|  20.2k|    if (output == NULL)
+  962|      0|    {
+  963|      0|        return false;
+  964|      0|    }
+  965|       |
+  966|       |    /* no characters have to be escaped */
+  967|  20.2k|    if (escape_characters == 0)
+  968|  19.6k|    {
+  969|  19.6k|        output[0] = '\"';
+  970|  19.6k|        memcpy(output + 1, input, output_length);
+  971|  19.6k|        output[output_length + 1] = '\"';
+  972|  19.6k|        output[output_length + 2] = '\0';
+  973|       |
+  974|  19.6k|        return true;
+  975|  19.6k|    }
+  976|       |
+  977|    600|    output[0] = '\"';
+  978|    600|    output_pointer = output + 1;
+  979|       |    /* copy the string */
+  980|  33.9k|    for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
+  981|  33.3k|    {
+  982|  33.3k|        if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
+  983|  13.4k|        {
+  984|       |            /* normal character, copy */
+  985|  13.4k|            *output_pointer = *input_pointer;
+  986|  13.4k|        }
+  987|  19.8k|        else
+  988|  19.8k|        {
+  989|       |            /* character needs to be escaped */
+  990|  19.8k|            *output_pointer++ = '\\';
+  991|  19.8k|            switch (*input_pointer)
+  992|  19.8k|            {
+  993|  4.00k|                case '\\':
+  994|  4.00k|                    *output_pointer = '\\';
+  995|  4.00k|                    break;
+  996|    545|                case '\"':
+  997|    545|                    *output_pointer = '\"';
+  998|    545|                    break;
+  999|     80|                case '\b':
+ 1000|     80|                    *output_pointer = 'b';
+ 1001|     80|                    break;
+ 1002|    231|                case '\f':
+ 1003|    231|                    *output_pointer = 'f';
+ 1004|    231|                    break;
+ 1005|  5.50k|                case '\n':
+ 1006|  5.50k|                    *output_pointer = 'n';
+ 1007|  5.50k|                    break;
+ 1008|      6|                case '\r':
+ 1009|      6|                    *output_pointer = 'r';
+ 1010|      6|                    break;
+ 1011|  3.03k|                case '\t':
+ 1012|  3.03k|                    *output_pointer = 't';
+ 1013|  3.03k|                    break;
+ 1014|  6.49k|                default:
+ 1015|       |                    /* escape and print as unicode codepoint */
+ 1016|  6.49k|                    sprintf((char*)output_pointer, "u%04x", *input_pointer);
+ 1017|  6.49k|                    output_pointer += 4;
+ 1018|  6.49k|                    break;
+ 1019|  19.8k|            }
+ 1020|  19.8k|        }
+ 1021|  33.3k|    }
+ 1022|    600|    output[output_length + 1] = '\"';
+ 1023|    600|    output[output_length + 2] = '\0';
+ 1024|       |
+ 1025|    600|    return true;
+ 1026|    600|}
+ 1027|       |
+ 1028|       |/* Invoke print_string_ptr (which is useful) on an item. */
+ 1029|       |static cJSON_bool print_string(const cJSON * const item, printbuffer * const p)
+ 1030|  8.30k|{
+ 1031|  8.30k|    return print_string_ptr((unsigned char*)item->valuestring, p);
+ 1032|  8.30k|}
+ 1033|       |
+ 1034|       |/* Predeclare these prototypes. */
+ 1035|       |static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer);
+ 1036|       |static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer);
+ 1037|       |static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer);
+ 1038|       |static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer);
+ 1039|       |static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer);
+ 1040|       |static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer);
+ 1041|       |
+ 1042|       |/* Utility to jump whitespace and cr/lf */
+ 1043|       |static parse_buffer *buffer_skip_whitespace(parse_buffer * const buffer)
+ 1044|   108k|{
+ 1045|   108k|    if ((buffer == NULL) || (buffer->content == NULL))
+ 1046|      0|    {
+ 1047|      0|        return NULL;
+ 1048|      0|    }
+ 1049|       |
+ 1050|   108k|    if (cannot_access_at_index(buffer, 0))
+ 1051|      0|    {
+ 1052|      0|        return buffer;
+ 1053|      0|    }
+ 1054|       |
+ 1055|   232k|    while (can_access_at_index(buffer, 0) && (buffer_at_offset(buffer)[0] <= 32))
+ 1056|   123k|    {
+ 1057|   123k|       buffer->offset++;
+ 1058|   123k|    }
+ 1059|       |
+ 1060|   108k|    if (buffer->offset == buffer->length)
+ 1061|    110|    {
+ 1062|    110|        buffer->offset--;
+ 1063|    110|    }
+ 1064|       |
+ 1065|   108k|    return buffer;
+ 1066|   108k|}
+ 1067|       |
+ 1068|       |/* skip the UTF-8 BOM (byte order mark) if it is at the beginning of a buffer */
+ 1069|       |static parse_buffer *skip_utf8_bom(parse_buffer * const buffer)
+ 1070|  1.84k|{
+ 1071|  1.84k|    if ((buffer == NULL) || (buffer->content == NULL) || (buffer->offset != 0))
+ 1072|      0|    {
+ 1073|      0|        return NULL;
+ 1074|      0|    }
+ 1075|       |
+ 1076|  1.84k|    if (can_access_at_index(buffer, 4) && (strncmp((const char*)buffer_at_offset(buffer), "\xEF\xBB\xBF", 3) == 0))
+ 1077|      0|    {
+ 1078|      0|        buffer->offset += 3;
+ 1079|      0|    }
+ 1080|       |
+ 1081|  1.84k|    return buffer;
+ 1082|  1.84k|}
+ 1083|       |
+ 1084|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated)
+ 1085|  1.84k|{
+ 1086|  1.84k|    size_t buffer_length;
+ 1087|       |
+ 1088|  1.84k|    if (NULL == value)
+ 1089|      0|    {
+ 1090|      0|        return NULL;
+ 1091|      0|    }
+ 1092|       |
+ 1093|       |    /* Adding null character size due to require_null_terminated. */
+ 1094|  1.84k|    buffer_length = strlen(value) + sizeof("");
+ 1095|       |
+ 1096|  1.84k|    return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
+ 1097|  1.84k|}
+ 1098|       |
+ 1099|       |/* Parse an object - create a new root, and populate. */
+ 1100|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated)
+ 1101|  1.84k|{
+ 1102|  1.84k|    parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
+ 1103|  1.84k|    cJSON *item = NULL;
+ 1104|       |
+ 1105|       |    /* reset error position */
+ 1106|  1.84k|    global_error.json = NULL;
+ 1107|  1.84k|    global_error.position = 0;
+ 1108|       |
+ 1109|  1.84k|    if (value == NULL || 0 == buffer_length)
+ 1110|      0|    {
+ 1111|      0|        goto fail;
+ 1112|      0|    }
+ 1113|       |
+ 1114|  1.84k|    buffer.content = (const unsigned char*)value;
+ 1115|  1.84k|    buffer.length = buffer_length;
+ 1116|  1.84k|    buffer.offset = 0;
+ 1117|  1.84k|    buffer.hooks = global_hooks;
+ 1118|       |
+ 1119|  1.84k|    item = cJSON_New_Item(&global_hooks);
+ 1120|  1.84k|    if (item == NULL) /* memory fail */
+ 1121|      0|    {
+ 1122|      0|        goto fail;
+ 1123|      0|    }
+ 1124|       |
+ 1125|  1.84k|    if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
+ 1126|    894|    {
+ 1127|       |        /* parse failure. ep is set. */
+ 1128|    894|        goto fail;
+ 1129|    894|    }
+ 1130|       |
+ 1131|       |    /* if we require null-terminated JSON without appended garbage, skip and then check for a null terminator */
+ 1132|    953|    if (require_null_terminated)
+ 1133|      0|    {
+ 1134|      0|        buffer_skip_whitespace(&buffer);
+ 1135|      0|        if ((buffer.offset >= buffer.length) || buffer_at_offset(&buffer)[0] != '\0')
+ 1136|      0|        {
+ 1137|      0|            goto fail;
+ 1138|      0|        }
+ 1139|      0|    }
+ 1140|    953|    if (return_parse_end)
+ 1141|      0|    {
+ 1142|      0|        *return_parse_end = (const char*)buffer_at_offset(&buffer);
+ 1143|      0|    }
+ 1144|       |
+ 1145|    953|    return item;
+ 1146|       |
+ 1147|    894|fail:
+ 1148|    894|    if (item != NULL)
+ 1149|    894|    {
+ 1150|    894|        cJSON_Delete(item);
+ 1151|    894|    }
+ 1152|       |
+ 1153|    894|    if (value != NULL)
+ 1154|    894|    {
+ 1155|    894|        error local_error;
+ 1156|    894|        local_error.json = (const unsigned char*)value;
+ 1157|    894|        local_error.position = 0;
+ 1158|       |
+ 1159|    894|        if (buffer.offset < buffer.length)
+ 1160|    883|        {
+ 1161|    883|            local_error.position = buffer.offset;
+ 1162|    883|        }
+ 1163|     11|        else if (buffer.length > 0)
+ 1164|     11|        {
+ 1165|     11|            local_error.position = buffer.length - 1;
+ 1166|     11|        }
+ 1167|       |
+ 1168|    894|        if (return_parse_end != NULL)
+ 1169|      0|        {
+ 1170|      0|            *return_parse_end = (const char*)local_error.json + local_error.position;
+ 1171|      0|        }
+ 1172|       |
+ 1173|    894|        global_error = local_error;
+ 1174|    894|    }
+ 1175|       |
+ 1176|    894|    return NULL;
+ 1177|    953|}
+ 1178|       |
+ 1179|       |/* Default options for cJSON_Parse */
+ 1180|       |CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)
+ 1181|  1.84k|{
+ 1182|  1.84k|    return cJSON_ParseWithOpts(value, 0, 0);
+ 1183|  1.84k|}
+ 1184|       |
+ 1185|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length)
+ 1186|      0|{
+ 1187|      0|    return cJSON_ParseWithLengthOpts(value, buffer_length, 0, 0);
+ 1188|      0|}
+ 1189|       |
+ 1190|      0|#define cjson_min(a, b) (((a) < (b)) ? (a) : (b))
+ 1191|       |
+ 1192|       |static unsigned char *print(const cJSON * const item, cJSON_bool format, const internal_hooks * const hooks)
+ 1193|    326|{
+ 1194|    326|    static const size_t default_buffer_size = 256;
+ 1195|    326|    printbuffer buffer[1];
+ 1196|    326|    unsigned char *printed = NULL;
+ 1197|       |
+ 1198|    326|    memset(buffer, 0, sizeof(buffer));
+ 1199|       |
+ 1200|       |    /* create buffer */
+ 1201|    326|    buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
+ 1202|    326|    buffer->length = default_buffer_size;
+ 1203|    326|    buffer->format = format;
+ 1204|    326|    buffer->hooks = *hooks;
+ 1205|    326|    if (buffer->buffer == NULL)
+ 1206|      0|    {
+ 1207|      0|        goto fail;
+ 1208|      0|    }
+ 1209|       |
+ 1210|       |    /* print the value */
+ 1211|    326|    if (!print_value(item, buffer))
+ 1212|      0|    {
+ 1213|      0|        goto fail;
+ 1214|      0|    }
+ 1215|    326|    update_offset(buffer);
+ 1216|       |
+ 1217|       |    /* check if reallocate is available */
+ 1218|    326|    if (hooks->reallocate != NULL)
+ 1219|    326|    {
+ 1220|    326|        printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
+ 1221|    326|        if (printed == NULL) {
+ 1222|      0|            goto fail;
+ 1223|      0|        }
+ 1224|    326|        buffer->buffer = NULL;
+ 1225|    326|    }
+ 1226|      0|    else /* otherwise copy the JSON over to a new buffer */
+ 1227|      0|    {
+ 1228|      0|        printed = (unsigned char*) hooks->allocate(buffer->offset + 1);
+ 1229|      0|        if (printed == NULL)
+ 1230|      0|        {
+ 1231|      0|            goto fail;
+ 1232|      0|        }
+ 1233|      0|        memcpy(printed, buffer->buffer, cjson_min(buffer->length, buffer->offset + 1));
+ 1234|      0|        printed[buffer->offset] = '\0'; /* just to be sure */
+ 1235|       |
+ 1236|       |        /* free the buffer */
+ 1237|      0|        hooks->deallocate(buffer->buffer);
+ 1238|      0|    }
+ 1239|       |
+ 1240|    326|    return printed;
+ 1241|       |
+ 1242|      0|fail:
+ 1243|      0|    if (buffer->buffer != NULL)
+ 1244|      0|    {
+ 1245|      0|        hooks->deallocate(buffer->buffer);
+ 1246|      0|    }
+ 1247|       |
+ 1248|      0|    if (printed != NULL)
+ 1249|      0|    {
+ 1250|      0|        hooks->deallocate(printed);
+ 1251|      0|    }
+ 1252|       |
+ 1253|      0|    return NULL;
+ 1254|    326|}
+ 1255|       |
+ 1256|       |/* Render a cJSON item/entity/structure to text. */
+ 1257|       |CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item)
+ 1258|     69|{
+ 1259|     69|    return (char*)print(item, true, &global_hooks);
+ 1260|     69|}
+ 1261|       |
+ 1262|       |CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item)
+ 1263|    257|{
+ 1264|    257|    return (char*)print(item, false, &global_hooks);
+ 1265|    257|}
+ 1266|       |
+ 1267|       |CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt)
+ 1268|    627|{
+ 1269|    627|    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
+ 1270|       |
+ 1271|    627|    if (prebuffer < 0)
+ 1272|      0|    {
+ 1273|      0|        return NULL;
+ 1274|      0|    }
+ 1275|       |
+ 1276|    627|    p.buffer = (unsigned char*)global_hooks.allocate((size_t)prebuffer);
+ 1277|    627|    if (!p.buffer)
+ 1278|      0|    {
+ 1279|      0|        return NULL;
+ 1280|      0|    }
+ 1281|       |
+ 1282|    627|    p.length = (size_t)prebuffer;
+ 1283|    627|    p.offset = 0;
+ 1284|    627|    p.noalloc = false;
+ 1285|    627|    p.format = fmt;
+ 1286|    627|    p.hooks = global_hooks;
+ 1287|       |
+ 1288|    627|    if (!print_value(item, &p))
+ 1289|      0|    {
+ 1290|      0|        global_hooks.deallocate(p.buffer);
+ 1291|      0|        return NULL;
+ 1292|      0|    }
+ 1293|       |
+ 1294|    627|    return (char*)p.buffer;
+ 1295|    627|}
+ 1296|       |
+ 1297|       |CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format)
+ 1298|      0|{
+ 1299|      0|    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
+ 1300|       |
+ 1301|      0|    if ((length < 0) || (buffer == NULL))
+ 1302|      0|    {
+ 1303|      0|        return false;
+ 1304|      0|    }
+ 1305|       |
+ 1306|      0|    p.buffer = (unsigned char*)buffer;
+ 1307|      0|    p.length = (size_t)length;
+ 1308|      0|    p.offset = 0;
+ 1309|      0|    p.noalloc = true;
+ 1310|      0|    p.format = format;
+ 1311|      0|    p.hooks = global_hooks;
+ 1312|       |
+ 1313|      0|    return print_value(item, &p);
+ 1314|      0|}
+ 1315|       |
+ 1316|       |/* Parser core - when encountering text, process appropriately. */
+ 1317|       |static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer)
+ 1318|  34.7k|{
+ 1319|  34.7k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+ 1320|      0|    {
+ 1321|      0|        return false; /* no input */
+ 1322|      0|    }
+ 1323|       |
+ 1324|       |    /* parse the different types of values */
+ 1325|       |    /* null */
+ 1326|  34.7k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
+ 1327|    217|    {
+ 1328|    217|        item->type = cJSON_NULL;
+ 1329|    217|        input_buffer->offset += 4;
+ 1330|    217|        return true;
+ 1331|    217|    }
+ 1332|       |    /* false */
+ 1333|  34.5k|    if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
+ 1334|    349|    {
+ 1335|    349|        item->type = cJSON_False;
+ 1336|    349|        input_buffer->offset += 5;
+ 1337|    349|        return true;
+ 1338|    349|    }
+ 1339|       |    /* true */
+ 1340|  34.1k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
+ 1341|    227|    {
+ 1342|    227|        item->type = cJSON_True;
+ 1343|    227|        item->valueint = 1;
+ 1344|    227|        input_buffer->offset += 4;
+ 1345|    227|        return true;
+ 1346|    227|    }
+ 1347|       |    /* string */
+ 1348|  33.9k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
+ 1349|  12.3k|    {
+ 1350|  12.3k|        return parse_string(item, input_buffer);
+ 1351|  12.3k|    }
+ 1352|       |    /* number */
+ 1353|  21.5k|    if (can_access_at_index(input_buffer, 0) && ((buffer_at_offset(input_buffer)[0] == '-') || ((buffer_at_offset(input_buffer)[0] >= '0') && (buffer_at_offset(input_buffer)[0] <= '9'))))
+ 1354|  7.75k|    {
+ 1355|  7.75k|        return parse_number(item, input_buffer);
+ 1356|  7.75k|    }
+ 1357|       |    /* array */
+ 1358|  13.8k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
+ 1359|  9.36k|    {
+ 1360|  9.36k|        return parse_array(item, input_buffer);
+ 1361|  9.36k|    }
+ 1362|       |    /* object */
+ 1363|  4.47k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
+ 1364|  4.36k|    {
+ 1365|  4.36k|        return parse_object(item, input_buffer);
+ 1366|  4.36k|    }
+ 1367|       |
+ 1368|    113|    return false;
+ 1369|  4.47k|}
+ 1370|       |
+ 1371|       |/* Render a value to text. */
+ 1372|       |static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer)
+ 1373|  17.3k|{
+ 1374|  17.3k|    unsigned char *output = NULL;
+ 1375|       |
+ 1376|  17.3k|    if ((item == NULL) || (output_buffer == NULL))
+ 1377|      0|    {
+ 1378|      0|        return false;
+ 1379|      0|    }
+ 1380|       |
+ 1381|  17.3k|    switch ((item->type) & 0xFF)
+ 1382|  17.3k|    {
+ 1383|    150|        case cJSON_NULL:
+ 1384|    150|            output = ensure(output_buffer, 5);
+ 1385|    150|            if (output == NULL)
+ 1386|      0|            {
+ 1387|      0|                return false;
+ 1388|      0|            }
+ 1389|    150|            strcpy((char*)output, "null");
+ 1390|    150|            return true;
+ 1391|       |
+ 1392|    259|        case cJSON_False:
+ 1393|    259|            output = ensure(output_buffer, 6);
+ 1394|    259|            if (output == NULL)
+ 1395|      0|            {
+ 1396|      0|                return false;
+ 1397|      0|            }
+ 1398|    259|            strcpy((char*)output, "false");
+ 1399|    259|            return true;
+ 1400|       |
+ 1401|    173|        case cJSON_True:
+ 1402|    173|            output = ensure(output_buffer, 5);
+ 1403|    173|            if (output == NULL)
+ 1404|      0|            {
+ 1405|      0|                return false;
+ 1406|      0|            }
+ 1407|    173|            strcpy((char*)output, "true");
+ 1408|    173|            return true;
+ 1409|       |
+ 1410|  4.25k|        case cJSON_Number:
+ 1411|  4.25k|            return print_number(item, output_buffer);
+ 1412|       |
+ 1413|      0|        case cJSON_Raw:
+ 1414|      0|        {
+ 1415|      0|            size_t raw_length = 0;
+ 1416|      0|            if (item->valuestring == NULL)
+ 1417|      0|            {
+ 1418|      0|                return false;
+ 1419|      0|            }
+ 1420|       |
+ 1421|      0|            raw_length = strlen(item->valuestring) + sizeof("");
+ 1422|      0|            output = ensure(output_buffer, raw_length);
+ 1423|      0|            if (output == NULL)
+ 1424|      0|            {
+ 1425|      0|                return false;
+ 1426|      0|            }
+ 1427|      0|            memcpy(output, item->valuestring, raw_length);
+ 1428|      0|            return true;
+ 1429|      0|        }
+ 1430|       |
+ 1431|  8.30k|        case cJSON_String:
+ 1432|  8.30k|            return print_string(item, output_buffer);
+ 1433|       |
+ 1434|  1.51k|        case cJSON_Array:
+ 1435|  1.51k|            return print_array(item, output_buffer);
+ 1436|       |
+ 1437|  2.71k|        case cJSON_Object:
+ 1438|  2.71k|            return print_object(item, output_buffer);
+ 1439|       |
+ 1440|      0|        default:
+ 1441|      0|            return false;
+ 1442|  17.3k|    }
+ 1443|  17.3k|}
+ 1444|       |
+ 1445|       |/* Build an array from input text. */
+ 1446|       |static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer)
+ 1447|  9.36k|{
+ 1448|  9.36k|    cJSON *head = NULL; /* head of the linked list */
+ 1449|  9.36k|    cJSON *current_item = NULL;
+ 1450|       |
+ 1451|  9.36k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+ 1452|      5|    {
+ 1453|      5|        return false; /* to deeply nested */
+ 1454|      5|    }
+ 1455|  9.36k|    input_buffer->depth++;
+ 1456|       |
+ 1457|  9.36k|    if (buffer_at_offset(input_buffer)[0] != '[')
+ 1458|      0|    {
+ 1459|       |        /* not an array */
+ 1460|      0|        goto fail;
+ 1461|      0|    }
+ 1462|       |
+ 1463|  9.36k|    input_buffer->offset++;
+ 1464|  9.36k|    buffer_skip_whitespace(input_buffer);
+ 1465|  9.36k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
+ 1466|     65|    {
+ 1467|       |        /* empty array */
+ 1468|     65|        goto success;
+ 1469|     65|    }
+ 1470|       |
+ 1471|       |    /* check if we skipped to the end of the buffer */
+ 1472|  9.29k|    if (cannot_access_at_index(input_buffer, 0))
+ 1473|      0|    {
+ 1474|      0|        input_buffer->offset--;
+ 1475|      0|        goto fail;
+ 1476|      0|    }
+ 1477|       |
+ 1478|       |    /* step back to character in front of the first element */
+ 1479|  9.29k|    input_buffer->offset--;
+ 1480|       |    /* loop through the comma separated array elements */
+ 1481|  9.29k|    do
+ 1482|  15.6k|    {
+ 1483|       |        /* allocate next item */
+ 1484|  15.6k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+ 1485|  15.6k|        if (new_item == NULL)
+ 1486|      0|        {
+ 1487|      0|            goto fail; /* allocation failure */
+ 1488|      0|        }
+ 1489|       |
+ 1490|       |        /* attach next item to list */
+ 1491|  15.6k|        if (head == NULL)
+ 1492|  9.29k|        {
+ 1493|       |            /* start the linked list */
+ 1494|  9.29k|            current_item = head = new_item;
+ 1495|  9.29k|        }
+ 1496|  6.37k|        else
+ 1497|  6.37k|        {
+ 1498|       |            /* add to the end and advance */
+ 1499|  6.37k|            current_item->next = new_item;
+ 1500|  6.37k|            new_item->prev = current_item;
+ 1501|  6.37k|            current_item = new_item;
+ 1502|  6.37k|        }
+ 1503|       |
+ 1504|       |        /* parse next value */
+ 1505|  15.6k|        input_buffer->offset++;
+ 1506|  15.6k|        buffer_skip_whitespace(input_buffer);
+ 1507|  15.6k|        if (!parse_value(current_item, input_buffer))
+ 1508|  6.64k|        {
+ 1509|  6.64k|            goto fail; /* failed to parse value */
+ 1510|  6.64k|        }
+ 1511|  9.02k|        buffer_skip_whitespace(input_buffer);
+ 1512|  9.02k|    }
+ 1513|  9.29k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+ 1514|       |
+ 1515|  2.65k|    if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
+ 1516|    160|    {
+ 1517|    160|        goto fail; /* expected end of array */
+ 1518|    160|    }
+ 1519|       |
+ 1520|  2.56k|success:
+ 1521|  2.56k|    input_buffer->depth--;
+ 1522|       |
+ 1523|  2.56k|    if (head != NULL) {
+ 1524|  2.49k|        head->prev = current_item;
+ 1525|  2.49k|    }
+ 1526|       |
+ 1527|  2.56k|    item->type = cJSON_Array;
+ 1528|  2.56k|    item->child = head;
+ 1529|       |
+ 1530|  2.56k|    input_buffer->offset++;
+ 1531|       |
+ 1532|  2.56k|    return true;
+ 1533|       |
+ 1534|  6.80k|fail:
+ 1535|  6.80k|    if (head != NULL)
+ 1536|  6.80k|    {
+ 1537|  6.80k|        cJSON_Delete(head);
+ 1538|  6.80k|    }
+ 1539|       |
+ 1540|  6.80k|    return false;
+ 1541|  2.65k|}
+ 1542|       |
+ 1543|       |/* Render an array to text */
+ 1544|       |static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer)
+ 1545|  1.51k|{
+ 1546|  1.51k|    unsigned char *output_pointer = NULL;
+ 1547|  1.51k|    size_t length = 0;
+ 1548|  1.51k|    cJSON *current_element = item->child;
+ 1549|       |
+ 1550|  1.51k|    if (output_buffer == NULL)
+ 1551|      0|    {
+ 1552|      0|        return false;
+ 1553|      0|    }
+ 1554|       |
+ 1555|       |    /* Compose the output array. */
+ 1556|       |    /* opening square bracket */
+ 1557|  1.51k|    output_pointer = ensure(output_buffer, 1);
+ 1558|  1.51k|    if (output_pointer == NULL)
+ 1559|      0|    {
+ 1560|      0|        return false;
+ 1561|      0|    }
+ 1562|       |
+ 1563|  1.51k|    *output_pointer = '[';
+ 1564|  1.51k|    output_buffer->offset++;
+ 1565|  1.51k|    output_buffer->depth++;
+ 1566|       |
+ 1567|  5.99k|    while (current_element != NULL)
+ 1568|  4.47k|    {
+ 1569|  4.47k|        if (!print_value(current_element, output_buffer))
+ 1570|      0|        {
+ 1571|      0|            return false;
+ 1572|      0|        }
+ 1573|  4.47k|        update_offset(output_buffer);
+ 1574|  4.47k|        if (current_element->next)
+ 1575|  2.99k|        {
+ 1576|  2.99k|            length = (size_t) (output_buffer->format ? 2 : 1);
+ 1577|  2.99k|            output_pointer = ensure(output_buffer, length + 1);
+ 1578|  2.99k|            if (output_pointer == NULL)
+ 1579|      0|            {
+ 1580|      0|                return false;
+ 1581|      0|            }
+ 1582|  2.99k|            *output_pointer++ = ',';
+ 1583|  2.99k|            if(output_buffer->format)
+ 1584|  2.13k|            {
+ 1585|  2.13k|                *output_pointer++ = ' ';
+ 1586|  2.13k|            }
+ 1587|  2.99k|            *output_pointer = '\0';
+ 1588|  2.99k|            output_buffer->offset += length;
+ 1589|  2.99k|        }
+ 1590|  4.47k|        current_element = current_element->next;
+ 1591|  4.47k|    }
+ 1592|       |
+ 1593|  1.51k|    output_pointer = ensure(output_buffer, 2);
+ 1594|  1.51k|    if (output_pointer == NULL)
+ 1595|      0|    {
+ 1596|      0|        return false;
+ 1597|      0|    }
+ 1598|  1.51k|    *output_pointer++ = ']';
+ 1599|  1.51k|    *output_pointer = '\0';
+ 1600|  1.51k|    output_buffer->depth--;
+ 1601|       |
+ 1602|  1.51k|    return true;
+ 1603|  1.51k|}
+ 1604|       |
+ 1605|       |/* Build an object from the text. */
+ 1606|       |static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer)
+ 1607|  4.36k|{
+ 1608|  4.36k|    cJSON *head = NULL; /* linked list head */
+ 1609|  4.36k|    cJSON *current_item = NULL;
+ 1610|       |
+ 1611|  4.36k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+ 1612|      0|    {
+ 1613|      0|        return false; /* to deeply nested */
+ 1614|      0|    }
+ 1615|  4.36k|    input_buffer->depth++;
+ 1616|       |
+ 1617|  4.36k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
+ 1618|      0|    {
+ 1619|      0|        goto fail; /* not an object */
+ 1620|      0|    }
+ 1621|       |
+ 1622|  4.36k|    input_buffer->offset++;
+ 1623|  4.36k|    buffer_skip_whitespace(input_buffer);
+ 1624|  4.36k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
+ 1625|     17|    {
+ 1626|     17|        goto success; /* empty object */
+ 1627|     17|    }
+ 1628|       |
+ 1629|       |    /* check if we skipped to the end of the buffer */
+ 1630|  4.34k|    if (cannot_access_at_index(input_buffer, 0))
+ 1631|      0|    {
+ 1632|      0|        input_buffer->offset--;
+ 1633|      0|        goto fail;
+ 1634|      0|    }
+ 1635|       |
+ 1636|       |    /* step back to character in front of the first element */
+ 1637|  4.34k|    input_buffer->offset--;
+ 1638|       |    /* loop through the comma separated array elements */
+ 1639|  4.34k|    do
+ 1640|  17.5k|    {
+ 1641|       |        /* allocate next item */
+ 1642|  17.5k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+ 1643|  17.5k|        if (new_item == NULL)
+ 1644|      0|        {
+ 1645|      0|            goto fail; /* allocation failure */
+ 1646|      0|        }
+ 1647|       |
+ 1648|       |        /* attach next item to list */
+ 1649|  17.5k|        if (head == NULL)
+ 1650|  4.34k|        {
+ 1651|       |            /* start the linked list */
+ 1652|  4.34k|            current_item = head = new_item;
+ 1653|  4.34k|        }
+ 1654|  13.1k|        else
+ 1655|  13.1k|        {
+ 1656|       |            /* add to the end and advance */
+ 1657|  13.1k|            current_item->next = new_item;
+ 1658|  13.1k|            new_item->prev = current_item;
+ 1659|  13.1k|            current_item = new_item;
+ 1660|  13.1k|        }
+ 1661|       |
+ 1662|       |        /* parse the name of the child */
+ 1663|  17.5k|        input_buffer->offset++;
+ 1664|  17.5k|        buffer_skip_whitespace(input_buffer);
+ 1665|  17.5k|        if (!parse_string(current_item, input_buffer))
+ 1666|    133|        {
+ 1667|    133|            goto fail; /* failed to parse name */
+ 1668|    133|        }
+ 1669|  17.3k|        buffer_skip_whitespace(input_buffer);
+ 1670|       |
+ 1671|       |        /* swap valuestring and string, because we parsed the name */
+ 1672|  17.3k|        current_item->string = current_item->valuestring;
+ 1673|  17.3k|        current_item->valuestring = NULL;
+ 1674|       |
+ 1675|  17.3k|        if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
+ 1676|    130|        {
+ 1677|    130|            goto fail; /* invalid object */
+ 1678|    130|        }
+ 1679|       |
+ 1680|       |        /* parse the value */
+ 1681|  17.2k|        input_buffer->offset++;
+ 1682|  17.2k|        buffer_skip_whitespace(input_buffer);
+ 1683|  17.2k|        if (!parse_value(current_item, input_buffer))
+ 1684|    644|        {
+ 1685|    644|            goto fail; /* failed to parse value */
+ 1686|    644|        }
+ 1687|  16.6k|        buffer_skip_whitespace(input_buffer);
+ 1688|  16.6k|    }
+ 1689|  16.6k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+ 1690|       |
+ 1691|  3.43k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
+ 1692|    219|    {
+ 1693|    219|        goto fail; /* expected end of object */
+ 1694|    219|    }
+ 1695|       |
+ 1696|  3.23k|success:
+ 1697|  3.23k|    input_buffer->depth--;
+ 1698|       |
+ 1699|  3.23k|    if (head != NULL) {
+ 1700|  3.21k|        head->prev = current_item;
+ 1701|  3.21k|    }
+ 1702|       |
+ 1703|  3.23k|    item->type = cJSON_Object;
+ 1704|  3.23k|    item->child = head;
+ 1705|       |
+ 1706|  3.23k|    input_buffer->offset++;
+ 1707|  3.23k|    return true;
+ 1708|       |
+ 1709|  1.12k|fail:
+ 1710|  1.12k|    if (head != NULL)
+ 1711|  1.12k|    {
+ 1712|  1.12k|        cJSON_Delete(head);
+ 1713|  1.12k|    }
+ 1714|       |
+ 1715|  1.12k|    return false;
+ 1716|  3.43k|}
+ 1717|       |
+ 1718|       |/* Render an object to text. */
+ 1719|       |static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer)
+ 1720|  2.71k|{
+ 1721|  2.71k|    unsigned char *output_pointer = NULL;
+ 1722|  2.71k|    size_t length = 0;
+ 1723|  2.71k|    cJSON *current_item = item->child;
+ 1724|       |
+ 1725|  2.71k|    if (output_buffer == NULL)
+ 1726|      0|    {
+ 1727|      0|        return false;
+ 1728|      0|    }
+ 1729|       |
+ 1730|       |    /* Compose the output: */
+ 1731|  2.71k|    length = (size_t) (output_buffer->format ? 2 : 1); /* fmt: {\n */
+ 1732|  2.71k|    output_pointer = ensure(output_buffer, length + 1);
+ 1733|  2.71k|    if (output_pointer == NULL)
+ 1734|      0|    {
+ 1735|      0|        return false;
+ 1736|      0|    }
+ 1737|       |
+ 1738|  2.71k|    *output_pointer++ = '{';
+ 1739|  2.71k|    output_buffer->depth++;
+ 1740|  2.71k|    if (output_buffer->format)
+ 1741|  2.46k|    {
+ 1742|  2.46k|        *output_pointer++ = '\n';
+ 1743|  2.46k|    }
+ 1744|  2.71k|    output_buffer->offset += length;
+ 1745|       |
+ 1746|  14.6k|    while (current_item)
+ 1747|  11.9k|    {
+ 1748|  11.9k|        if (output_buffer->format)
+ 1749|  10.9k|        {
+ 1750|  10.9k|            size_t i;
+ 1751|  10.9k|            output_pointer = ensure(output_buffer, output_buffer->depth);
+ 1752|  10.9k|            if (output_pointer == NULL)
+ 1753|      0|            {
+ 1754|      0|                return false;
+ 1755|      0|            }
+ 1756|  51.3k|            for (i = 0; i < output_buffer->depth; i++)
+ 1757|  40.3k|            {
+ 1758|  40.3k|                *output_pointer++ = '\t';
+ 1759|  40.3k|            }
+ 1760|  10.9k|            output_buffer->offset += output_buffer->depth;
+ 1761|  10.9k|        }
+ 1762|       |
+ 1763|       |        /* print key */
+ 1764|  11.9k|        if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
+ 1765|      0|        {
+ 1766|      0|            return false;
+ 1767|      0|        }
+ 1768|  11.9k|        update_offset(output_buffer);
+ 1769|       |
+ 1770|  11.9k|        length = (size_t) (output_buffer->format ? 2 : 1);
+ 1771|  11.9k|        output_pointer = ensure(output_buffer, length);
+ 1772|  11.9k|        if (output_pointer == NULL)
+ 1773|      0|        {
+ 1774|      0|            return false;
+ 1775|      0|        }
+ 1776|  11.9k|        *output_pointer++ = ':';
+ 1777|  11.9k|        if (output_buffer->format)
+ 1778|  10.9k|        {
+ 1779|  10.9k|            *output_pointer++ = '\t';
+ 1780|  10.9k|        }
+ 1781|  11.9k|        output_buffer->offset += length;
+ 1782|       |
+ 1783|       |        /* print value */
+ 1784|  11.9k|        if (!print_value(current_item, output_buffer))
+ 1785|      0|        {
+ 1786|      0|            return false;
+ 1787|      0|        }
+ 1788|  11.9k|        update_offset(output_buffer);
+ 1789|       |
+ 1790|       |        /* print comma if not last */
+ 1791|  11.9k|        length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
+ 1792|  11.9k|        output_pointer = ensure(output_buffer, length + 1);
+ 1793|  11.9k|        if (output_pointer == NULL)
+ 1794|      0|        {
+ 1795|      0|            return false;
+ 1796|      0|        }
+ 1797|  11.9k|        if (current_item->next)
+ 1798|  9.23k|        {
+ 1799|  9.23k|            *output_pointer++ = ',';
+ 1800|  9.23k|        }
+ 1801|       |
+ 1802|  11.9k|        if (output_buffer->format)
+ 1803|  10.9k|        {
+ 1804|  10.9k|            *output_pointer++ = '\n';
+ 1805|  10.9k|        }
+ 1806|  11.9k|        *output_pointer = '\0';
+ 1807|  11.9k|        output_buffer->offset += length;
+ 1808|       |
+ 1809|  11.9k|        current_item = current_item->next;
+ 1810|  11.9k|    }
+ 1811|       |
+ 1812|  2.71k|    output_pointer = ensure(output_buffer, output_buffer->format ? (output_buffer->depth + 1) : 2);
+ 1813|  2.71k|    if (output_pointer == NULL)
+ 1814|      0|    {
+ 1815|      0|        return false;
+ 1816|      0|    }
+ 1817|  2.71k|    if (output_buffer->format)
+ 1818|  2.46k|    {
+ 1819|  2.46k|        size_t i;
+ 1820|  7.70k|        for (i = 0; i < (output_buffer->depth - 1); i++)
+ 1821|  5.24k|        {
+ 1822|  5.24k|            *output_pointer++ = '\t';
+ 1823|  5.24k|        }
+ 1824|  2.46k|    }
+ 1825|  2.71k|    *output_pointer++ = '}';
+ 1826|  2.71k|    *output_pointer = '\0';
+ 1827|  2.71k|    output_buffer->depth--;
+ 1828|       |
+ 1829|  2.71k|    return true;
+ 1830|  2.71k|}
+ 1831|       |
+ 1832|       |/* Get Array size/item / object item. */
+ 1833|       |CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array)
+ 1834|      0|{
+ 1835|      0|    cJSON *child = NULL;
+ 1836|      0|    size_t size = 0;
+ 1837|       |
+ 1838|      0|    if (array == NULL)
+ 1839|      0|    {
+ 1840|      0|        return 0;
+ 1841|      0|    }
+ 1842|       |
+ 1843|      0|    child = array->child;
+ 1844|       |
+ 1845|      0|    while(child != NULL)
+ 1846|      0|    {
+ 1847|      0|        size++;
+ 1848|      0|        child = child->next;
+ 1849|      0|    }
+ 1850|       |
+ 1851|       |    /* FIXME: Can overflow here. Cannot be fixed without breaking the API */
+ 1852|       |
+ 1853|      0|    return (int)size;
+ 1854|      0|}
+ 1855|       |
+ 1856|       |static cJSON* get_array_item(const cJSON *array, size_t index)
+ 1857|      0|{
+ 1858|      0|    cJSON *current_child = NULL;
+ 1859|       |
+ 1860|      0|    if (array == NULL)
+ 1861|      0|    {
+ 1862|      0|        return NULL;
+ 1863|      0|    }
+ 1864|       |
+ 1865|      0|    current_child = array->child;
+ 1866|      0|    while ((current_child != NULL) && (index > 0))
+ 1867|      0|    {
+ 1868|      0|        index--;
+ 1869|      0|        current_child = current_child->next;
+ 1870|      0|    }
+ 1871|       |
+ 1872|      0|    return current_child;
+ 1873|      0|}
+ 1874|       |
+ 1875|       |CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index)
+ 1876|      0|{
+ 1877|      0|    if (index < 0)
+ 1878|      0|    {
+ 1879|      0|        return NULL;
+ 1880|      0|    }
+ 1881|       |
+ 1882|      0|    return get_array_item(array, (size_t)index);
+ 1883|      0|}
+ 1884|       |
+ 1885|       |static cJSON *get_object_item(const cJSON * const object, const char * const name, const cJSON_bool case_sensitive)
+ 1886|      0|{
+ 1887|      0|    cJSON *current_element = NULL;
+ 1888|       |
+ 1889|      0|    if ((object == NULL) || (name == NULL))
+ 1890|      0|    {
+ 1891|      0|        return NULL;
+ 1892|      0|    }
+ 1893|       |
+ 1894|      0|    current_element = object->child;
+ 1895|      0|    if (case_sensitive)
+ 1896|      0|    {
+ 1897|      0|        while ((current_element != NULL) && (current_element->string != NULL) && (strcmp(name, current_element->string) != 0))
+ 1898|      0|        {
+ 1899|      0|            current_element = current_element->next;
+ 1900|      0|        }
+ 1901|      0|    }
+ 1902|      0|    else
+ 1903|      0|    {
+ 1904|      0|        while ((current_element != NULL) && (case_insensitive_strcmp((const unsigned char*)name, (const unsigned char*)(current_element->string)) != 0))
+ 1905|      0|        {
+ 1906|      0|            current_element = current_element->next;
+ 1907|      0|        }
+ 1908|      0|    }
+ 1909|       |
+ 1910|      0|    if ((current_element == NULL) || (current_element->string == NULL)) {
+ 1911|      0|        return NULL;
+ 1912|      0|    }
+ 1913|       |
+ 1914|      0|    return current_element;
+ 1915|      0|}
+ 1916|       |
+ 1917|       |CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string)
+ 1918|      0|{
+ 1919|      0|    return get_object_item(object, string, false);
+ 1920|      0|}
+ 1921|       |
+ 1922|       |CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string)
+ 1923|      0|{
+ 1924|      0|    return get_object_item(object, string, true);
+ 1925|      0|}
+ 1926|       |
+ 1927|       |CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string)
+ 1928|      0|{
+ 1929|      0|    return cJSON_GetObjectItem(object, string) ? 1 : 0;
+ 1930|      0|}
+ 1931|       |
+ 1932|       |/* Utility for array list handling. */
+ 1933|       |static void suffix_object(cJSON *prev, cJSON *item)
+ 1934|      0|{
+ 1935|      0|    prev->next = item;
+ 1936|      0|    item->prev = prev;
+ 1937|      0|}
+ 1938|       |
+ 1939|       |/* Utility for handling references. */
+ 1940|       |static cJSON *create_reference(const cJSON *item, const internal_hooks * const hooks)
+ 1941|      0|{
+ 1942|      0|    cJSON *reference = NULL;
+ 1943|      0|    if (item == NULL)
+ 1944|      0|    {
+ 1945|      0|        return NULL;
+ 1946|      0|    }
+ 1947|       |
+ 1948|      0|    reference = cJSON_New_Item(hooks);
+ 1949|      0|    if (reference == NULL)
+ 1950|      0|    {
+ 1951|      0|        return NULL;
+ 1952|      0|    }
+ 1953|       |
+ 1954|      0|    memcpy(reference, item, sizeof(cJSON));
+ 1955|      0|    reference->string = NULL;
+ 1956|      0|    reference->type |= cJSON_IsReference;
+ 1957|      0|    reference->next = reference->prev = NULL;
+ 1958|      0|    return reference;
+ 1959|      0|}
+ 1960|       |
+ 1961|       |static cJSON_bool add_item_to_array(cJSON *array, cJSON *item)
+ 1962|      0|{
+ 1963|      0|    cJSON *child = NULL;
+ 1964|       |
+ 1965|      0|    if ((item == NULL) || (array == NULL) || (array == item))
+ 1966|      0|    {
+ 1967|      0|        return false;
+ 1968|      0|    }
+ 1969|       |
+ 1970|      0|    child = array->child;
+ 1971|       |    /*
+ 1972|       |     * To find the last item in array quickly, we use prev in array
+ 1973|       |     */
+ 1974|      0|    if (child == NULL)
+ 1975|      0|    {
+ 1976|       |        /* list is empty, start new one */
+ 1977|      0|        array->child = item;
+ 1978|      0|        item->prev = item;
+ 1979|      0|        item->next = NULL;
+ 1980|      0|    }
+ 1981|      0|    else
+ 1982|      0|    {
+ 1983|       |        /* append to the end */
+ 1984|      0|        if (child->prev)
+ 1985|      0|        {
+ 1986|      0|            suffix_object(child->prev, item);
+ 1987|      0|            array->child->prev = item;
+ 1988|      0|        }
+ 1989|      0|    }
+ 1990|       |
+ 1991|      0|    return true;
+ 1992|      0|}
+ 1993|       |
+ 1994|       |/* Add item to array/object. */
+ 1995|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item)
+ 1996|      0|{
+ 1997|      0|    return add_item_to_array(array, item);
+ 1998|      0|}
+ 1999|       |
+ 2000|       |#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+ 2001|       |    #pragma GCC diagnostic push
+ 2002|       |#endif
+ 2003|       |#ifdef __GNUC__
+ 2004|       |#pragma GCC diagnostic ignored "-Wcast-qual"
+ 2005|       |#endif
+ 2006|       |/* helper function to cast away const */
+ 2007|       |static void* cast_away_const(const void* string)
+ 2008|      0|{
+ 2009|      0|    return (void*)string;
+ 2010|      0|}
+ 2011|       |#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+ 2012|       |    #pragma GCC diagnostic pop
+ 2013|       |#endif
+ 2014|       |
+ 2015|       |
+ 2016|       |static cJSON_bool add_item_to_object(cJSON * const object, const char * const string, cJSON * const item, const internal_hooks * const hooks, const cJSON_bool constant_key)
+ 2017|      0|{
+ 2018|      0|    char *new_key = NULL;
+ 2019|      0|    int new_type = cJSON_Invalid;
+ 2020|       |
+ 2021|      0|    if ((object == NULL) || (string == NULL) || (item == NULL) || (object == item))
+ 2022|      0|    {
+ 2023|      0|        return false;
+ 2024|      0|    }
+ 2025|       |
+ 2026|      0|    if (constant_key)
+ 2027|      0|    {
+ 2028|      0|        new_key = (char*)cast_away_const(string);
+ 2029|      0|        new_type = item->type | cJSON_StringIsConst;
+ 2030|      0|    }
+ 2031|      0|    else
+ 2032|      0|    {
+ 2033|      0|        new_key = (char*)cJSON_strdup((const unsigned char*)string, hooks);
+ 2034|      0|        if (new_key == NULL)
+ 2035|      0|        {
+ 2036|      0|            return false;
+ 2037|      0|        }
+ 2038|       |
+ 2039|      0|        new_type = item->type & ~cJSON_StringIsConst;
+ 2040|      0|    }
+ 2041|       |
+ 2042|      0|    if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
+ 2043|      0|    {
+ 2044|      0|        hooks->deallocate(item->string);
+ 2045|      0|    }
+ 2046|       |
+ 2047|      0|    item->string = new_key;
+ 2048|      0|    item->type = new_type;
+ 2049|       |
+ 2050|      0|    return add_item_to_array(object, item);
+ 2051|      0|}
+ 2052|       |
+ 2053|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item)
+ 2054|      0|{
+ 2055|      0|    return add_item_to_object(object, string, item, &global_hooks, false);
+ 2056|      0|}
+ 2057|       |
+ 2058|       |/* Add an item to an object with constant string as key */
+ 2059|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item)
+ 2060|      0|{
+ 2061|      0|    return add_item_to_object(object, string, item, &global_hooks, true);
+ 2062|      0|}
+ 2063|       |
+ 2064|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item)
+ 2065|      0|{
+ 2066|      0|    if (array == NULL)
+ 2067|      0|    {
+ 2068|      0|        return false;
+ 2069|      0|    }
+ 2070|       |
+ 2071|      0|    return add_item_to_array(array, create_reference(item, &global_hooks));
+ 2072|      0|}
+ 2073|       |
+ 2074|       |CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item)
+ 2075|      0|{
+ 2076|      0|    if ((object == NULL) || (string == NULL))
+ 2077|      0|    {
+ 2078|      0|        return false;
+ 2079|      0|    }
+ 2080|       |
+ 2081|      0|    return add_item_to_object(object, string, create_reference(item, &global_hooks), &global_hooks, false);
+ 2082|      0|}
+ 2083|       |
+ 2084|       |CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name)
+ 2085|      0|{
+ 2086|      0|    cJSON *null = cJSON_CreateNull();
+ 2087|      0|    if (add_item_to_object(object, name, null, &global_hooks, false))
+ 2088|      0|    {
+ 2089|      0|        return null;
+ 2090|      0|    }
+ 2091|       |
+ 2092|      0|    cJSON_Delete(null);
+ 2093|      0|    return NULL;
+ 2094|      0|}
+ 2095|       |
+ 2096|       |CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name)
+ 2097|      0|{
+ 2098|      0|    cJSON *true_item = cJSON_CreateTrue();
+ 2099|      0|    if (add_item_to_object(object, name, true_item, &global_hooks, false))
+ 2100|      0|    {
+ 2101|      0|        return true_item;
+ 2102|      0|    }
+ 2103|       |
+ 2104|      0|    cJSON_Delete(true_item);
+ 2105|      0|    return NULL;
+ 2106|      0|}
+ 2107|       |
+ 2108|       |CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name)
+ 2109|      0|{
+ 2110|      0|    cJSON *false_item = cJSON_CreateFalse();
+ 2111|      0|    if (add_item_to_object(object, name, false_item, &global_hooks, false))
+ 2112|      0|    {
+ 2113|      0|        return false_item;
+ 2114|      0|    }
+ 2115|       |
+ 2116|      0|    cJSON_Delete(false_item);
+ 2117|      0|    return NULL;
+ 2118|      0|}
+ 2119|       |
+ 2120|       |CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean)
+ 2121|      0|{
+ 2122|      0|    cJSON *bool_item = cJSON_CreateBool(boolean);
+ 2123|      0|    if (add_item_to_object(object, name, bool_item, &global_hooks, false))
+ 2124|      0|    {
+ 2125|      0|        return bool_item;
+ 2126|      0|    }
+ 2127|       |
+ 2128|      0|    cJSON_Delete(bool_item);
+ 2129|      0|    return NULL;
+ 2130|      0|}
+ 2131|       |
+ 2132|       |CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number)
+ 2133|      0|{
+ 2134|      0|    cJSON *number_item = cJSON_CreateNumber(number);
+ 2135|      0|    if (add_item_to_object(object, name, number_item, &global_hooks, false))
+ 2136|      0|    {
+ 2137|      0|        return number_item;
+ 2138|      0|    }
+ 2139|       |
+ 2140|      0|    cJSON_Delete(number_item);
+ 2141|      0|    return NULL;
+ 2142|      0|}
+ 2143|       |
+ 2144|       |CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string)
+ 2145|      0|{
+ 2146|      0|    cJSON *string_item = cJSON_CreateString(string);
+ 2147|      0|    if (add_item_to_object(object, name, string_item, &global_hooks, false))
+ 2148|      0|    {
+ 2149|      0|        return string_item;
+ 2150|      0|    }
+ 2151|       |
+ 2152|      0|    cJSON_Delete(string_item);
+ 2153|      0|    return NULL;
+ 2154|      0|}
+ 2155|       |
+ 2156|       |CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw)
+ 2157|      0|{
+ 2158|      0|    cJSON *raw_item = cJSON_CreateRaw(raw);
+ 2159|      0|    if (add_item_to_object(object, name, raw_item, &global_hooks, false))
+ 2160|      0|    {
+ 2161|      0|        return raw_item;
+ 2162|      0|    }
+ 2163|       |
+ 2164|      0|    cJSON_Delete(raw_item);
+ 2165|      0|    return NULL;
+ 2166|      0|}
+ 2167|       |
+ 2168|       |CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name)
+ 2169|      0|{
+ 2170|      0|    cJSON *object_item = cJSON_CreateObject();
+ 2171|      0|    if (add_item_to_object(object, name, object_item, &global_hooks, false))
+ 2172|      0|    {
+ 2173|      0|        return object_item;
+ 2174|      0|    }
+ 2175|       |
+ 2176|      0|    cJSON_Delete(object_item);
+ 2177|      0|    return NULL;
+ 2178|      0|}
+ 2179|       |
+ 2180|       |CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name)
+ 2181|      0|{
+ 2182|      0|    cJSON *array = cJSON_CreateArray();
+ 2183|      0|    if (add_item_to_object(object, name, array, &global_hooks, false))
+ 2184|      0|    {
+ 2185|      0|        return array;
+ 2186|      0|    }
+ 2187|       |
+ 2188|      0|    cJSON_Delete(array);
+ 2189|      0|    return NULL;
+ 2190|      0|}
+ 2191|       |
+ 2192|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item)
+ 2193|      0|{
+ 2194|      0|    if ((parent == NULL) || (item == NULL))
+ 2195|      0|    {
+ 2196|      0|        return NULL;
+ 2197|      0|    }
+ 2198|       |
+ 2199|      0|    if (item != parent->child)
+ 2200|      0|    {
+ 2201|       |        /* not the first element */
+ 2202|      0|        item->prev->next = item->next;
+ 2203|      0|    }
+ 2204|      0|    if (item->next != NULL)
+ 2205|      0|    {
+ 2206|       |        /* not the last element */
+ 2207|      0|        item->next->prev = item->prev;
+ 2208|      0|    }
+ 2209|       |
+ 2210|      0|    if (item == parent->child)
+ 2211|      0|    {
+ 2212|       |        /* first element */
+ 2213|      0|        parent->child = item->next;
+ 2214|      0|    }
+ 2215|      0|    else if (item->next == NULL)
+ 2216|      0|    {
+ 2217|       |        /* last element */
+ 2218|      0|        parent->child->prev = item->prev;
+ 2219|      0|    }
+ 2220|       |
+ 2221|       |    /* make sure the detached item doesn't point anywhere anymore */
+ 2222|      0|    item->prev = NULL;
+ 2223|      0|    item->next = NULL;
+ 2224|       |
+ 2225|      0|    return item;
+ 2226|      0|}
+ 2227|       |
+ 2228|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which)
+ 2229|      0|{
+ 2230|      0|    if (which < 0)
+ 2231|      0|    {
+ 2232|      0|        return NULL;
+ 2233|      0|    }
+ 2234|       |
+ 2235|      0|    return cJSON_DetachItemViaPointer(array, get_array_item(array, (size_t)which));
+ 2236|      0|}
+ 2237|       |
+ 2238|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which)
+ 2239|      0|{
+ 2240|      0|    cJSON_Delete(cJSON_DetachItemFromArray(array, which));
+ 2241|      0|}
+ 2242|       |
+ 2243|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string)
+ 2244|      0|{
+ 2245|      0|    cJSON *to_detach = cJSON_GetObjectItem(object, string);
+ 2246|       |
+ 2247|      0|    return cJSON_DetachItemViaPointer(object, to_detach);
+ 2248|      0|}
+ 2249|       |
+ 2250|       |CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string)
+ 2251|      0|{
+ 2252|      0|    cJSON *to_detach = cJSON_GetObjectItemCaseSensitive(object, string);
+ 2253|       |
+ 2254|      0|    return cJSON_DetachItemViaPointer(object, to_detach);
+ 2255|      0|}
+ 2256|       |
+ 2257|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string)
+ 2258|      0|{
+ 2259|      0|    cJSON_Delete(cJSON_DetachItemFromObject(object, string));
+ 2260|      0|}
+ 2261|       |
+ 2262|       |CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string)
+ 2263|      0|{
+ 2264|      0|    cJSON_Delete(cJSON_DetachItemFromObjectCaseSensitive(object, string));
+ 2265|      0|}
+ 2266|       |
+ 2267|       |/* Replace array/object items with new ones. */
+ 2268|       |CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem)
+ 2269|      0|{
+ 2270|      0|    cJSON *after_inserted = NULL;
+ 2271|       |
+ 2272|      0|    if (which < 0 || newitem == NULL)
+ 2273|      0|    {
+ 2274|      0|        return false;
+ 2275|      0|    }
+ 2276|       |
+ 2277|      0|    after_inserted = get_array_item(array, (size_t)which);
+ 2278|      0|    if (after_inserted == NULL)
+ 2279|      0|    {
+ 2280|      0|        return add_item_to_array(array, newitem);
+ 2281|      0|    }
+ 2282|       |
+ 2283|      0|    if (after_inserted != array->child && after_inserted->prev == NULL) {
+ 2284|       |        /* return false if after_inserted is a corrupted array item */
+ 2285|      0|        return false;
+ 2286|      0|    }
+ 2287|       |
+ 2288|      0|    newitem->next = after_inserted;
+ 2289|      0|    newitem->prev = after_inserted->prev;
+ 2290|      0|    after_inserted->prev = newitem;
+ 2291|      0|    if (after_inserted == array->child)
+ 2292|      0|    {
+ 2293|      0|        array->child = newitem;
+ 2294|      0|    }
+ 2295|      0|    else
+ 2296|      0|    {
+ 2297|      0|        newitem->prev->next = newitem;
+ 2298|      0|    }
+ 2299|      0|    return true;
+ 2300|      0|}
+ 2301|       |
+ 2302|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement)
+ 2303|      0|{
+ 2304|      0|    if ((parent == NULL) || (parent->child == NULL) || (replacement == NULL) || (item == NULL))
+ 2305|      0|    {
+ 2306|      0|        return false;
+ 2307|      0|    }
+ 2308|       |
+ 2309|      0|    if (replacement == item)
+ 2310|      0|    {
+ 2311|      0|        return true;
+ 2312|      0|    }
+ 2313|       |
+ 2314|      0|    replacement->next = item->next;
+ 2315|      0|    replacement->prev = item->prev;
+ 2316|       |
+ 2317|      0|    if (replacement->next != NULL)
+ 2318|      0|    {
+ 2319|      0|        replacement->next->prev = replacement;
+ 2320|      0|    }
+ 2321|      0|    if (parent->child == item)
+ 2322|      0|    {
+ 2323|      0|        if (parent->child->prev == parent->child)
+ 2324|      0|        {
+ 2325|      0|            replacement->prev = replacement;
+ 2326|      0|        }
+ 2327|      0|        parent->child = replacement;
+ 2328|      0|    }
+ 2329|      0|    else
+ 2330|      0|    {   /*
+ 2331|       |         * To find the last item in array quickly, we use prev in array.
+ 2332|       |         * We can't modify the last item's next pointer where this item was the parent's child
+ 2333|       |         */
+ 2334|      0|        if (replacement->prev != NULL)
+ 2335|      0|        {
+ 2336|      0|            replacement->prev->next = replacement;
+ 2337|      0|        }
+ 2338|      0|        if (replacement->next == NULL)
+ 2339|      0|        {
+ 2340|      0|            parent->child->prev = replacement;
+ 2341|      0|        }
+ 2342|      0|    }
+ 2343|       |
+ 2344|      0|    item->next = NULL;
+ 2345|      0|    item->prev = NULL;
+ 2346|      0|    cJSON_Delete(item);
+ 2347|       |
+ 2348|      0|    return true;
+ 2349|      0|}
+ 2350|       |
+ 2351|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem)
+ 2352|      0|{
+ 2353|      0|    if (which < 0)
+ 2354|      0|    {
+ 2355|      0|        return false;
+ 2356|      0|    }
+ 2357|       |
+ 2358|      0|    return cJSON_ReplaceItemViaPointer(array, get_array_item(array, (size_t)which), newitem);
+ 2359|      0|}
+ 2360|       |
+ 2361|       |static cJSON_bool replace_item_in_object(cJSON *object, const char *string, cJSON *replacement, cJSON_bool case_sensitive)
+ 2362|      0|{
+ 2363|      0|    if ((replacement == NULL) || (string == NULL))
+ 2364|      0|    {
+ 2365|      0|        return false;
+ 2366|      0|    }
+ 2367|       |
+ 2368|       |    /* replace the name in the replacement */
+ 2369|      0|    if (!(replacement->type & cJSON_StringIsConst) && (replacement->string != NULL))
+ 2370|      0|    {
+ 2371|      0|        cJSON_free(replacement->string);
+ 2372|      0|    }
+ 2373|      0|    replacement->string = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
+ 2374|      0|    if (replacement->string == NULL)
+ 2375|      0|    {
+ 2376|      0|        return false;
+ 2377|      0|    }
+ 2378|       |
+ 2379|      0|    replacement->type &= ~cJSON_StringIsConst;
+ 2380|       |
+ 2381|      0|    return cJSON_ReplaceItemViaPointer(object, get_object_item(object, string, case_sensitive), replacement);
+ 2382|      0|}
+ 2383|       |
+ 2384|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object, const char *string, cJSON *newitem)
+ 2385|      0|{
+ 2386|      0|    return replace_item_in_object(object, string, newitem, false);
+ 2387|      0|}
+ 2388|       |
+ 2389|       |CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object, const char *string, cJSON *newitem)
+ 2390|      0|{
+ 2391|      0|    return replace_item_in_object(object, string, newitem, true);
+ 2392|      0|}
+ 2393|       |
+ 2394|       |/* Create basic types: */
+ 2395|       |CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void)
+ 2396|      0|{
+ 2397|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2398|      0|    if(item)
+ 2399|      0|    {
+ 2400|      0|        item->type = cJSON_NULL;
+ 2401|      0|    }
+ 2402|       |
+ 2403|      0|    return item;
+ 2404|      0|}
+ 2405|       |
+ 2406|       |CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void)
+ 2407|      0|{
+ 2408|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2409|      0|    if(item)
+ 2410|      0|    {
+ 2411|      0|        item->type = cJSON_True;
+ 2412|      0|    }
+ 2413|       |
+ 2414|      0|    return item;
+ 2415|      0|}
+ 2416|       |
+ 2417|       |CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void)
+ 2418|      0|{
+ 2419|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2420|      0|    if(item)
+ 2421|      0|    {
+ 2422|      0|        item->type = cJSON_False;
+ 2423|      0|    }
+ 2424|       |
+ 2425|      0|    return item;
+ 2426|      0|}
+ 2427|       |
+ 2428|       |CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean)
+ 2429|      0|{
+ 2430|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2431|      0|    if(item)
+ 2432|      0|    {
+ 2433|      0|        item->type = boolean ? cJSON_True : cJSON_False;
+ 2434|      0|    }
+ 2435|       |
+ 2436|      0|    return item;
+ 2437|      0|}
+ 2438|       |
+ 2439|       |CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num)
+ 2440|      0|{
+ 2441|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2442|      0|    if(item)
+ 2443|      0|    {
+ 2444|      0|        item->type = cJSON_Number;
+ 2445|      0|        item->valuedouble = num;
+ 2446|       |
+ 2447|       |        /* use saturation in case of overflow */
+ 2448|      0|        if (num >= INT_MAX)
+ 2449|      0|        {
+ 2450|      0|            item->valueint = INT_MAX;
+ 2451|      0|        }
+ 2452|      0|        else if (num <= (double)INT_MIN)
+ 2453|      0|        {
+ 2454|      0|            item->valueint = INT_MIN;
+ 2455|      0|        }
+ 2456|      0|        else
+ 2457|      0|        {
+ 2458|      0|            item->valueint = (int)num;
+ 2459|      0|        }
+ 2460|      0|    }
+ 2461|       |
+ 2462|      0|    return item;
+ 2463|      0|}
+ 2464|       |
+ 2465|       |CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string)
+ 2466|      0|{
+ 2467|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2468|      0|    if(item)
+ 2469|      0|    {
+ 2470|      0|        item->type = cJSON_String;
+ 2471|      0|        item->valuestring = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
+ 2472|      0|        if(!item->valuestring)
+ 2473|      0|        {
+ 2474|      0|            cJSON_Delete(item);
+ 2475|      0|            return NULL;
+ 2476|      0|        }
+ 2477|      0|    }
+ 2478|       |
+ 2479|      0|    return item;
+ 2480|      0|}
+ 2481|       |
+ 2482|       |CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string)
+ 2483|      0|{
+ 2484|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2485|      0|    if (item != NULL)
+ 2486|      0|    {
+ 2487|      0|        item->type = cJSON_String | cJSON_IsReference;
+ 2488|      0|        item->valuestring = (char*)cast_away_const(string);
+ 2489|      0|    }
+ 2490|       |
+ 2491|      0|    return item;
+ 2492|      0|}
+ 2493|       |
+ 2494|       |CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child)
+ 2495|      0|{
+ 2496|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2497|      0|    if (item != NULL) {
+ 2498|      0|        item->type = cJSON_Object | cJSON_IsReference;
+ 2499|      0|        item->child = (cJSON*)cast_away_const(child);
+ 2500|      0|    }
+ 2501|       |
+ 2502|      0|    return item;
+ 2503|      0|}
+ 2504|       |
+ 2505|      0|CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child) {
+ 2506|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2507|      0|    if (item != NULL) {
+ 2508|      0|        item->type = cJSON_Array | cJSON_IsReference;
+ 2509|      0|        item->child = (cJSON*)cast_away_const(child);
+ 2510|      0|    }
+ 2511|       |
+ 2512|      0|    return item;
+ 2513|      0|}
+ 2514|       |
+ 2515|       |CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw)
+ 2516|      0|{
+ 2517|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2518|      0|    if(item)
+ 2519|      0|    {
+ 2520|      0|        item->type = cJSON_Raw;
+ 2521|      0|        item->valuestring = (char*)cJSON_strdup((const unsigned char*)raw, &global_hooks);
+ 2522|      0|        if(!item->valuestring)
+ 2523|      0|        {
+ 2524|      0|            cJSON_Delete(item);
+ 2525|      0|            return NULL;
+ 2526|      0|        }
+ 2527|      0|    }
+ 2528|       |
+ 2529|      0|    return item;
+ 2530|      0|}
+ 2531|       |
+ 2532|       |CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void)
+ 2533|      0|{
+ 2534|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2535|      0|    if(item)
+ 2536|      0|    {
+ 2537|      0|        item->type=cJSON_Array;
+ 2538|      0|    }
+ 2539|       |
+ 2540|      0|    return item;
+ 2541|      0|}
+ 2542|       |
+ 2543|       |CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void)
+ 2544|      0|{
+ 2545|      0|    cJSON *item = cJSON_New_Item(&global_hooks);
+ 2546|      0|    if (item)
+ 2547|      0|    {
+ 2548|      0|        item->type = cJSON_Object;
+ 2549|      0|    }
+ 2550|       |
+ 2551|      0|    return item;
+ 2552|      0|}
+ 2553|       |
+ 2554|       |/* Create Arrays: */
+ 2555|       |CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count)
+ 2556|      0|{
+ 2557|      0|    size_t i = 0;
+ 2558|      0|    cJSON *n = NULL;
+ 2559|      0|    cJSON *p = NULL;
+ 2560|      0|    cJSON *a = NULL;
+ 2561|       |
+ 2562|      0|    if ((count < 0) || (numbers == NULL))
+ 2563|      0|    {
+ 2564|      0|        return NULL;
+ 2565|      0|    }
+ 2566|       |
+ 2567|      0|    a = cJSON_CreateArray();
+ 2568|       |
+ 2569|      0|    for(i = 0; a && (i < (size_t)count); i++)
+ 2570|      0|    {
+ 2571|      0|        n = cJSON_CreateNumber(numbers[i]);
+ 2572|      0|        if (!n)
+ 2573|      0|        {
+ 2574|      0|            cJSON_Delete(a);
+ 2575|      0|            return NULL;
+ 2576|      0|        }
+ 2577|      0|        if(!i)
+ 2578|      0|        {
+ 2579|      0|            a->child = n;
+ 2580|      0|        }
+ 2581|      0|        else
+ 2582|      0|        {
+ 2583|      0|            suffix_object(p, n);
+ 2584|      0|        }
+ 2585|      0|        p = n;
+ 2586|      0|    }
+ 2587|       |
+ 2588|      0|    if (a && a->child) {
+ 2589|      0|        a->child->prev = n;
+ 2590|      0|    }
+ 2591|       |
+ 2592|      0|    return a;
+ 2593|      0|}
+ 2594|       |
+ 2595|       |CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count)
+ 2596|      0|{
+ 2597|      0|    size_t i = 0;
+ 2598|      0|    cJSON *n = NULL;
+ 2599|      0|    cJSON *p = NULL;
+ 2600|      0|    cJSON *a = NULL;
+ 2601|       |
+ 2602|      0|    if ((count < 0) || (numbers == NULL))
+ 2603|      0|    {
+ 2604|      0|        return NULL;
+ 2605|      0|    }
+ 2606|       |
+ 2607|      0|    a = cJSON_CreateArray();
+ 2608|       |
+ 2609|      0|    for(i = 0; a && (i < (size_t)count); i++)
+ 2610|      0|    {
+ 2611|      0|        n = cJSON_CreateNumber((double)numbers[i]);
+ 2612|      0|        if(!n)
+ 2613|      0|        {
+ 2614|      0|            cJSON_Delete(a);
+ 2615|      0|            return NULL;
+ 2616|      0|        }
+ 2617|      0|        if(!i)
+ 2618|      0|        {
+ 2619|      0|            a->child = n;
+ 2620|      0|        }
+ 2621|      0|        else
+ 2622|      0|        {
+ 2623|      0|            suffix_object(p, n);
+ 2624|      0|        }
+ 2625|      0|        p = n;
+ 2626|      0|    }
+ 2627|       |
+ 2628|      0|    if (a && a->child) {
+ 2629|      0|        a->child->prev = n;
+ 2630|      0|    }
+ 2631|       |
+ 2632|      0|    return a;
+ 2633|      0|}
+ 2634|       |
+ 2635|       |CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count)
+ 2636|      0|{
+ 2637|      0|    size_t i = 0;
+ 2638|      0|    cJSON *n = NULL;
+ 2639|      0|    cJSON *p = NULL;
+ 2640|      0|    cJSON *a = NULL;
+ 2641|       |
+ 2642|      0|    if ((count < 0) || (numbers == NULL))
+ 2643|      0|    {
+ 2644|      0|        return NULL;
+ 2645|      0|    }
+ 2646|       |
+ 2647|      0|    a = cJSON_CreateArray();
+ 2648|       |
+ 2649|      0|    for(i = 0; a && (i < (size_t)count); i++)
+ 2650|      0|    {
+ 2651|      0|        n = cJSON_CreateNumber(numbers[i]);
+ 2652|      0|        if(!n)
+ 2653|      0|        {
+ 2654|      0|            cJSON_Delete(a);
+ 2655|      0|            return NULL;
+ 2656|      0|        }
+ 2657|      0|        if(!i)
+ 2658|      0|        {
+ 2659|      0|            a->child = n;
+ 2660|      0|        }
+ 2661|      0|        else
+ 2662|      0|        {
+ 2663|      0|            suffix_object(p, n);
+ 2664|      0|        }
+ 2665|      0|        p = n;
+ 2666|      0|    }
+ 2667|       |
+ 2668|      0|    if (a && a->child) {
+ 2669|      0|        a->child->prev = n;
+ 2670|      0|    }
+ 2671|       |
+ 2672|      0|    return a;
+ 2673|      0|}
+ 2674|       |
+ 2675|       |CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count)
+ 2676|      0|{
+ 2677|      0|    size_t i = 0;
+ 2678|      0|    cJSON *n = NULL;
+ 2679|      0|    cJSON *p = NULL;
+ 2680|      0|    cJSON *a = NULL;
+ 2681|       |
+ 2682|      0|    if ((count < 0) || (strings == NULL))
+ 2683|      0|    {
+ 2684|      0|        return NULL;
+ 2685|      0|    }
+ 2686|       |
+ 2687|      0|    a = cJSON_CreateArray();
+ 2688|       |
+ 2689|      0|    for (i = 0; a && (i < (size_t)count); i++)
+ 2690|      0|    {
+ 2691|      0|        n = cJSON_CreateString(strings[i]);
+ 2692|      0|        if(!n)
+ 2693|      0|        {
+ 2694|      0|            cJSON_Delete(a);
+ 2695|      0|            return NULL;
+ 2696|      0|        }
+ 2697|      0|        if(!i)
+ 2698|      0|        {
+ 2699|      0|            a->child = n;
+ 2700|      0|        }
+ 2701|      0|        else
+ 2702|      0|        {
+ 2703|      0|            suffix_object(p,n);
+ 2704|      0|        }
+ 2705|      0|        p = n;
+ 2706|      0|    }
+ 2707|       |
+ 2708|      0|    if (a && a->child) {
+ 2709|      0|        a->child->prev = n;
+ 2710|      0|    }
+ 2711|       |
+ 2712|      0|    return a;
+ 2713|      0|}
+ 2714|       |
+ 2715|       |/* Duplication */
+ 2716|       |CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse)
+ 2717|      0|{
+ 2718|      0|    cJSON *newitem = NULL;
+ 2719|      0|    cJSON *child = NULL;
+ 2720|      0|    cJSON *next = NULL;
+ 2721|      0|    cJSON *newchild = NULL;
+ 2722|       |
+ 2723|       |    /* Bail on bad ptr */
+ 2724|      0|    if (!item)
+ 2725|      0|    {
+ 2726|      0|        goto fail;
+ 2727|      0|    }
+ 2728|       |    /* Create new item */
+ 2729|      0|    newitem = cJSON_New_Item(&global_hooks);
+ 2730|      0|    if (!newitem)
+ 2731|      0|    {
+ 2732|      0|        goto fail;
+ 2733|      0|    }
+ 2734|       |    /* Copy over all vars */
+ 2735|      0|    newitem->type = item->type & (~cJSON_IsReference);
+ 2736|      0|    newitem->valueint = item->valueint;
+ 2737|      0|    newitem->valuedouble = item->valuedouble;
+ 2738|      0|    if (item->valuestring)
+ 2739|      0|    {
+ 2740|      0|        newitem->valuestring = (char*)cJSON_strdup((unsigned char*)item->valuestring, &global_hooks);
+ 2741|      0|        if (!newitem->valuestring)
+ 2742|      0|        {
+ 2743|      0|            goto fail;
+ 2744|      0|        }
+ 2745|      0|    }
+ 2746|      0|    if (item->string)
+ 2747|      0|    {
+ 2748|      0|        newitem->string = (item->type&cJSON_StringIsConst) ? item->string : (char*)cJSON_strdup((unsigned char*)item->string, &global_hooks);
+ 2749|      0|        if (!newitem->string)
+ 2750|      0|        {
+ 2751|      0|            goto fail;
+ 2752|      0|        }
+ 2753|      0|    }
+ 2754|       |    /* If non-recursive, then we're done! */
+ 2755|      0|    if (!recurse)
+ 2756|      0|    {
+ 2757|      0|        return newitem;
+ 2758|      0|    }
+ 2759|       |    /* Walk the ->next chain for the child. */
+ 2760|      0|    child = item->child;
+ 2761|      0|    while (child != NULL)
+ 2762|      0|    {
+ 2763|      0|        newchild = cJSON_Duplicate(child, true); /* Duplicate (with recurse) each item in the ->next chain */
+ 2764|      0|        if (!newchild)
+ 2765|      0|        {
+ 2766|      0|            goto fail;
+ 2767|      0|        }
+ 2768|      0|        if (next != NULL)
+ 2769|      0|        {
+ 2770|       |            /* If newitem->child already set, then crosswire ->prev and ->next and move on */
+ 2771|      0|            next->next = newchild;
+ 2772|      0|            newchild->prev = next;
+ 2773|      0|            next = newchild;
+ 2774|      0|        }
+ 2775|      0|        else
+ 2776|      0|        {
+ 2777|       |            /* Set newitem->child and move to it */
+ 2778|      0|            newitem->child = newchild;
+ 2779|      0|            next = newchild;
+ 2780|      0|        }
+ 2781|      0|        child = child->next;
+ 2782|      0|    }
+ 2783|      0|    if (newitem && newitem->child)
+ 2784|      0|    {
+ 2785|      0|        newitem->child->prev = newchild;
+ 2786|      0|    }
+ 2787|       |
+ 2788|      0|    return newitem;
+ 2789|       |
+ 2790|      0|fail:
+ 2791|      0|    if (newitem != NULL)
+ 2792|      0|    {
+ 2793|      0|        cJSON_Delete(newitem);
+ 2794|      0|    }
+ 2795|       |
+ 2796|      0|    return NULL;
+ 2797|      0|}
+ 2798|       |
+ 2799|       |static void skip_oneline_comment(char **input)
+ 2800|      0|{
+ 2801|      0|    *input += static_strlen("//");
+ 2802|       |
+ 2803|      0|    for (; (*input)[0] != '\0'; ++(*input))
+ 2804|      0|    {
+ 2805|      0|        if ((*input)[0] == '\n') {
+ 2806|      0|            *input += static_strlen("\n");
+ 2807|      0|            return;
+ 2808|      0|        }
+ 2809|      0|    }
+ 2810|      0|}
+ 2811|       |
+ 2812|       |static void skip_multiline_comment(char **input)
+ 2813|      0|{
+ 2814|      0|    *input += static_strlen("/*");
+ 2815|       |
+ 2816|      0|    for (; (*input)[0] != '\0'; ++(*input))
+ 2817|      0|    {
+ 2818|      0|        if (((*input)[0] == '*') && ((*input)[1] == '/'))
+ 2819|      0|        {
+ 2820|      0|            *input += static_strlen("*/");
+ 2821|      0|            return;
+ 2822|      0|        }
+ 2823|      0|    }
+ 2824|      0|}
+ 2825|       |
+ 2826|      0|static void minify_string(char **input, char **output) {
+ 2827|      0|    (*output)[0] = (*input)[0];
+ 2828|      0|    *input += static_strlen("\"");
+ 2829|      0|    *output += static_strlen("\"");
+ 2830|       |
+ 2831|       |
+ 2832|      0|    for (; (*input)[0] != '\0'; (void)++(*input), ++(*output)) {
+ 2833|      0|        (*output)[0] = (*input)[0];
+ 2834|       |
+ 2835|      0|        if ((*input)[0] == '\"') {
+ 2836|      0|            (*output)[0] = '\"';
+ 2837|      0|            *input += static_strlen("\"");
+ 2838|      0|            *output += static_strlen("\"");
+ 2839|      0|            return;
+ 2840|      0|        } else if (((*input)[0] == '\\') && ((*input)[1] == '\"')) {
+ 2841|      0|            (*output)[1] = (*input)[1];
+ 2842|      0|            *input += static_strlen("\"");
+ 2843|      0|            *output += static_strlen("\"");
+ 2844|      0|        }
+ 2845|      0|    }
+ 2846|      0|}
+ 2847|       |
+ 2848|       |CJSON_PUBLIC(void) cJSON_Minify(char *json)
+ 2849|      0|{
+ 2850|      0|    char *into = json;
+ 2851|       |
+ 2852|      0|    if (json == NULL)
+ 2853|      0|    {
+ 2854|      0|        return;
+ 2855|      0|    }
+ 2856|       |
+ 2857|      0|    while (json[0] != '\0')
+ 2858|      0|    {
+ 2859|      0|        switch (json[0])
+ 2860|      0|        {
+ 2861|      0|            case ' ':
+ 2862|      0|            case '\t':
+ 2863|      0|            case '\r':
+ 2864|      0|            case '\n':
+ 2865|      0|                json++;
+ 2866|      0|                break;
+ 2867|       |
+ 2868|      0|            case '/':
+ 2869|      0|                if (json[1] == '/')
+ 2870|      0|                {
+ 2871|      0|                    skip_oneline_comment(&json);
+ 2872|      0|                }
+ 2873|      0|                else if (json[1] == '*')
+ 2874|      0|                {
+ 2875|      0|                    skip_multiline_comment(&json);
+ 2876|      0|                } else {
+ 2877|      0|                    json++;
+ 2878|      0|                }
+ 2879|      0|                break;
+ 2880|       |
+ 2881|      0|            case '\"':
+ 2882|      0|                minify_string(&json, (char**)&into);
+ 2883|      0|                break;
+ 2884|       |
+ 2885|      0|            default:
+ 2886|      0|                into[0] = json[0];
+ 2887|      0|                json++;
+ 2888|      0|                into++;
+ 2889|      0|        }
+ 2890|      0|    }
+ 2891|       |
+ 2892|       |    /* and null-terminate. */
+ 2893|      0|    *into = '\0';
+ 2894|      0|}
+ 2895|       |
+ 2896|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item)
+ 2897|      0|{
+ 2898|      0|    if (item == NULL)
+ 2899|      0|    {
+ 2900|      0|        return false;
+ 2901|      0|    }
+ 2902|       |
+ 2903|      0|    return (item->type & 0xFF) == cJSON_Invalid;
+ 2904|      0|}
+ 2905|       |
+ 2906|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item)
+ 2907|      0|{
+ 2908|      0|    if (item == NULL)
+ 2909|      0|    {
+ 2910|      0|        return false;
+ 2911|      0|    }
+ 2912|       |
+ 2913|      0|    return (item->type & 0xFF) == cJSON_False;
+ 2914|      0|}
+ 2915|       |
+ 2916|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item)
+ 2917|      0|{
+ 2918|      0|    if (item == NULL)
+ 2919|      0|    {
+ 2920|      0|        return false;
+ 2921|      0|    }
+ 2922|       |
+ 2923|      0|    return (item->type & 0xff) == cJSON_True;
+ 2924|      0|}
+ 2925|       |
+ 2926|       |
+ 2927|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item)
+ 2928|      0|{
+ 2929|      0|    if (item == NULL)
+ 2930|      0|    {
+ 2931|      0|        return false;
+ 2932|      0|    }
+ 2933|       |
+ 2934|      0|    return (item->type & (cJSON_True | cJSON_False)) != 0;
+ 2935|      0|}
+ 2936|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item)
+ 2937|      0|{
+ 2938|      0|    if (item == NULL)
+ 2939|      0|    {
+ 2940|      0|        return false;
+ 2941|      0|    }
+ 2942|       |
+ 2943|      0|    return (item->type & 0xFF) == cJSON_NULL;
+ 2944|      0|}
+ 2945|       |
+ 2946|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item)
+ 2947|      0|{
+ 2948|      0|    if (item == NULL)
+ 2949|      0|    {
+ 2950|      0|        return false;
+ 2951|      0|    }
+ 2952|       |
+ 2953|      0|    return (item->type & 0xFF) == cJSON_Number;
+ 2954|      0|}
+ 2955|       |
+ 2956|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item)
+ 2957|      0|{
+ 2958|      0|    if (item == NULL)
+ 2959|      0|    {
+ 2960|      0|        return false;
+ 2961|      0|    }
+ 2962|       |
+ 2963|      0|    return (item->type & 0xFF) == cJSON_String;
+ 2964|      0|}
+ 2965|       |
+ 2966|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item)
+ 2967|      0|{
+ 2968|      0|    if (item == NULL)
+ 2969|      0|    {
+ 2970|      0|        return false;
+ 2971|      0|    }
+ 2972|       |
+ 2973|      0|    return (item->type & 0xFF) == cJSON_Array;
+ 2974|      0|}
+ 2975|       |
+ 2976|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item)
+ 2977|      0|{
+ 2978|      0|    if (item == NULL)
+ 2979|      0|    {
+ 2980|      0|        return false;
+ 2981|      0|    }
+ 2982|       |
+ 2983|      0|    return (item->type & 0xFF) == cJSON_Object;
+ 2984|      0|}
+ 2985|       |
+ 2986|       |CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item)
+ 2987|      0|{
+ 2988|      0|    if (item == NULL)
+ 2989|      0|    {
+ 2990|      0|        return false;
+ 2991|      0|    }
+ 2992|       |
+ 2993|      0|    return (item->type & 0xFF) == cJSON_Raw;
+ 2994|      0|}
+ 2995|       |
+ 2996|       |CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive)
+ 2997|      0|{
+ 2998|      0|    if ((a == NULL) || (b == NULL) || ((a->type & 0xFF) != (b->type & 0xFF)))
+ 2999|      0|    {
+ 3000|      0|        return false;
+ 3001|      0|    }
+ 3002|       |
+ 3003|       |    /* check if type is valid */
+ 3004|      0|    switch (a->type & 0xFF)
+ 3005|      0|    {
+ 3006|      0|        case cJSON_False:
+ 3007|      0|        case cJSON_True:
+ 3008|      0|        case cJSON_NULL:
+ 3009|      0|        case cJSON_Number:
+ 3010|      0|        case cJSON_String:
+ 3011|      0|        case cJSON_Raw:
+ 3012|      0|        case cJSON_Array:
+ 3013|      0|        case cJSON_Object:
+ 3014|      0|            break;
+ 3015|       |
+ 3016|      0|        default:
+ 3017|      0|            return false;
+ 3018|      0|    }
+ 3019|       |
+ 3020|       |    /* identical objects are equal */
+ 3021|      0|    if (a == b)
+ 3022|      0|    {
+ 3023|      0|        return true;
+ 3024|      0|    }
+ 3025|       |
+ 3026|      0|    switch (a->type & 0xFF)
+ 3027|      0|    {
+ 3028|       |        /* in these cases and equal type is enough */
+ 3029|      0|        case cJSON_False:
+ 3030|      0|        case cJSON_True:
+ 3031|      0|        case cJSON_NULL:
+ 3032|      0|            return true;
+ 3033|       |
+ 3034|      0|        case cJSON_Number:
+ 3035|      0|            if (compare_double(a->valuedouble, b->valuedouble))
+ 3036|      0|            {
+ 3037|      0|                return true;
+ 3038|      0|            }
+ 3039|      0|            return false;
+ 3040|       |
+ 3041|      0|        case cJSON_String:
+ 3042|      0|        case cJSON_Raw:
+ 3043|      0|            if ((a->valuestring == NULL) || (b->valuestring == NULL))
+ 3044|      0|            {
+ 3045|      0|                return false;
+ 3046|      0|            }
+ 3047|      0|            if (strcmp(a->valuestring, b->valuestring) == 0)
+ 3048|      0|            {
+ 3049|      0|                return true;
+ 3050|      0|            }
+ 3051|       |
+ 3052|      0|            return false;
+ 3053|       |
+ 3054|      0|        case cJSON_Array:
+ 3055|      0|        {
+ 3056|      0|            cJSON *a_element = a->child;
+ 3057|      0|            cJSON *b_element = b->child;
+ 3058|       |
+ 3059|      0|            for (; (a_element != NULL) && (b_element != NULL);)
+ 3060|      0|            {
+ 3061|      0|                if (!cJSON_Compare(a_element, b_element, case_sensitive))
+ 3062|      0|                {
+ 3063|      0|                    return false;
+ 3064|      0|                }
+ 3065|       |
+ 3066|      0|                a_element = a_element->next;
+ 3067|      0|                b_element = b_element->next;
+ 3068|      0|            }
+ 3069|       |
+ 3070|       |            /* one of the arrays is longer than the other */
+ 3071|      0|            if (a_element != b_element) {
+ 3072|      0|                return false;
+ 3073|      0|            }
+ 3074|       |
+ 3075|      0|            return true;
+ 3076|      0|        }
+ 3077|       |
+ 3078|      0|        case cJSON_Object:
+ 3079|      0|        {
+ 3080|      0|            cJSON *a_element = NULL;
+ 3081|      0|            cJSON *b_element = NULL;
+ 3082|      0|            cJSON_ArrayForEach(a_element, a)
+ 3083|      0|            {
+ 3084|       |                /* TODO This has O(n^2) runtime, which is horrible! */
+ 3085|      0|                b_element = get_object_item(b, a_element->string, case_sensitive);
+ 3086|      0|                if (b_element == NULL)
+ 3087|      0|                {
+ 3088|      0|                    return false;
+ 3089|      0|                }
+ 3090|       |
+ 3091|      0|                if (!cJSON_Compare(a_element, b_element, case_sensitive))
+ 3092|      0|                {
+ 3093|      0|                    return false;
+ 3094|      0|                }
+ 3095|      0|            }
+ 3096|       |
+ 3097|       |            /* doing this twice, once on a and b to prevent true comparison if a subset of b
+ 3098|       |             * TODO: Do this the proper way, this is just a fix for now */
+ 3099|      0|            cJSON_ArrayForEach(b_element, b)
+ 3100|      0|            {
+ 3101|      0|                a_element = get_object_item(a, b_element->string, case_sensitive);
+ 3102|      0|                if (a_element == NULL)
+ 3103|      0|                {
+ 3104|      0|                    return false;
+ 3105|      0|                }
+ 3106|       |
+ 3107|      0|                if (!cJSON_Compare(b_element, a_element, case_sensitive))
+ 3108|      0|                {
+ 3109|      0|                    return false;
+ 3110|      0|                }
+ 3111|      0|            }
+ 3112|       |
+ 3113|      0|            return true;
+ 3114|      0|        }
+ 3115|       |
+ 3116|      0|        default:
+ 3117|      0|            return false;
+ 3118|      0|    }
+ 3119|      0|}
+ 3120|       |
+ 3121|       |CJSON_PUBLIC(void *) cJSON_malloc(size_t size)
+ 3122|      0|{
+ 3123|      0|    return global_hooks.allocate(size);
+ 3124|      0|}
+ 3125|       |
+ 3126|       |CJSON_PUBLIC(void) cJSON_free(void *object)
+ 3127|      0|{
+ 3128|      0|    global_hooks.deallocate(object);
+ 3129|      0|}
+
+/home/s22100141/Capston2/cJSON_ijon/fuzzing/afl.c:
+    1|       |/*
+    2|       |  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
+    3|       |
+    4|       |  Permission is hereby granted, free of charge, to any person obtaining a copy
+    5|       |  of this software and associated documentation files (the "Software"), to deal
+    6|       |  in the Software without restriction, including without limitation the rights
+    7|       |  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    8|       |  copies of the Software, and to permit persons to whom the Software is
+    9|       |  furnished to do so, subject to the following conditions:
+   10|       |
+   11|       |  The above copyright notice and this permission notice shall be included in
+   12|       |  all copies or substantial portions of the Software.
+   13|       |
+   14|       |  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   15|       |  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   16|       |  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   17|       |  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   18|       |  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   19|       |  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   20|       |  THE SOFTWARE.
+   21|       |*/
+   22|       |
+   23|       |#include <stdio.h>
+   24|       |#include <stdlib.h>
+   25|       |#include <string.h>
+   26|       |
+   27|       |#include "../cJSON.h"
+   28|       |
+   29|       |static char *read_file(const char *filename)
+   30|  1.85k|{
+   31|  1.85k|    FILE *file = NULL;
+   32|  1.85k|    long length = 0;
+   33|  1.85k|    char *content = NULL;
+   34|  1.85k|    size_t read_chars = 0;
+   35|       |
+   36|       |    /* open in read binary mode */
+   37|  1.85k|    file = fopen(filename, "rb");
+   38|  1.85k|    if (file == NULL)
+   39|      0|    {
+   40|      0|        goto cleanup;
+   41|      0|    }
+   42|       |
+   43|       |    /* get the length */
+   44|  1.85k|    if (fseek(file, 0, SEEK_END) != 0)
+   45|      0|    {
+   46|      0|        goto cleanup;
+   47|      0|    }
+   48|  1.85k|    length = ftell(file);
+   49|  1.85k|    if (length < 0)
+   50|      0|    {
+   51|      0|        goto cleanup;
+   52|      0|    }
+   53|  1.85k|    if (fseek(file, 0, SEEK_SET) != 0)
+   54|      0|    {
+   55|      0|        goto cleanup;
+   56|      0|    }
+   57|       |
+   58|       |    /* allocate content buffer */
+   59|  1.85k|    content = (char*)malloc((size_t)length + sizeof(""));
+   60|  1.85k|    if (content == NULL)
+   61|      0|    {
+   62|      0|        goto cleanup;
+   63|      0|    }
+   64|       |
+   65|       |    /* read the file into memory */
+   66|  1.85k|    read_chars = fread(content, sizeof(char), (size_t)length, file);
+   67|  1.85k|    if ((long)read_chars != length)
+   68|      0|    {
+   69|      0|        free(content);
+   70|      0|        content = NULL;
+   71|      0|        goto cleanup;
+   72|      0|    }
+   73|  1.85k|    content[read_chars] = '\0';
+   74|       |
+   75|       |
+   76|  1.85k|cleanup:
+   77|  1.85k|    if (file != NULL)
+   78|  1.85k|    {
+   79|  1.85k|        fclose(file);
+   80|  1.85k|    }
+   81|       |
+   82|  1.85k|    return content;
+   83|  1.85k|}
+   84|       |
+   85|       |int main(int argc, char** argv)
+   86|  1.85k|{
+   87|  1.85k|    const char *filename = NULL;
+   88|  1.85k|    cJSON *item = NULL;
+   89|  1.85k|    char *json = NULL;
+   90|  1.85k|    int status = EXIT_FAILURE;
+   91|  1.85k|    char *printed_json = NULL;
+   92|       |
+   93|       |
+   94|  1.85k|    if ((argc < 2) || (argc > 3))
+   95|      0|    {
+   96|      0|        printf("Usage:\n");
+   97|      0|        printf("%s input_file [enable_printing]\n", argv[0]);
+   98|      0|        printf("\t input_file: file containing the test data\n");
+   99|      0|        printf("\t enable_printing: print after parsing, 'yes' or 'no', defaults to 'no'\n");
+  100|      0|        goto cleanup;
+  101|      0|    }
+  102|       |
+  103|  1.85k|    filename = argv[1];
+  104|       |
+  105|       |#if __AFL_HAVE_MANUAL_CONTROL
+  106|       |    while (__AFL_LOOP(1000))
+  107|       |    {
+  108|       |#endif
+  109|  1.85k|    status = EXIT_SUCCESS;
+  110|       |
+  111|  1.85k|    json = read_file(filename);
+  112|  1.85k|    if ((json == NULL) || (json[0] == '\0') || (json[1] == '\0'))
+  113|     10|    {
+  114|     10|        status = EXIT_FAILURE;
+  115|     10|        goto cleanup;
+  116|     10|    }
+  117|  1.84k|    item = cJSON_Parse(json + 2);
+  118|  1.84k|    if (item == NULL)
+  119|    894|    {
+  120|    894|        goto cleanup;
+  121|    894|    }
+  122|       |
+  123|    953|    char yes[5] = "yes";
+  124|    953|    argv[2] = yes;
+  125|    953|    argc = 3;
+  126|       |
+  127|    953|    if ((argc == 3) && (strncmp(argv[2], "yes", 3) == 0))
+  128|    953|    {
+  129|    953|        int do_format = 0;
+  130|    953|        if (json[1] == 'f')
+  131|    587|        {
+  132|    587|            do_format = 1;
+  133|    587|        }
+  134|       |
+  135|    953|        if (json[0] == 'b')
+  136|    627|        {
+  137|       |            /* buffered printing */
+  138|    627|            printed_json = cJSON_PrintBuffered(item, 1, do_format);
+  139|    627|        }
+  140|    326|        else
+  141|    326|        {
+  142|       |            /* unbuffered printing */
+  143|    326|            if (do_format)
+  144|     69|            {
+  145|     69|                printed_json = cJSON_Print(item);
+  146|     69|            }
+  147|    257|            else
+  148|    257|            {
+  149|    257|                printed_json = cJSON_PrintUnformatted(item);
+  150|    257|            }
+  151|    326|        }
+  152|    953|        if (printed_json == NULL)
+  153|      0|        {
+  154|      0|            status = EXIT_FAILURE;
+  155|      0|            goto cleanup;
+  156|      0|        }
+  157|    953|        printf("%s\n", printed_json);
+  158|    953|    }
+  159|       |
+  160|  1.85k|cleanup:
+  161|  1.85k|    if (item != NULL)
+  162|    953|    {
+  163|    953|        cJSON_Delete(item);
+  164|    953|        item = NULL;
+  165|    953|    }
+  166|  1.85k|    if (json != NULL)
+  167|  1.85k|    {
+  168|  1.85k|        free(json);
+  169|  1.85k|        json = NULL;
+  170|  1.85k|    }
+  171|  1.85k|    if (printed_json != NULL)
+  172|    953|    {
+  173|    953|        free(printed_json);
+  174|    953|        printed_json = NULL;
+  175|    953|    }
+  176|       |#if __AFL_HAVE_MANUAL_CONTROL
+  177|       |    }
+  178|       |#endif
+  179|       |//	printf("afl testing done");
+  180|  1.85k|    return status;
+  181|    953|}
+
