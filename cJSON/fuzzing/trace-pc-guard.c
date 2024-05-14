@@ -81,7 +81,6 @@ __sanitizer_cov_trace_pc_guard(uint32_t *guard)
 	//printf("Func: %s\n",extract_function);
 	for(i = 0; i < total_func; i++){
 		if(strcmp(extract_function,name_func[i]) == 0 && already_covered[i] == 0){
-			fprintf(fp,"%s\n",name_func[i]);
 			putc(1,fp);
 			already_covered[i]++;
 			break;

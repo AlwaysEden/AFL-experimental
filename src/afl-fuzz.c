@@ -511,7 +511,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         func[func_cnt] = malloc(sizeof(char)* (strlen(tmp)+1));
                         memcpy(func[func_cnt], tmp, strlen(tmp));
-			printf("func: %s\n",func[func_cnt]);
+			//printf("func: %s\n",func[func_cnt]);
                         func_cnt++;
                         if(func_cnt > 5){
                                 fprintf(stderr, "ERROR: Don't over 5 target function\n");
@@ -521,7 +521,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL, "\"");
                         target_path = (char*)malloc(sizeof(char)*LENGTH);
                         memcpy(target_path, tmp, strlen(tmp));
-                        printf("target_path: %s\n", target_path);
+                        //printf("target_path: %s\n", target_path);
                 }else{
                         fprintf(stderr,"ERROR: Check your JSON Format.\n");
                         fprintf(stderr,"Example: \n");
@@ -536,11 +536,6 @@ void parseJson(char *json){
                         exit(1);
                 }
         }
-	printf("total_func: %s\n",total_func);
-	for(int x = 0; x < func_cnt; x++){
-		printf("func: %s\n",func[x]);
-	}
-	printf("target_path: %s\n", target_path);
 	if(atoi(total_func) != func_cnt){
                 fprintf(stderr, "ERROR: Not Match \"total_func\" and the number of \"func\"\n");
         	free(total_func);
@@ -2212,43 +2207,6 @@ int main(int argc, char **argv_orig, char **envp) {
 
   setup_cmdline_file(afl, argv + optind);
 
-  read_testcases(afl, NULL);
-  // read_foreign_testcases(afl, 1); for the moment dont do this
-  OKF("Loaded a total of %u seeds.", afl->queued_items);
-
-  pivot_inputs(afl);
-
-  if (!afl->timeout_given) { find_timeout(afl); }  // only for resumes!
-
-  if (afl->afl_env.afl_tmpdir && !afl->in_place_resume) {
-
-    char tmpfile[PATH_MAX];
-
-    if (afl->file_extension) {
-
-      snprintf(tmpfile, PATH_MAX, "%s/.cur_input.%s", afl->tmp_dir,
-               afl->file_extension);
-
-    } else {
-
-      snprintf(tmpfile, PATH_MAX, "%s/.cur_input", afl->tmp_dir);
-
-    }
-
-    /* there is still a race condition here, but well ... */
-    if (access(tmpfile, F_OK) != -1) {
-
-      FATAL(
-          "AFL_TMPDIR already has an existing temporary input file: %s - if "
-          "this is not from another instance, then just remove the file.",
-          tmpfile);
-
-    }
-
-  }
-
-  /* If we don't have a file name chosen yet, use a safe default. */
-
   if (!afl->fsrv.out_file) {
 
     u32 j = optind + 1;
@@ -2286,6 +2244,80 @@ int main(int argc, char **argv_orig, char **envp) {
 
   if (!afl->fsrv.out_file) { setup_stdio_file(afl); }
 
+  read_testcases(afl, NULL);
+  // read_foreign_testcases(afl, 1); for the moment dont do this
+  OKF("Loaded a total of %u seeds.", afl->queued_items);
+
+  pivot_inputs(afl);
+
+  if (!afl->timeout_given) { find_timeout(afl); }  // only for resumes!
+
+  if (afl->afl_env.afl_tmpdir && !afl->in_place_resume) {
+
+    char tmpfile[PATH_MAX];
+
+    if (afl->file_extension) {
+
+      snprintf(tmpfile, PATH_MAX, "%s/.cur_input.%s", afl->tmp_dir,
+               afl->file_extension);
+
+    } else {
+
+      snprintf(tmpfile, PATH_MAX, "%s/.cur_input", afl->tmp_dir);
+
+    }
+
+    /* there is still a race condition here, but well ... */
+    if (access(tmpfile, F_OK) != -1) {
+
+      FATAL(
+          "AFL_TMPDIR already has an existing temporary input file: %s - if "
+          "this is not from another instance, then just remove the file.",
+          tmpfile);
+
+    }
+
+  }
+
+  /* If we don't have a file name chosen yet, use a safe default. */
+/* There is the same thing above. For interface mode.
+  if (!afl->fsrv.out_file) {
+
+    u32 j = optind + 1;
+    while (argv[j]) {
+
+      u8 *aa_loc = strstr(argv[j], "@@");
+
+      if (aa_loc && !afl->fsrv.out_file) {
+
+        afl->fsrv.use_stdin = 0;
+        default_output = 0;
+
+        if (afl->file_extension) {
+
+          afl->fsrv.out_file = alloc_printf("%s/.cur_input.%s", afl->tmp_dir,
+                                            afl->file_extension);
+
+        } else {
+
+          afl->fsrv.out_file = alloc_printf("%s/.cur_input", afl->tmp_dir);
+
+        }
+	
+        detect_file_args(argv + optind + 1, afl->fsrv.out_file,
+                         &afl->fsrv.use_stdin);
+        break;
+
+      }
+
+      ++j;
+
+    }
+
+  }
+
+  if (!afl->fsrv.out_file) { setup_stdio_file(afl); }
+*/
   if (afl->cmplog_binary) {
 
     if (afl->unicorn_mode) {
