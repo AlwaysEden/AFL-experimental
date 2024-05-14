@@ -598,29 +598,24 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
   q->testcase_buf = NULL;
   q->mother = afl->queue_cur;
 
-  FILE *fpp = fopen("checking_func_count", "a+");
+ //FILE *fpp = fopen("checking_func_count", "a+");
 
   if(afl->interface_mode > 0){ // suppress mode or enhance mode
             int pid;
             char exe_line[512];
             snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
 
-	    printf("stdin: %d\n", afl->fsrv.use_stdin);
-	    printf("out_file: %s\n", afl->fsrv.out_file);
             char ** exe_args;
             if(afl->fsrv.use_stdin == false){ //stdin X, argv O
-			    printf("arge?????\n\n");
                     exe_args = (char**)malloc(3 * sizeof(char*));
                     exe_args[0] = exe_line;
                     exe_args[1] = q->fname;
                     exe_args[2] = NULL;
             }else{ // stdin O, argv X
-			    printf("stdin????\n\n");
                     exe_args = (char**)malloc(2*sizeof(char*));
                     exe_args[0] = exe_line;
                     exe_args[1] = NULL;
             }
-            //Stdin일 때는 pipe 써서 넘겨주면 되고, argv일 때는 argument로 넘겨주면 될듯
 
             pid = fork();
             if(pid == 0){
@@ -666,7 +661,7 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
 
             }
 	    q->covered_func_count = cover_count;
-            fprintf(fpp, "%d\n",q->covered_func_count);//for checking -JW-
+            //fprintf(fpp, "%d\n",q->covered_func_count);//for checking -JW-
 
            free(exe_args);
     }
@@ -1262,7 +1257,6 @@ u32 calculate_score(afl_state_t *afl, struct queue_entry *q) {
 
   }
   FILE *fp = fopen("perf_score","a+");
-  char output[50];
   if(afl->interface_mode > 0){
     if(afl->interface_mode == 1){//supress mode
   	  switch(q->covered_func_count){
@@ -1287,6 +1281,7 @@ u32 calculate_score(afl_state_t *afl, struct queue_entry *q) {
 			fprintf(fp,"sup case5\n");
 			break;
 		default:
+			fprintf(fp,"sup case0\n");
 			break;
 	  }
   }else if(afl->interface_mode == 2){//enhance mode
@@ -1313,6 +1308,7 @@ u32 calculate_score(afl_state_t *afl, struct queue_entry *q) {
 			fprintf(fp,"enhance case5\n");
 			break;
 		default:
+			fprintf(fp,"enhance case0\n");
 			break;
 	  }
   }

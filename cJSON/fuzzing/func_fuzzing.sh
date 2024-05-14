@@ -14,19 +14,19 @@ clang -fsanitize=address -fsanitize-coverage=trace-pc-guard,func ../../afl.c ../
 
 cp ../../target.json ./
 
-/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ../../afl++_test/findings0 -R target.json ./afl-main yes 
+/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings0 -r target.json ./afl-main @@ yes &
 program_pid0=$!
 
-#/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ../../afl++_test/findings0 -r target.json ./afl-main @@ yes &
+/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings1 -r target.json ./afl-main @@ yes &
 program_pid1=$!
 
-#/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ../../afl++_test/findings0 -r target.json ./afl-main @@ yes &
+/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings2 -r target.json ./afl-main @@ yes &
 program_pid2=$!
 
-#/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ../../afl++_test/findings0 -r target.json ./afl-main @@ yes &
+/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings3 -r target.json ./afl-main @@ yes &
 program_pid3=$!
 
-#/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ../../afl++_test/findings0 -r target.json ./afl-main @@ yes &
+/mnt/hdd/fuzz_usability/AFL++experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs -o ./findings4 -r target.json ./afl-main @@ yes &
 program_pid4=$!
 
 sleep 3700

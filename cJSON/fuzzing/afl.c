@@ -118,7 +118,9 @@ int main(int argc, char** argv)
     {
         goto cleanup;
     }
-
+   char yes[5] = "yes";
+   argv[2] = yes;
+   argc=3;
     if ((argc == 3) && (strncmp(argv[2], "yes", 3) == 0))
     {
         int do_format = 0;
