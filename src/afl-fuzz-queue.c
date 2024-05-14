@@ -605,13 +605,17 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
             char exe_line[512];
             snprintf(exe_line, 512, "./%s", afl_interface.binary_path);
 
+	    printf("stdin: %d\n", afl->fsrv.use_stdin);
+	    printf("out_file: %s\n", afl->fsrv.out_file);
             char ** exe_args;
             if(afl->fsrv.use_stdin == false){ //stdin X, argv O
+			    printf("arge?????\n\n");
                     exe_args = (char**)malloc(3 * sizeof(char*));
                     exe_args[0] = exe_line;
                     exe_args[1] = q->fname;
                     exe_args[2] = NULL;
             }else{ // stdin O, argv X
+			    printf("stdin????\n\n");
                     exe_args = (char**)malloc(2*sizeof(char*));
                     exe_args[0] = exe_line;
                     exe_args[1] = NULL;
@@ -621,6 +625,12 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
             pid = fork();
             if(pid == 0){
                     if(afl->fsrv.use_stdin == true){
+			    /* For hiding the output displayed from child process
+			    int hide_output_fd = open("/dev/null",O_WRONLY);
+			    dup2(fd, STDOUT_FILENO);
+			    dup2(fd, STDERR_FILENO);
+			    close(fd);
+			    */
                             int tmp_fd = open(q->fname, O_RDONLY); //fd variable already exist
                             if(tmp_fd < 0)      {
                                     fprintf(stderr, "open %s file\n", q->fname) ;
@@ -643,10 +653,10 @@ void add_to_queue(afl_state_t *afl, u8 *fname, u32 len, u8 passed_det) {
 
             FILE *fp;
             int cover_count = 0;
-            fp = fopen("function_coverage", "r");
+            fp = fopen("function_coverage", "r"); //사실 이걸 dup2로 받아올 수 있긴함. 나중에 가능하면 고쳐보자.
             if (fp == NULL) {
                     fprintf(stderr, "can not open func_covFile in interface mode.\n");
-                    cover_count = 1;
+                    cover_count = 3;
             }
             else{
                     while(fgetc(fp) != EOF){

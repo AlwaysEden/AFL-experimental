@@ -487,12 +487,12 @@ void parseJson(char *json){
         }
 
 	char *total_func = NULL;
-        char **func = NULL;
+        char *func[5] = {0};
         char *target_path = NULL;
 
         int func_cnt = 0;
 
-        char line[LENGTH];
+       	char line[LENGTH];
         char *tmp;
         while( (fgets(line, LENGTH, fp)) != NULL){
                 if(line[0] == '{' || line[0] == '}') continue;
@@ -501,7 +501,7 @@ void parseJson(char *json){
                         tmp = strtok(NULL,",");
                         total_func = malloc(sizeof(char));
                         memcpy(total_func, tmp, sizeof(char));
-                        func = malloc(sizeof(char) * atoi(total_func));
+                        //func = malloc(sizeof(char*) * atoi(total_func));
                         //printf("total_func: %s\n", total_func);
                 }else if(strcmp(tmp, "\t\"func\":") == 0){
                         if(total_func == NULL){
@@ -509,19 +509,19 @@ void parseJson(char *json){
                                 exit(1);
                         }
                         tmp = strtok(NULL, "\"");
-                        func[func_cnt] = malloc(sizeof(char)*LENGTH);
+                        func[func_cnt] = malloc(sizeof(char)* (strlen(tmp)+1));
                         memcpy(func[func_cnt], tmp, strlen(tmp));
-			//printf("func: %s\n",func[func_cnt]);
+			printf("func: %s\n",func[func_cnt]);
                         func_cnt++;
-                        if(func_cnt >= 5){
+                        if(func_cnt > 5){
                                 fprintf(stderr, "ERROR: Don't over 5 target function\n");
                                 exit(1);
                         }
                 }else if(strcmp(tmp, "\t\"target_path\":")==0){
                         tmp = strtok(NULL, "\"");
-                        target_path = malloc(sizeof(char)*LENGTH);
+                        target_path = (char*)malloc(sizeof(char)*LENGTH);
                         memcpy(target_path, tmp, strlen(tmp));
-                        //printf("target_path: %s\n", target_path);
+                        printf("target_path: %s\n", target_path);
                 }else{
                         fprintf(stderr,"ERROR: Check your JSON Format.\n");
                         fprintf(stderr,"Example: \n");
@@ -536,6 +536,11 @@ void parseJson(char *json){
                         exit(1);
                 }
         }
+	printf("total_func: %s\n",total_func);
+	for(int x = 0; x < func_cnt; x++){
+		printf("func: %s\n",func[x]);
+	}
+	printf("target_path: %s\n", target_path);
 	if(atoi(total_func) != func_cnt){
                 fprintf(stderr, "ERROR: Not Match \"total_func\" and the number of \"func\"\n");
         	free(total_func);
@@ -568,13 +573,13 @@ void parseJson(char *json){
         for(int i = 0; i < func_cnt; i++){
                 strcat(func[i], "\n");
                 fwrite(func[i],1, strlen(func[i]),fp);
+		free(func[i]);
         }
         fwrite(target_path, 1, strlen(target_path),fp);
 	
 	afl_interface.total_func = atoi(total_func);
 	memcpy(&afl_interface.binary_path, target_path, strlen(target_path));
 
-	free(func);
         free(total_func);
         free(target_path);
         fclose(fp);
@@ -2266,7 +2271,7 @@ int main(int argc, char **argv_orig, char **envp) {
           afl->fsrv.out_file = alloc_printf("%s/.cur_input", afl->tmp_dir);
 
         }
-
+	
         detect_file_args(argv + optind + 1, afl->fsrv.out_file,
                          &afl->fsrv.use_stdin);
         break;

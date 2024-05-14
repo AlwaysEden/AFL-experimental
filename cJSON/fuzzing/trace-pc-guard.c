@@ -41,7 +41,7 @@ __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop)
 		fgets(line, LENGTH,fp);
 		line[strlen(line)-1] = 0x0;
 		memcpy(name_func[i],line,strlen(line));
-		printf("name: %s\n", name_func[i]);
+		//printf("name: %s\n", name_func[i]);
 	}
 	fclose(fp);
 	fp = fopen("function_coverage","w+");
@@ -81,6 +81,7 @@ __sanitizer_cov_trace_pc_guard(uint32_t *guard)
 	//printf("Func: %s\n",extract_function);
 	for(i = 0; i < total_func; i++){
 		if(strcmp(extract_function,name_func[i]) == 0 && already_covered[i] == 0){
+			fprintf(fp,"%s\n",name_func[i]);
 			putc(1,fp);
 			already_covered[i]++;
 			break;

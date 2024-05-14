@@ -907,7 +907,7 @@ void perform_dry_run(afl_state_t *afl) {
   u32                 cal_failures = 0, idx;
   u8                 *use_mem;
   
-  FILE *fpp = fopen("checking_func_count", "a+");
+  //FILE *fpp = fopen("checking_func_count", "a+");
 
   for (idx = 0; idx < afl->queued_items; idx++) {
 
@@ -938,7 +938,7 @@ void perform_dry_run(afl_state_t *afl) {
     ck_read(fd, use_mem, read_len, q->fname);
 
     close(fd);
-
+/*
     if(afl->interface_mode > 0){ // suppress mode or enhance mode
 	    int pid;
 	    char exe_line[512];
@@ -1001,7 +1001,7 @@ void perform_dry_run(afl_state_t *afl) {
 	   //free(exe_args); 
     }
 	   fclose(fpp);
-
+*/
     res = calibrate_case(afl, q, use_mem, 0, 1);
 
     /* For AFLFast schedules we update the queue entry */
