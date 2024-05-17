@@ -1,0 +1,1 @@
+/home/s22100141/AFLplusplus/afl-c++ -O3 -DNDEBUG CMakeFiles/api_test.dir/cplusplus.cpp.o CMakeFiles/api_test.dir/harness.c.o CMakeFiles/api_test.dir/main.c.o -o api_test   -L/usr/lib/llvm-13/lib  ../src/libcmark.a 
