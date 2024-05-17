@@ -1,0 +1,6 @@
+bf{"menu": { "he": "er",
+    "items": [
+{"id": "Open"},
+        {"id": "New", "label": "Open New"},
+        null,
+  "Zoom In"},

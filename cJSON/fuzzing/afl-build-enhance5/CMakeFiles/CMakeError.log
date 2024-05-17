@@ -1,0 +1,40 @@
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wformatoverflow failed with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0f1f3/fast && /usr/bin/make  -f CMakeFiles/cmTC_0f1f3.dir/build.make CMakeFiles/cmTC_0f1f3.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0f1f3.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -DFLAG_SUPPORTED_Wformatoverflow   -Wformat-overflow -o CMakeFiles/cmTC_0f1f3.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+error: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+CMakeFiles/cmTC_0f1f3.dir/build.make:84: recipe for target 'CMakeFiles/cmTC_0f1f3.dir/src.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_0f1f3.dir/src.c.o] Error 1
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Makefile:140: recipe for target 'cmTC_0f1f3/fast' failed
+make: *** [cmTC_0f1f3/fast] Error 2
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fsanitizeaddress failed with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_03654/fast && /usr/bin/make  -f CMakeFiles/cmTC_03654.dir/build.make CMakeFiles/cmTC_03654.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_03654.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -DFLAG_SUPPORTED_fsanitizeaddress   -fsanitize=address -o CMakeFiles/cmTC_03654.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_03654
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_03654.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -DFLAG_SUPPORTED_fsanitizeaddress -rdynamic CMakeFiles/cmTC_03654.dir/src.c.o -o cmTC_03654 
+CMakeFiles/cmTC_03654.dir/src.c.o: In function `asan.module_ctor':
+src.c:(.text+0x7d): undefined reference to `__asan_init'
+src.c:(.text+0x82): undefined reference to `__asan_version_mismatch_check_v8'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+CMakeFiles/cmTC_03654.dir/build.make:105: recipe for target 'cmTC_03654' failed
+make[1]: *** [cmTC_03654] Error 1
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Makefile:140: recipe for target 'cmTC_03654/fast' failed
+make: *** [cmTC_03654/fast] Error 2
+
+
+Source file was:
+int main(void) { return 0; }

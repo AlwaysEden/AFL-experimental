@@ -1,0 +1,27 @@
+start_time        : 1714200241
+last_update       : 1714200256
+fuzzer_pid        : 9966
+cycles_done       : 47
+execs_done        : 205969
+execs_per_sec     : 13864.62
+paths_total       : 9
+paths_favored     : 2
+paths_found       : 8
+paths_imported    : 0
+max_depth         : 3
+cur_path          : 6
+pending_favs      : 0
+pending_total     : 0
+variable_paths    : 0
+stability         : 100.00%
+bitmap_cvg        : 0.01%
+unique_crashes    : 0
+unique_hangs      : 0
+last_path         : 1714200245
+last_crash        : 0
+last_hang         : 0
+execs_since_crash : 205969
+exec_timeout      : 20
+afl_banner        : test3
+afl_version       : 2.51b-ijon
+command_line      : ./afl-fuzz -i simpletest/simple_testcase/ -o simpletest/simple_output/ ./test3

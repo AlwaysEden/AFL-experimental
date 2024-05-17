@@ -1,0 +1,17 @@
+bf{"menu": { "he": "er", "items": [
+{"id": "Open"},
+{"id": "New", "l": " New"},
+null,
+    {"id": "ZoomIn", "label": "Zoom In"},
+{"id": "ZoomOut", "label": "inalView", "label": "Oriew"},
+     null, {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "F", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+     [1, 0, 0],
+    [0, 0, 1]
+	]   {"

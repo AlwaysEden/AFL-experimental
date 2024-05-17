@@ -1465,6 +1465,7 @@ int main(int argc, char **argv_orig, char **envp) {
         break;  // not needed
 
       case 'r'://supress mode(== function supress mode)
+	afl->perf_score_avg = 0;
 	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);
@@ -1478,6 +1479,7 @@ int main(int argc, char **argv_orig, char **envp) {
 	*/
         break;
       case 'R': //enhance mode(== function enhance mode)
+	afl->perf_score_avg = 0;
 	if(afl->interface_mode != 0){
 		fprintf(stderr,"ERROR: Check afl->interface_mode\n");
 		exit(1);

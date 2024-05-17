@@ -1,0 +1,38 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+   },
+"text": {
+   "src": "Imaain_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+   },
+"text": {
+   "src": "Images",
+    "name": "sun1",
+    "hOffsOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C ",
+        "size": 36,
+"e": "bold", "name": "text1",
+        "het": 250,
+     ges",
+    "name": "sun1",
+    "hOffsOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C ",
+        "size": 36,
+"e": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "sity = et", "name": "main_window",
+

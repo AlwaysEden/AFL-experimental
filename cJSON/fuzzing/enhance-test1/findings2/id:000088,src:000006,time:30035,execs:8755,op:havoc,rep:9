@@ -1,0 +1,21 @@
+u   "height":f{"et": {
+    "{ebug": "on",J   7"window": {
+    "title": "Sampbulator Widget", "name": 8main_window",
+"width": 500,
+    eight": 500
+},
+    "image"": {
+    "src": "Images",
+    "name": "sun1",
+   þ"hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"text": {
+        "data": "C Here",
+        "size": 36,
+"style": "bold",      "hext": {
+et": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

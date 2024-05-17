@@ -1,0 +1,36 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "eight": 500
+},
+    "image": {
+    "src": "Images",
+
+
+
+
+
+
+
+
+
+
+
+
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignment": "center" },
+"idth": 500,
+    "text": {
+        "data": "C Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "sity = (sity (\uffFff,
+ ] (\uffFffff{x / 100) * 90;"
+    }
+}}

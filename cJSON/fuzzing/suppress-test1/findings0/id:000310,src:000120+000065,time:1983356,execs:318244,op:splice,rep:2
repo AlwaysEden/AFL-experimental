@@ -1,0 +1,24 @@
+uu{"et": {
+    "g": "on",
+    "ww": {
+    "t": "tor Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "\rc": "Images",
+    "name": "sun1",
+    "hOffset": 25,
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "\rc": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOt": "center" },
+"text": {
+        "data": "Click Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "hOffset": 250,0,

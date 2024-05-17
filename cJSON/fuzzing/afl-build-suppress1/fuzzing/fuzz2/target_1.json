@@ -1,0 +1,5 @@
+{
+	"total_func": 1,
+	"func": "parse_string",
+	"target_path": "../target_For_FuncCov"
+}

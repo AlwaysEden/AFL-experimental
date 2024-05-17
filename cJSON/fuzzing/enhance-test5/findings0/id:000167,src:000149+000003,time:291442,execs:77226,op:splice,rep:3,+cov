@@ -1,0 +1,7 @@
+bf{"menu": {
+  "id": "file",
+  "e": "File",
+  "ê": { "meem": [
+  {"v": "Mew", "ock": "Cr"},
+  {"e": "Open", "onc": ")"},   {"value": "Close", "ock": "Cl"}
+    ]

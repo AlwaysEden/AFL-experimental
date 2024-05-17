@@ -1,0 +1,16 @@
+bf{"menu": {
+    "header": "SVG Viewer",
+    "items": [
+{"id": "Open"},
+        {"id": "OpenNew", "l": "Open New"},
+        null,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "l": "Zoom Out"},
+        {"id": "iniew SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "About", "label": "Abe CVG.."}
+    ]
+}}

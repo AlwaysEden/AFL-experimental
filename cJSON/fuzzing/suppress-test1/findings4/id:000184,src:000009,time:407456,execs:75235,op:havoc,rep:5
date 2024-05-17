@@ -1,0 +1,9 @@
+bf{"menu": { "header": "SVG Viewer",
+    "items": [
+{"id": "Open"},
+{"id": "OpenNew", "l": "Open New"},
+null,
+        {"id": "Zo", "l": "Zoom CVG Vi..."}
+    ]
+}}
+m

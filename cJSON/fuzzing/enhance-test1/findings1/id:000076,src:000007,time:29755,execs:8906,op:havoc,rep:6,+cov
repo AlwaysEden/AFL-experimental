@@ -1,0 +1,18 @@
+uu{"et": {
+    "w": {
+    "t": "et", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "Omage": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignme\t": "center" },
+"text": {
+    "data": "Click Here",
+"size": 36,
+"style": "bold", "name": "text1",
+    "hOffset": 250,
+   100

@@ -1,0 +1,30 @@
+bu{"et": {
+    "w": {
+    "t": "Sampbulator Widget", "h": 500
+}, "image": {
+
+},
+"image": {
+    "src": "Im",
+"name": "sun1",
+"set": 250,
+"set": "dow",
+"w": 500
+},
+    "image": {
+
+},
+    "image": {
+    "src": "Im",
+    "name": "sun1",
+    "set": 250,
+    "set": 250,
+    "t": "center" },
+    "text": {
+        "data": "Click Here",
+    "style": "bold", "name": "text1",
+"het": 250,
+        "vet": 100,
+"alignment": "center", "p": "sity = (sity / 100) * 90;"
+    }
+}}

@@ -1,0 +1,22 @@
+uu{"et": {
+    "g": "on",
+                "t": "bulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "int": "center" },
+"text":mage": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "ali    "src": "Imagnment": "center" },
+"text": {
+        "data": "Click Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "hOfgset": 250,
+        "vet": 104,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

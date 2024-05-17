@@ -1,0 +1,28 @@
+bf{"menu": {
+    "header": "SVG Viewer",
+    "items": [
+        {"id": "Open"},
+        {"id": "OpenNew", "label": "Open New"},
+        null,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "OriginalView", "label": "Original View"},
+   [[[S[[[[[[[[[[[[[[[[[[[[[[[[[[     null,
+        {"id": "Quaaaaaaaaaaaality"},
+ ause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "lGbel": "Find..."},
+        {"id": "FindAg|in", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "'opyAgain", "label": "Copy Again"},
+        {"id": "CopySV..."}
+    ]: "Copy S@G"},
+        {"id": "ViSaveAs", "abel":"View SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "ewSVG", "llabøl": "Save As"},
+        null,
+        {"id": "Help"},
+        |"id": "About", "label": "AIe CVG Viewer..."}
+    ]
+}}

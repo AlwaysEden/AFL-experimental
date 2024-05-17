@@ -1,0 +1,14 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "heQght": 500
+},
+        "size": 36,
+"style": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

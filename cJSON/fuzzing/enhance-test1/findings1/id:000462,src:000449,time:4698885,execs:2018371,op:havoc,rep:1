@@ -1,0 +1,61 @@
+bf[
+	 {
+	 "precision": 8,
+	 "Longitude": -122.E959,
+"Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SAN F",
+	 "State":  22.E959,
+"Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SAN F",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 { "Lade":  37.371991,
+	 "e": -122.026020,
+	 "Addqess":   "",
+	 "City":      "SUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "94085",
+	 "Countrysion": 8,
+	 "Longitude": -122.E959,
+"e": -122.E959,
+	 "Ads":   "",
+	 "City":  "SAN FRSCO",
+	 "State": "CA",
+	 "Zip":   "9",
+	 "Coy":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.91,
+	 "e": -122.20,
+	 "Ass":  "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 { "Lade":  37.371991,
+	 "e": -122.026020,
+	 "Addqess":   "",
+	 "City":      "SUNNYVALE",
+	 "StateZip":   "94085",
+	 "Countrysion": 8,
+	 "Longitude": -122.E959,
+"e": -122.E959,
+	 "Ads":   "",
+	 "City":  "SAN FRSCO",
+	 "State": "CA",
+	 "Zip":   "9",
+	 "Coy":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.91,
+	 "e": -122.20,
+	 "Ass":   "",
+	 "City":  "S",
+	 "Stat":   "US"
+	 }
+	 ]

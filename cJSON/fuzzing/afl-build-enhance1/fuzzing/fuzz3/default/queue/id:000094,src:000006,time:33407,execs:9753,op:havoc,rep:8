@@ -1,0 +1,19 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampwidator Widget", "name": "main_wYndow",
+"width": 5+++++++++++++++++++++++++++++++mage": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 2Ê0,
+    "vOffset": 250,
+    "alignment": "center" },
+"tIxt": {
+        "data": "C Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "het": 250,
+     ±  "vet": 100,
+        "a": "er", "oveUp": "sity = (sity / 100) * 90;"
+    }
+}}

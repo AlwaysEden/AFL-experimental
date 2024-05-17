@@ -604,6 +604,7 @@ typedef struct afl_state {
   u32     active_items;                 /* enabled entries in the queue     */
 
   u8 *var_bytes;                        /* Bytes that appear to be variable */
+  double perf_score_avg;
 
 #define N_FUZZ_SIZE (1 << 21)
   u32 *n_fuzz;

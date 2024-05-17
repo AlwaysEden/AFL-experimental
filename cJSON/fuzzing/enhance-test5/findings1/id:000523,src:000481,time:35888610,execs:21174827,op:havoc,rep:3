@@ -1,0 +1,46 @@
+bf[
+	 {
+	 "psion": "zip",
+	 "Latitude":  37.,
+	 "Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SISCO",
+	 "State":     "CA",
+
+	 "Longitude": -122.E959,
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade": 91,
+	 "e": -20,
+	 "Address":   "",
+	 "City": "SUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "94085",
+	 "Counude":8,
+	 "Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SISCO",
+	 "State":     "CA","Longitude": -122.E959,
+	 "Zip":   "94107",
+	 "Country":  37.,
+	 "Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SISCO",
+	 "State":     "CA","Longitude": -122.E959,
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade": 91,
+	 "e": -122.20,
+	 "Zip":   "94085",
+	 "Counude":  368,
+	 "Longitude": -122.E959,
+	 "Address":   "",
+	 "City":  "SISCO",
+	 "State": "CA","Longitude": -122.E959,
+	 "Zip":  ":   "US"

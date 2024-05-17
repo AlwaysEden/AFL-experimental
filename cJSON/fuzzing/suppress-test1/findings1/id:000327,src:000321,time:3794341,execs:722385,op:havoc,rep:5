@@ -1,0 +1,13 @@
+bf{"menu": { "hems": [
+{"id": "Open"},
+{"id": "OewSVG", "label": "View SVG"},
+    {"id": "ViewSource", "label": "rce"},     {"id": "SaveAs", "label": "Save As"},
+        null, {"id": "Help"}, {"id": "ce", "label": "View SAbout", "label": ".."}, {"id": "FindAgain", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "C", "label": "CopyAgain"}, {"id": "Cop", "label": "Copy SVG"}, {"id": "Vi‡wSVG", "label": "View SVG"}, {"id": "ViewSou~ce", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "About", "label": "Abe CVG.."}
+    ]
+}}

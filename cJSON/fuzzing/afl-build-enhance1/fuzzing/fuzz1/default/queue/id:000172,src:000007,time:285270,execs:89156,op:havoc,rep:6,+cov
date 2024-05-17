@@ -1,0 +1,20 @@
+uu{"et": {
+    "g": "on",
+    "ww": {
+    "t": "et", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "imÅge": {
+   "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "t": "center" },
+"text": {
+    "data": "Click H\re",
+"size": 36,
+"style": "bold", "name": "text1",
+    "hOffset": 250,
+    "vet": 100,
+    "a": "er", "o 

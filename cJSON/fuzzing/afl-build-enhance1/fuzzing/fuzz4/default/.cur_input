@@ -1,0 +1,16 @@
+bn{
+"name": "Jack (\"Bee\") Nimble",
+"fo": {"type":   "r": { "header": "SVG Viewer", "items": [
+{"id": "Open"},
+{"id": "OpenNew", "label": "Open New"},
+null,
+r},
+null,
+    {"id": "Find", "label": "Find..."},
+(   {"id": "FindAgain", "label": "Find Again"},
+    {"id": "Copy"},
+    {"id": "CopyAgain", "label": "Copy Again"},
+    {"id": "CopySVG", "la"label": "View SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+    {"id": "Help"},
+       

@@ -1,0 +1,13 @@
+bf{"et": {
+    "debug": "on",
+    "window": {
+    "t": "le Konfa Widget", "name": "main_window",
+"width": 500,
+    "ht": 500
+},
+"image": {
+    "src": "Is",
+"name": "sun1",
+"hOffset": 250,
+"vOf": 250,
+"alint": "ce" }}}}}}
