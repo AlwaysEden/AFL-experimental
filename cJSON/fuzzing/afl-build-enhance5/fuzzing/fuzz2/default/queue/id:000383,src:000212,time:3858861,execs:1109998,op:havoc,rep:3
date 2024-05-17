@@ -1,0 +1,9 @@
+b™{"menu": { "header": "SVG Viewer", "items": [
+{"id": "Open"},
+{"id": "OpenNew", "label": "Open New"},
+null,
+    {"id": "ZoomIn", "label": "Zoom In"},
+ {"id": "SaveAs", "label": "Save As"},
+    null, {"id": "Help"}, {"id": "About", "label": "Abe CbG Viewer..."}
+    ]
+}}

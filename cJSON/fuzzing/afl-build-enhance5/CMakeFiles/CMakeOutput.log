@@ -1,0 +1,684 @@
+The system is: Linux - 5.4.0-122-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/s22100141/AFLplusplus-experimental/afl-clang-fast 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/3.18.2/CompilerIdC/a.out"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_286d2/fast && /usr/bin/make  -f CMakeFiles/cmTC_286d2.dir/build.make CMakeFiles/cmTC_286d2.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -v -o CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.18/Modules/CMakeCCompilerABI.c
+Ubuntu clang version 13.0.1-++20220120110844+75e33f71c2da-1~exp1~20220120230854.66
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Candidate multilib: x32;@mx32
+Selected multilib: .;@m64
+ "/usr/lib/llvm-13/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -S -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -fhalf-no-semantic-interposition -mframe-pointer=none -fmath-errno -fno-rounding-math -no-integrated-as -mconstructor-aliases -munwind-tables -target-cpu x86-64 -tune-cpu generic -mllvm -treat-scalable-fixed-error-as-warning -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fno-dwarf-directory-asm -v -fcoverage-compilation-dir=/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp -resource-dir /usr/lib/llvm-13/lib/clang/13.0.1 -D __AFL_COMPILER=1 -D FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION=1 -D "__AFL_COVERAGE()=int __afl_selective_coverage = 1;void __afl_coverage_discard();void __afl_coverage_skip();void __afl_coverage_on();void __afl_coverage_off();" -D "__AFL_COVERAGE_START_OFF()=int __afl_selective_coverage_start_off = 1;" -D __AFL_COVERAGE_ON()=__afl_coverage_on() -D __AFL_COVERAGE_OFF()=__afl_coverage_off() -D __AFL_COVERAGE_DISCARD()=__afl_coverage_discard() -D __AFL_COVERAGE_SKIP()=__afl_coverage_skip() -internal-isystem /usr/lib/llvm-13/lib/clang/13.0.1/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -O3 -Wno-unused-command-line-argument -fdebug-compilation-dir=/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp -ferror-limit 19 -funroll-loops -fgnuc-version=4.2.1 -vectorize-loops -vectorize-slp -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o /tmp/CMakeCCompilerABI-fc8010.s -x c /usr/local/share/cmake-3.18/Modules/CMakeCCompilerABI.c
+clang -cc1 version 13.0.1 based upon LLVM 13.0.1 default target x86_64-pc-linux-gnu
+ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../x86_64-linux-gnu/include"
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/llvm-13/lib/clang/13.0.1/include
+ /usr/local/include
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+ "/home/s22100141/AFLplusplus-experimental/as" --64 -o CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o /tmp/CMakeCCompilerABI-fc8010.s
+Linking C executable cmTC_286d2
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_286d2.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -v -rdynamic CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -o cmTC_286d2 
+Ubuntu clang version 13.0.1-++20220120110844+75e33f71c2da-1~exp1~20220120230854.66
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Candidate multilib: x32;@mx32
+Selected multilib: .;@m64
+ "/usr/bin/ld" -export-dynamic -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_286d2 /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/llvm-13/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtend.o /usr/lib/x86_64-linux-gnu/crtn.o
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/lib/llvm-13/lib/clang/13.0.1/include]
+    add: [/usr/local/include]
+    add: [/usr/include/x86_64-linux-gnu]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/lib/llvm-13/lib/clang/13.0.1/include] ==> [/usr/lib/llvm-13/lib/clang/13.0.1/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/lib/llvm-13/lib/clang/13.0.1/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_286d2/fast && /usr/bin/make  -f CMakeFiles/cmTC_286d2.dir/build.make CMakeFiles/cmTC_286d2.dir/build]
+  ignore line: [make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -v -o CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.18/Modules/CMakeCCompilerABI.c]
+  ignore line: [Ubuntu clang version 13.0.1-++20220120110844+75e33f71c2da-1~exp1~20220120230854.66]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Candidate multilib: x32]
+  ignore line: [@mx32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [ "/usr/lib/llvm-13/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -S -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -fhalf-no-semantic-interposition -mframe-pointer=none -fmath-errno -fno-rounding-math -no-integrated-as -mconstructor-aliases -munwind-tables -target-cpu x86-64 -tune-cpu generic -mllvm -treat-scalable-fixed-error-as-warning -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fno-dwarf-directory-asm -v -fcoverage-compilation-dir=/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp -resource-dir /usr/lib/llvm-13/lib/clang/13.0.1 -D __AFL_COMPILER=1 -D FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION=1 -D "__AFL_COVERAGE()=int __afl_selective_coverage = 1]
+  ignore line: [void __afl_coverage_discard()]
+  ignore line: [void __afl_coverage_skip()]
+  ignore line: [void __afl_coverage_on()]
+  ignore line: [void __afl_coverage_off()]
+  ignore line: [" -D "__AFL_COVERAGE_START_OFF()=int __afl_selective_coverage_start_off = 1]
+  ignore line: [" -D __AFL_COVERAGE_ON()=__afl_coverage_on() -D __AFL_COVERAGE_OFF()=__afl_coverage_off() -D __AFL_COVERAGE_DISCARD()=__afl_coverage_discard() -D __AFL_COVERAGE_SKIP()=__afl_coverage_skip() -internal-isystem /usr/lib/llvm-13/lib/clang/13.0.1/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -O3 -Wno-unused-command-line-argument -fdebug-compilation-dir=/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp -ferror-limit 19 -funroll-loops -fgnuc-version=4.2.1 -vectorize-loops -vectorize-slp -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o /tmp/CMakeCCompilerABI-fc8010.s -x c /usr/local/share/cmake-3.18/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 13.0.1 based upon LLVM 13.0.1 default target x86_64-pc-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/../../../../x86_64-linux-gnu/include"]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/lib/llvm-13/lib/clang/13.0.1/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include/x86_64-linux-gnu]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [ "/home/s22100141/AFLplusplus-experimental/as" --64 -o CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o /tmp/CMakeCCompilerABI-fc8010.s]
+  ignore line: [Linking C executable cmTC_286d2]
+  ignore line: [/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_286d2.dir/link.txt --verbose=1]
+  ignore line: [/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -v -rdynamic CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -o cmTC_286d2 ]
+  ignore line: [Ubuntu clang version 13.0.1-++20220120110844+75e33f71c2da-1~exp1~20220120230854.66]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Candidate multilib: x32]
+  ignore line: [@mx32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  link line: [ "/usr/bin/ld" -export-dynamic -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_286d2 /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/llvm-13/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtend.o /usr/lib/x86_64-linux-gnu/crtn.o]
+    arg [/usr/bin/ld] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_286d2] ==> ignore
+    arg [/usr/lib/x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/lib/x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/llvm-13/bin/../lib] ==> dir [/usr/lib/llvm-13/bin/../lib]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [CMakeFiles/cmTC_286d2.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0/crtend.o] ==> ignore
+    arg [/usr/lib/x86_64-linux-gnu/crtn.o] ==> ignore
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/7.5.0] ==> [/usr/lib/gcc/x86_64-linux-gnu/7.5.0]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/llvm-13/bin/../lib] ==> [/usr/lib/llvm-13/lib]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/7.5.0;/lib/x86_64-linux-gnu;/lib64;/usr/lib/x86_64-linux-gnu;/usr/lib/llvm-13/lib;/lib;/usr/lib]
+  implicit fwks: []
+
+
+Performing C SOURCE FILE Test FLAG_SUPPORTED_stdc89 succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a71f8/fast && /usr/bin/make  -f CMakeFiles/cmTC_a71f8.dir/build.make CMakeFiles/cmTC_a71f8.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a71f8.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -DFLAG_SUPPORTED_stdc89   -std=c89 -o CMakeFiles/cmTC_a71f8.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_a71f8
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a71f8.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -DFLAG_SUPPORTED_stdc89 -rdynamic CMakeFiles/cmTC_a71f8.dir/src.c.o -o cmTC_a71f8 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_pedantic succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_80f13/fast && /usr/bin/make  -f CMakeFiles/cmTC_80f13.dir/build.make CMakeFiles/cmTC_80f13.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_80f13.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -DFLAG_SUPPORTED_pedantic   -pedantic -o CMakeFiles/cmTC_80f13.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_80f13
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80f13.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -DFLAG_SUPPORTED_pedantic -rdynamic CMakeFiles/cmTC_80f13.dir/src.c.o -o cmTC_80f13 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wall succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_ccaff/fast && /usr/bin/make  -f CMakeFiles/cmTC_ccaff.dir/build.make CMakeFiles/cmTC_ccaff.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ccaff.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -DFLAG_SUPPORTED_Wall   -Wall -o CMakeFiles/cmTC_ccaff.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_ccaff
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ccaff.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -DFLAG_SUPPORTED_Wall -rdynamic CMakeFiles/cmTC_ccaff.dir/src.c.o -o cmTC_ccaff 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wextra succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_fd24b/fast && /usr/bin/make  -f CMakeFiles/cmTC_fd24b.dir/build.make CMakeFiles/cmTC_fd24b.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fd24b.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -DFLAG_SUPPORTED_Wextra   -Wextra -o CMakeFiles/cmTC_fd24b.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_fd24b
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fd24b.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -DFLAG_SUPPORTED_Wextra -rdynamic CMakeFiles/cmTC_fd24b.dir/src.c.o -o cmTC_fd24b 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Werror succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_603bb/fast && /usr/bin/make  -f CMakeFiles/cmTC_603bb.dir/build.make CMakeFiles/cmTC_603bb.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_603bb.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -DFLAG_SUPPORTED_Werror   -Werror -o CMakeFiles/cmTC_603bb.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_603bb
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_603bb.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -DFLAG_SUPPORTED_Werror -rdynamic CMakeFiles/cmTC_603bb.dir/src.c.o -o cmTC_603bb 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wstrictprototypes succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c94fd/fast && /usr/bin/make  -f CMakeFiles/cmTC_c94fd.dir/build.make CMakeFiles/cmTC_c94fd.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c94fd.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -DFLAG_SUPPORTED_Wstrictprototypes   -Wstrict-prototypes -o CMakeFiles/cmTC_c94fd.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_c94fd
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c94fd.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -DFLAG_SUPPORTED_Wstrictprototypes -rdynamic CMakeFiles/cmTC_c94fd.dir/src.c.o -o cmTC_c94fd 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wwritestrings succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_053c7/fast && /usr/bin/make  -f CMakeFiles/cmTC_053c7.dir/build.make CMakeFiles/cmTC_053c7.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_053c7.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -DFLAG_SUPPORTED_Wwritestrings   -Wwrite-strings -o CMakeFiles/cmTC_053c7.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_053c7
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_053c7.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -DFLAG_SUPPORTED_Wwritestrings -rdynamic CMakeFiles/cmTC_053c7.dir/src.c.o -o cmTC_053c7 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wshadow succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2971f/fast && /usr/bin/make  -f CMakeFiles/cmTC_2971f.dir/build.make CMakeFiles/cmTC_2971f.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2971f.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -DFLAG_SUPPORTED_Wshadow   -Wshadow -o CMakeFiles/cmTC_2971f.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_2971f
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2971f.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -DFLAG_SUPPORTED_Wshadow -rdynamic CMakeFiles/cmTC_2971f.dir/src.c.o -o cmTC_2971f 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Winitself succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_f3cae/fast && /usr/bin/make  -f CMakeFiles/cmTC_f3cae.dir/build.make CMakeFiles/cmTC_f3cae.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f3cae.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -DFLAG_SUPPORTED_Winitself   -Winit-self -o CMakeFiles/cmTC_f3cae.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_f3cae
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f3cae.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -DFLAG_SUPPORTED_Winitself -rdynamic CMakeFiles/cmTC_f3cae.dir/src.c.o -o cmTC_f3cae 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wcastalign succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_cd0a6/fast && /usr/bin/make  -f CMakeFiles/cmTC_cd0a6.dir/build.make CMakeFiles/cmTC_cd0a6.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd0a6.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -DFLAG_SUPPORTED_Wcastalign   -Wcast-align -o CMakeFiles/cmTC_cd0a6.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cd0a6
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd0a6.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -DFLAG_SUPPORTED_Wcastalign -rdynamic CMakeFiles/cmTC_cd0a6.dir/src.c.o -o cmTC_cd0a6 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wformat2 succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_74cb1/fast && /usr/bin/make  -f CMakeFiles/cmTC_74cb1.dir/build.make CMakeFiles/cmTC_74cb1.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74cb1.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -DFLAG_SUPPORTED_Wformat2   -Wformat=2 -o CMakeFiles/cmTC_74cb1.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_74cb1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74cb1.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -DFLAG_SUPPORTED_Wformat2 -rdynamic CMakeFiles/cmTC_74cb1.dir/src.c.o -o cmTC_74cb1 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wmissingprototypes succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_cdd29/fast && /usr/bin/make  -f CMakeFiles/cmTC_cdd29.dir/build.make CMakeFiles/cmTC_cdd29.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cdd29.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -DFLAG_SUPPORTED_Wmissingprototypes   -Wmissing-prototypes -o CMakeFiles/cmTC_cdd29.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cdd29
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cdd29.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -DFLAG_SUPPORTED_Wmissingprototypes -rdynamic CMakeFiles/cmTC_cdd29.dir/src.c.o -o cmTC_cdd29 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wstrictoverflow2 succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_936af/fast && /usr/bin/make  -f CMakeFiles/cmTC_936af.dir/build.make CMakeFiles/cmTC_936af.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_936af.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -DFLAG_SUPPORTED_Wstrictoverflow2   -Wstrict-overflow=2 -o CMakeFiles/cmTC_936af.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_936af
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_936af.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -DFLAG_SUPPORTED_Wstrictoverflow2 -rdynamic CMakeFiles/cmTC_936af.dir/src.c.o -o cmTC_936af 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wcastqual succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1ba7e/fast && /usr/bin/make  -f CMakeFiles/cmTC_1ba7e.dir/build.make CMakeFiles/cmTC_1ba7e.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1ba7e.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -DFLAG_SUPPORTED_Wcastqual   -Wcast-qual -o CMakeFiles/cmTC_1ba7e.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_1ba7e
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1ba7e.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -DFLAG_SUPPORTED_Wcastqual -rdynamic CMakeFiles/cmTC_1ba7e.dir/src.c.o -o cmTC_1ba7e 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wundef succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0adec/fast && /usr/bin/make  -f CMakeFiles/cmTC_0adec.dir/build.make CMakeFiles/cmTC_0adec.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0adec.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -DFLAG_SUPPORTED_Wundef   -Wundef -o CMakeFiles/cmTC_0adec.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_0adec
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0adec.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -DFLAG_SUPPORTED_Wundef -rdynamic CMakeFiles/cmTC_0adec.dir/src.c.o -o cmTC_0adec 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wswitchdefault succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e1054/fast && /usr/bin/make  -f CMakeFiles/cmTC_e1054.dir/build.make CMakeFiles/cmTC_e1054.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e1054.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -DFLAG_SUPPORTED_Wswitchdefault   -Wswitch-default -o CMakeFiles/cmTC_e1054.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e1054
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e1054.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -DFLAG_SUPPORTED_Wswitchdefault -rdynamic CMakeFiles/cmTC_e1054.dir/src.c.o -o cmTC_e1054 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wconversion succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_921e6/fast && /usr/bin/make  -f CMakeFiles/cmTC_921e6.dir/build.make CMakeFiles/cmTC_921e6.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_921e6.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -DFLAG_SUPPORTED_Wconversion   -Wconversion -o CMakeFiles/cmTC_921e6.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_921e6
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_921e6.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -DFLAG_SUPPORTED_Wconversion -rdynamic CMakeFiles/cmTC_921e6.dir/src.c.o -o cmTC_921e6 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wccompat succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e07b9/fast && /usr/bin/make  -f CMakeFiles/cmTC_e07b9.dir/build.make CMakeFiles/cmTC_e07b9.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e07b9.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -DFLAG_SUPPORTED_Wccompat   -Wc++-compat -o CMakeFiles/cmTC_e07b9.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e07b9
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e07b9.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -DFLAG_SUPPORTED_Wccompat -rdynamic CMakeFiles/cmTC_e07b9.dir/src.c.o -o cmTC_e07b9 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fstackprotectorstrong succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_ed151/fast && /usr/bin/make  -f CMakeFiles/cmTC_ed151.dir/build.make CMakeFiles/cmTC_ed151.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ed151.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -DFLAG_SUPPORTED_fstackprotectorstrong   -fstack-protector-strong -o CMakeFiles/cmTC_ed151.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_ed151
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed151.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -DFLAG_SUPPORTED_fstackprotectorstrong -rdynamic CMakeFiles/cmTC_ed151.dir/src.c.o -o cmTC_ed151 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wcomma succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c98ec/fast && /usr/bin/make  -f CMakeFiles/cmTC_c98ec.dir/build.make CMakeFiles/cmTC_c98ec.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c98ec.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -DFLAG_SUPPORTED_Wcomma   -Wcomma -o CMakeFiles/cmTC_c98ec.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_c98ec
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c98ec.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -DFLAG_SUPPORTED_Wcomma -rdynamic CMakeFiles/cmTC_c98ec.dir/src.c.o -o cmTC_c98ec 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wdoublepromotion succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_22b87/fast && /usr/bin/make  -f CMakeFiles/cmTC_22b87.dir/build.make CMakeFiles/cmTC_22b87.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_22b87.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -DFLAG_SUPPORTED_Wdoublepromotion   -Wdouble-promotion -o CMakeFiles/cmTC_22b87.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_22b87
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_22b87.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -DFLAG_SUPPORTED_Wdoublepromotion -rdynamic CMakeFiles/cmTC_22b87.dir/src.c.o -o cmTC_22b87 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wparentheses succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_58ef8/fast && /usr/bin/make  -f CMakeFiles/cmTC_58ef8.dir/build.make CMakeFiles/cmTC_58ef8.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_58ef8.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -DFLAG_SUPPORTED_Wparentheses   -Wparentheses -o CMakeFiles/cmTC_58ef8.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_58ef8
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_58ef8.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -DFLAG_SUPPORTED_Wparentheses -rdynamic CMakeFiles/cmTC_58ef8.dir/src.c.o -o cmTC_58ef8 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wunusedmacros succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0946b/fast && /usr/bin/make  -f CMakeFiles/cmTC_0946b.dir/build.make CMakeFiles/cmTC_0946b.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0946b.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -DFLAG_SUPPORTED_Wunusedmacros   -Wunused-macros -o CMakeFiles/cmTC_0946b.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_0946b
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0946b.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -DFLAG_SUPPORTED_Wunusedmacros -rdynamic CMakeFiles/cmTC_0946b.dir/src.c.o -o cmTC_0946b 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wmissingvariabledeclarations succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_72f08/fast && /usr/bin/make  -f CMakeFiles/cmTC_72f08.dir/build.make CMakeFiles/cmTC_72f08.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_72f08.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -DFLAG_SUPPORTED_Wmissingvariabledeclarations   -Wmissing-variable-declarations -o CMakeFiles/cmTC_72f08.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_72f08
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_72f08.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -DFLAG_SUPPORTED_Wmissingvariabledeclarations -rdynamic CMakeFiles/cmTC_72f08.dir/src.c.o -o cmTC_72f08 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wusedbutmarkedunused succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_777fd/fast && /usr/bin/make  -f CMakeFiles/cmTC_777fd.dir/build.make CMakeFiles/cmTC_777fd.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_777fd.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -DFLAG_SUPPORTED_Wusedbutmarkedunused   -Wused-but-marked-unused -o CMakeFiles/cmTC_777fd.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_777fd
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_777fd.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -DFLAG_SUPPORTED_Wusedbutmarkedunused -rdynamic CMakeFiles/cmTC_777fd.dir/src.c.o -o cmTC_777fd 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_Wswitchenum succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_f67d8/fast && /usr/bin/make  -f CMakeFiles/cmTC_f67d8.dir/build.make CMakeFiles/cmTC_f67d8.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f67d8.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -DFLAG_SUPPORTED_Wswitchenum   -Wswitch-enum -o CMakeFiles/cmTC_f67d8.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_f67d8
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f67d8.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -DFLAG_SUPPORTED_Wswitchenum -rdynamic CMakeFiles/cmTC_f67d8.dir/src.c.o -o cmTC_f67d8 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fnoomitframepointer succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_7321d/fast && /usr/bin/make  -f CMakeFiles/cmTC_7321d.dir/build.make CMakeFiles/cmTC_7321d.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7321d.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -DFLAG_SUPPORTED_fnoomitframepointer   -fno-omit-frame-pointer -o CMakeFiles/cmTC_7321d.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_7321d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7321d.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -DFLAG_SUPPORTED_fnoomitframepointer -rdynamic CMakeFiles/cmTC_7321d.dir/src.c.o -o cmTC_7321d 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fsanitizeundefined succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_9b7d1/fast && /usr/bin/make  -f CMakeFiles/cmTC_9b7d1.dir/build.make CMakeFiles/cmTC_9b7d1.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9b7d1.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -DFLAG_SUPPORTED_fsanitizeundefined   -fsanitize=undefined -o CMakeFiles/cmTC_9b7d1.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_9b7d1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9b7d1.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -DFLAG_SUPPORTED_fsanitizeundefined -rdynamic CMakeFiles/cmTC_9b7d1.dir/src.c.o -o cmTC_9b7d1 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fsanitizefloatcastoverflow succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e9f52/fast && /usr/bin/make  -f CMakeFiles/cmTC_e9f52.dir/build.make CMakeFiles/cmTC_e9f52.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e9f52.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -DFLAG_SUPPORTED_fsanitizefloatcastoverflow   -fsanitize=float-cast-overflow -o CMakeFiles/cmTC_e9f52.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e9f52
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e9f52.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -DFLAG_SUPPORTED_fsanitizefloatcastoverflow -rdynamic CMakeFiles/cmTC_e9f52.dir/src.c.o -o cmTC_e9f52 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fsanitizeaddressuseafterscope succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_84686/fast && /usr/bin/make  -f CMakeFiles/cmTC_84686.dir/build.make CMakeFiles/cmTC_84686.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_84686.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -DFLAG_SUPPORTED_fsanitizeaddressuseafterscope   -fsanitize-address-use-after-scope -o CMakeFiles/cmTC_84686.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_84686
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_84686.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -DFLAG_SUPPORTED_fsanitizeaddressuseafterscope -rdynamic CMakeFiles/cmTC_84686.dir/src.c.o -o cmTC_84686 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fsanitizeinteger succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_14aa8/fast && /usr/bin/make  -f CMakeFiles/cmTC_14aa8.dir/build.make CMakeFiles/cmTC_14aa8.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_14aa8.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -DFLAG_SUPPORTED_fsanitizeinteger   -fsanitize=integer -o CMakeFiles/cmTC_14aa8.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_14aa8
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_14aa8.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -DFLAG_SUPPORTED_fsanitizeinteger -rdynamic CMakeFiles/cmTC_14aa8.dir/src.c.o -o cmTC_14aa8 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fnosanitizerecover succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e5e7a/fast && /usr/bin/make  -f CMakeFiles/cmTC_e5e7a.dir/build.make CMakeFiles/cmTC_e5e7a.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e5e7a.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -fsanitize=integer -DFLAG_SUPPORTED_fnosanitizerecover   -fno-sanitize-recover -o CMakeFiles/cmTC_e5e7a.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e5e7a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5e7a.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -fsanitize=integer -DFLAG_SUPPORTED_fnosanitizerecover -rdynamic CMakeFiles/cmTC_e5e7a.dir/src.c.o -o cmTC_e5e7a 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test FLAG_SUPPORTED_fvisibilityhidden succeeded with the following output:
+Change Dir: /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1cd0f/fast && /usr/bin/make  -f CMakeFiles/cmTC_1cd0f.dir/build.make CMakeFiles/cmTC_1cd0f.dir/build
+make[1]: Entering directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1cd0f.dir/src.c.o
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast   -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -fsanitize=integer -fno-sanitize-recover -DFLAG_SUPPORTED_fvisibilityhidden   -fvisibility=hidden -o CMakeFiles/cmTC_1cd0f.dir/src.c.o -c /home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_1cd0f
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1cd0f.dir/link.txt --verbose=1
+/home/s22100141/AFLplusplus-experimental/afl-clang-fast  -std=c89 -pedantic -Wall -Wextra -Werror -Wstrict-prototypes -Wwrite-strings -Wshadow -Winit-self -Wcast-align -Wformat=2 -Wmissing-prototypes -Wstrict-overflow=2 -Wcast-qual -Wundef -Wswitch-default -Wconversion -Wc++-compat -fstack-protector-strong -Wcomma -Wdouble-promotion -Wparentheses -Wunused-macros -Wmissing-variable-declarations -Wused-but-marked-unused -Wswitch-enum -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=float-cast-overflow -fsanitize-address-use-after-scope -fsanitize=integer -fno-sanitize-recover -DFLAG_SUPPORTED_fvisibilityhidden -rdynamic CMakeFiles/cmTC_1cd0f.dir/src.c.o -o cmTC_1cd0f 
+make[1]: Leaving directory '/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl-build-enhance5/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }

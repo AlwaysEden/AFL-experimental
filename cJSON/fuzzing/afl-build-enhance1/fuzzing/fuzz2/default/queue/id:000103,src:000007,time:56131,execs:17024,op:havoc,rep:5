@@ -1,0 +1,21 @@
+uu{"et": {
+    "g": "on",
+    "ww": {
+    "t": "bbbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+    "  me": "sun1",
+    "hOffset": 250,    "vOffset": 250,
+    "lignment": "center" },
+"text": {
+        "data": "Click Here",
+        "size": 36,
+"style": "bold", "name": "text1",
+        "hOffset": 250,
+        "vet": 100,
+        "a": "er", "oneUp": "s0) * 90;"
+    }
+}}

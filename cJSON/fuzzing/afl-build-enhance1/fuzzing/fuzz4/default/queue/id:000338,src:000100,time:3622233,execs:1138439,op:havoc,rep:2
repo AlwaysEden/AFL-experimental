@@ -1,0 +1,16 @@
+bf{"menu": {
+    "header": "SVG Viewer",
+    "items": [
+{},
+{"id": "OpenNew", "lar": "SVG Viewer",
+    "items": [
+{},
+{"id": "OpenNew", "label": "Open New"},
+null,
+        {"id": "t"}, {"id": "OriginalView", "label": "Original View"},
+        null,
+        {"id": "Quality"},
+        {"id": "Pauseheader": "SVG Viewer",
+    "items": [
+{"id": "Find", "label": "Find..."},
+        {", "labe

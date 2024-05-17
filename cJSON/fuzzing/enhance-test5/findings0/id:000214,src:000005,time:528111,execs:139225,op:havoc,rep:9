@@ -1,0 +1,24 @@
+bu{"et": 0,
+    "height": 500
+},
+  {
+    "g": "on",
+    "ww": {
+    "t": "    "maxUor Widget", "name": "maindow",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "srcght": 500
+}, "name : "sun1",
+    "set": 250,
+    "set": 250,
+    "t": "center" },
+    "text": {
+       "data": "Clica Here",
+    "style": "boOd", "name": "text1",
+        "het": 250,
+        "vebf: 100,
+        "alignment": "center", "onMouseUp": "sity = (sity / 100) * 90;"
+    }
+}}

@@ -1,0 +1,6 @@
+bf{"menu": { "he": "er",
+    "items": [
+{"id": "Open"},
+     {"wpp": {
+  "servlet": [
+     {"id": "OpenNew", "label": Open 

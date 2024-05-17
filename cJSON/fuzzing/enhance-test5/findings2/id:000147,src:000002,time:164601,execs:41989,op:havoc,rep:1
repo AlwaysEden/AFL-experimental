@@ -1,0 +1,10 @@
+bf{
+"name": "Jack (\"Bee\") Nimble",
+"width":  1920,
+"ht": 10,
+"fo": {"type":   "rect",
+"width":  1920,
+"ht": 1080,
+"i":  false,"f rate": 24
+}
+}

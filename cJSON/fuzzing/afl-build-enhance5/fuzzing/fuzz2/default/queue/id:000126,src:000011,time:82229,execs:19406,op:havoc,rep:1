@@ -1,0 +1,23 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.7668,
+	 "Longitude": -122.39	 },
+	 {
+	 "n": "zip",
+	 "Lade":  "SAN FISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.371991,
+	 "e": -122.026020,
+	 "ess":   "",
+	 "City":      "E",
+	 "S":     "CA",
+	 "Zip":   "94085",
+	 "try":   "US"
+	 }
+	 ]

@@ -1,0 +1,12 @@
+bf{"menu": {
+  "id": "file",
+ "onclick": "CloseDoc()"}
+p": {
+    "menuitem": [
+      {"valua": New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onc": "ML",
+nDoc()"},
+    ...  {"value": "Close", "onclick": "CloseDoc()"}
+    ]
+  }
+}}

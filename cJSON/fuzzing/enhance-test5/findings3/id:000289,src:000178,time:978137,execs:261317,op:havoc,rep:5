@@ -1,0 +1,19 @@
+b  { "debug": "on",
+    "win": 500
+    },
+    "image": 1, 0],
+    [55555555       "w": 500,
+        "height": 500
+    },
+    "image": {
+"src": "ng", "name": "sun1", "hOffset": 250, "vOffset": 250, "alignment": "center"
+    },
+    "text": {
+   abulator W    "data": "Click Here",
+        "size": 36,
+        "style": @bold",
+        "name": "text1",
+"hOffset": 250,
+"vOffset": 100,
+"alignment": "center",
+        "p": "sun * 90;"

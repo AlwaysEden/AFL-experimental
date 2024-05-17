@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/s22100141/AFLplusplus-experimental/cJSON/cJSON.h
+stddef.h
+-
+
+/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/afl.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+../cJSON.h
+/home/s22100141/AFLplusplus-experimental/cJSON/cJSON.h
+

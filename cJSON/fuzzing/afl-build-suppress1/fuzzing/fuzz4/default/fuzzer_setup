@@ -1,0 +1,7 @@
+# environment variables:
+AFL_CUSTOM_INFO_PROGRAM=../afl-main
+AFL_CUSTOM_INFO_PROGRAM_ARGV=@@ yes
+AFL_CUSTOM_INFO_OUT=.//default
+AFL_NO_AFFINITY=1
+# command line:
+'../../../../../afl-fuzz' '-i' '/mnt/hdd/fuzz_usability/AFL++experimental/cJSON/fuzzing/inputs' '-o' './' '-r' 'target_1.json' '../afl-main' '@@' 'yes'

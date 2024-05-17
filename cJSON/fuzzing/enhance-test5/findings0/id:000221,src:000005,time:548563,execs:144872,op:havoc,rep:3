@@ -1,0 +1,23 @@
+bu{"et": {
+    "g": "o (sity / 100) * 90;"
+    }
+}}n",
+    "ww": {
+    "t": "S?mpbulator Widget", "name": "maindow",
+"width": 500,
+    "he  "het": 2ight": 500
+},
+    "image": {
+    "src": "Im",
+    "name": "sun1",
+    "set": 250,
+    "set": 250,
+    "t": "center" },
+    "text": {
+        "data": "Click Here",
+    "style": "bold", "name": "text1",
+        "het": 250,
+        "vet": 100,
+        "alignment": "center", "onMouseUp": "sity = (sity / 100) * 90;"
+    }
+}}

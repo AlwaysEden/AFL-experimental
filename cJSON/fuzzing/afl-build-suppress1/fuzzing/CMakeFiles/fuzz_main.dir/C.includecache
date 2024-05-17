@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/s22100141/AFLplusplus-experimental/cJSON/cJSON.h
+stddef.h
+-
+
+/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/cjson_read_fuzzer.c
+stdlib.h
+-
+stdint.h
+-
+string.h
+-
+../cJSON.h
+/home/s22100141/AFLplusplus-experimental/cJSON/cJSON.h
+
+/home/s22100141/AFLplusplus-experimental/cJSON/fuzzing/fuzz_main.c
+stdint.h
+-
+stdio.h
+-
+stdlib.h
+-
+

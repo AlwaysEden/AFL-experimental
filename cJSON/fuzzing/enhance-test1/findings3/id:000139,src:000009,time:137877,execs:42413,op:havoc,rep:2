@@ -1,0 +1,17 @@
+bf{"menu": { "he": "er", "items": [
+{"id": "Open"},
+{"id": "New", "l": " New"},
+null,
+        {"id": "Zo", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "Orig", "label": "Oriew"},
+        null,
+        {"id": "Quality"},
+        {"id": "Pause"},
+{"id": "Mute"},
+null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "FindAgain", "label": "in"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+  ----------------

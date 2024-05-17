@@ -1,0 +1,18 @@
+uu{"et": {
+    "g": "on",
+    "ww": {
+    "t": "tor Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignme\t": "center" },
+"talignme\t": "center" },
+"text": {
+  "size": 36,
+"style": "bold", "name": e {
+ 

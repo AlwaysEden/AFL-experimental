@@ -1,0 +1,15 @@
+uf{"et": {
+    "debug": "on",
+    "window": {
+    "title": "Sampbulator Widget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "v\ffset": 250,
+    "alignment": "center" },
+"text": {
+    "a": "er", "one   : "s

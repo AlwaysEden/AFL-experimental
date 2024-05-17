@@ -1,0 +1,17 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.7668,
+	 "Longngitude": -122.3959,
+	 "Additude": -122.3959,
+	 "Addrep":   "5",
+	 "City":  "SAN FRANCISCO",
+	 "State": "CA",
+	 "Zip":   "94107",
+	 "Cick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": "Close", "onclick": "CSUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "5",
+	 "Cry":   "US"
+	 }	 ]

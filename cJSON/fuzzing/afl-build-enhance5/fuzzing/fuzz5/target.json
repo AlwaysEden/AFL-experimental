@@ -1,0 +1,9 @@
+{
+	"total_func": 5,
+	"func": "parse_number",
+	"func": "utf16_literal_to_utf8", 
+	"func": "parse_string",
+	"func": "print_string_ptr",
+	"func": "parse_value",
+	"target_path": "../target_For_FuncCov"
+}

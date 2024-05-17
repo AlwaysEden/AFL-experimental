@@ -1,0 +1,21 @@
+uu{"et": {
+    "g": "on",
+    "ww":    { "t": "borWidget", "name": "main_window",
+"width": 500, "height": 500
+},
+  "h\ffset": 250,
+   "image": {
+    "src": "Images",
+    "name": "sun1",
+    "h\ffset": 250,
+    "vOffset": 250,
+    "t": "center" },
+"text": {
+        "data": "Click Here",
+        "size": 36,
+"style": "bold", "nyme": "text1",
+        "hOffset": 250,
+        "vet": 100,
+        "a": "e", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

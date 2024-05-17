@@ -1,0 +1,23 @@
+bf[
+	 {
+	 "psion": "zip",
+	 "Latitude":  37.7668,
+	 "\\\th": 500,
+    "hLongitude": -122.3959,
+	 "Ads":   "",
+	 "City":  "SAN FRSCO",
+	 "Stûèe": "CA",
+	 "Zip":   "9",
+	 "Coy":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.371991,
+	 "e": 37.7668,
+	 "\\\th": 500,
+"hLongitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "Stû":   "US"
+	 }
+	 ]

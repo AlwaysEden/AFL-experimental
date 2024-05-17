@@ -1,0 +1,28 @@
+uf{"et": {
+    "debug": "on",
+    "winNow": {
+    "title": "Samp\\\\\\\\\\\\\\\\\\\\\\\\\\\bulator0],
+    [1, 0, ": "main_window",
+"width": 500,
+   ß"height": 500
+},
+    "image": {
+    "src": "Images",
+ xt": {
+          "name": "sun1",
+    "hOffset": 250,
+    "vOffset":250,
+    "debug": "o90;"
+    }
+
+    "alignment": "center" },
+"text": {
+        "data": "C Here",
+        "sizitle": "S"data": "C Here",
+     ae": 36,
+"style": "bold", "name": "texT1",
+        "het": 250,
+        "vet": 100,
+       "a": "er", 8oneUp": "sity = (sity / 100) * 90;"
+    }
+}}

@@ -1,0 +1,24 @@
+bu{"et": {
+    "g": "on",
+    "ww": {
+    "t": "Sampbulator Widget", "name": "maindow",
+"width": 500
+},
+    "image": {
+
+},
+    "image": {
+    "src": "Im",
+    "name": "sun1",
+    "sata": "Clindow",
+"width": 500
+},
+    "image": {
+
+},
+    "image": {
+    "src": "Im",
+    "na: 100,
+        "alignment": "center", "onMouweUp": "sity = (sity / 100) * 90;"
+    }
+}}

@@ -1,0 +1,13 @@
+bf{"menu": {
+  "id": "file",
+  "value": "File",
+  "popup": {
+    "mcnuitem": [
+      {"value": "New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": ,1, 0, 0],
+    [0,	0, 1]
+	"Close", "onclick": "CloseDoc()"}
+    ]
+  }
+}}

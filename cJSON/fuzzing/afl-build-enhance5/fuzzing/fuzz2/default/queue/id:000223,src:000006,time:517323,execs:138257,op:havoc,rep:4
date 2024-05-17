@@ -1,0 +1,22 @@
+uf{"et": {
+    "g": "on",
+    "window": {
+    "title": "Sampbulator Wiˆget", "name": "main_window",
+"width": 500,
+    "height": 500
+},
+    "image": {
+    "src": "Images",
+    "name": "sun1",
+    "hOffset": 250,
+    "vOffset": 250,
+    "alignmet": "center" },
+"text": 100,
+     "data": "C ",
+        "size": 36,
+"e": "bold", "name": "text1",
+        "het": 250,
+       "vet": 100,
+        "a": "er", "oneUp": "sity = (sity / 100) * 90;"
+    }
+}

@@ -1,0 +1,18 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "resh": 15,
+        "cachePagesTrack": 200,
+        "cachePagesStore": 100,
+        "cachePagesRefresh": 10,
+"cachePagesDirtyRead": 10,
+        "searchEnginp":   "94085",
+	 "Country":   "US"
+	 }
+	 ]

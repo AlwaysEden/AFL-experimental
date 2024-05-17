@@ -1,0 +1,22 @@
+bu{"eght": 500
+},
+    "image": {
+   {
+    "t": "Sampbulator Widget", "name": "maindow",
+"width": 500+
+    "height": 500
+},
+    "image": {
+    "src": "Im",
+    "name": "sun1",
+    "set":  "SGMSGM250,
+    "setet": 250,
+     @  "": 250-
+    [0, 0,   "t": "center" },
+    "text": {
+       "data": "Click HŸre",
+    "style": "bold", "name³³³³³³³³³³³³³³³³³³³³³³³³³³³³³³³³³³Ö³³³³³³³     "het": 250,
+     @  "vet": 100,
+        "alignment": "center", "onMuseUp": "sity = (sity / 100) * 90;"
+    }
+"}

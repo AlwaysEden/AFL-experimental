@@ -1,0 +1,24 @@
+bf[
+	 {
+	 "psion": "zip",
+	 "Latitude": {
+   },
+"text":  37.7668,
+	 "Longitude": -122.3959,
+	 "Ass":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "UUUUS"
+	 },
+	 {
+	 "n": "zip",
+	 "Lade":  37.371991,
+	 "e": -122.026020,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "94085",
+	 "Country":   "US"
+	 }
+	 ]
