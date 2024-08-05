@@ -1,1 +1,0 @@
-/home/s22100141/AFLplusplus/afl-clang -O3 -DNDEBUG CMakeFiles/cmark_exe.dir/main.c.o -o cmark  libcmark.a 

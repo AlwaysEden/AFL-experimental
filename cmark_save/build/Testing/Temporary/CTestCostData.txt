@@ -1,6 +1,0 @@
-api_test 1 0.000832984
-html_normalization 1 0.0538844
-spectest_executable 1 0.474636
-smartpuncttest_executable 1 0.0555576
-regressiontest_executable 1 0.0626122
----
